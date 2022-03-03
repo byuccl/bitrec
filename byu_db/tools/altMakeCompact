@@ -1,0 +1,2 @@
+source altMakeFull
+cat alt.full | fgrep "private" | sed -e 's/endprivate//' > alt.compact

@@ -1,0 +1,984 @@
+{
+  "SITE_INDEX": {
+    "0": {
+      "DEFAULT_SITE_TYPE": "USR_ACCESS",
+      "SITE_TYPE": {
+        "USR_ACCESS": {
+          "BEL": {
+            "USR_ACCESS": {
+              "CONFIG": {}
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "1": {
+      "DEFAULT_SITE_TYPE": "BSCAN",
+      "SITE_TYPE": {
+        "BSCAN": {
+          "BEL": {
+            "BSCAN": {
+              "CONFIG": {
+                "DISABLE_JTAG": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "!26_323",
+                        "!26_325",
+                        "!26_922",
+                        "!27_320",
+                        "!27_321",
+                        "!27_322",
+                        "!27_332",
+                        "!27_923",
+                        "!27_924",
+                        "26_321",
+                        "26_324",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331"
+                      ]
+                    ],
+                    "TRUE": [
+                      [
+                        "!26_321",
+                        "!26_324",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "26_323",
+                        "26_325",
+                        "26_922",
+                        "27_320",
+                        "27_321",
+                        "27_322",
+                        "27_332",
+                        "27_923",
+                        "27_924"
+                      ]
+                    ]
+                  }
+                },
+                "JTAG_CHAIN": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      []
+                    ],
+                    "2": [
+                      []
+                    ],
+                    "3": [
+                      []
+                    ],
+                    "4": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "10": {
+      "DEFAULT_SITE_TYPE": "ICAP",
+      "SITE_TYPE": {
+        "ICAP": {
+          "BEL": {
+            "ICAP": {
+              "CONFIG": {
+                "ICAP_AUTO_SWITCH": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "DISABLE": [],
+                    "ENABLE": [],
+                    "NOT CONFIGURED": [
+                      [
+                        "26_926",
+                        "26_927",
+                        "27_322",
+                        "27_925"
+                      ]
+                    ]
+                  }
+                },
+                "ICAP_WIDTH": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "X16": [
+                      [
+                        "!26_923",
+                        "!26_924",
+                        "!27_320",
+                        "!27_321",
+                        "!27_332",
+                        "!27_922",
+                        "26_321",
+                        "26_322",
+                        "26_324",
+                        "26_325",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331",
+                        "26_919",
+                        "26_926",
+                        "26_927",
+                        "27_322",
+                        "27_323",
+                        "27_325",
+                        "27_920",
+                        "27_921",
+                        "27_925"
+                      ]
+                    ],
+                    "X32": [
+                      [
+                        "!26_321",
+                        "!26_322",
+                        "!26_324",
+                        "!26_325",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "!26_919",
+                        "!26_923",
+                        "!26_924",
+                        "!27_321",
+                        "!27_920",
+                        "!27_921",
+                        "!27_922",
+                        "26_926",
+                        "26_927",
+                        "27_320",
+                        "27_322",
+                        "27_323",
+                        "27_325",
+                        "27_332",
+                        "27_925"
+                      ]
+                    ],
+                    "X8": [
+                      [
+                        "!26_324",
+                        "!26_325",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "!26_919",
+                        "!27_323",
+                        "!27_325",
+                        "!27_920",
+                        "!27_921",
+                        "26_321",
+                        "26_322",
+                        "26_923",
+                        "26_924",
+                        "26_926",
+                        "26_927",
+                        "27_320",
+                        "27_321",
+                        "27_322",
+                        "27_332",
+                        "27_922",
+                        "27_925"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "2": {
+      "DEFAULT_SITE_TYPE": "BSCAN",
+      "SITE_TYPE": {
+        "BSCAN": {
+          "BEL": {
+            "BSCAN": {
+              "CONFIG": {
+                "DISABLE_JTAG": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "!26_321",
+                        "!26_323",
+                        "!26_324",
+                        "!26_325",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "!26_922",
+                        "!27_320",
+                        "!27_322",
+                        "!27_332",
+                        "!27_923",
+                        "!27_924",
+                        "27_321"
+                      ]
+                    ],
+                    "TRUE": [
+                      [
+                        "!27_321",
+                        "26_321",
+                        "26_323",
+                        "26_324",
+                        "26_325",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331",
+                        "26_922",
+                        "27_320",
+                        "27_322",
+                        "27_332",
+                        "27_923",
+                        "27_924"
+                      ]
+                    ]
+                  }
+                },
+                "JTAG_CHAIN": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      []
+                    ],
+                    "2": [
+                      []
+                    ],
+                    "3": [
+                      []
+                    ],
+                    "4": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "3": {
+      "DEFAULT_SITE_TYPE": "ICAP",
+      "SITE_TYPE": {
+        "ICAP": {
+          "BEL": {
+            "ICAP": {
+              "CONFIG": {
+                "ICAP_AUTO_SWITCH": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "DISABLE": [],
+                    "ENABLE": [],
+                    "NOT CONFIGURED": [
+                      [
+                        "26_323",
+                        "26_925",
+                        "27_926",
+                        "27_927"
+                      ]
+                    ]
+                  }
+                },
+                "ICAP_WIDTH": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "X16": [
+                      [
+                        "!26_322",
+                        "!26_324",
+                        "!26_325",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "!26_923",
+                        "!26_924",
+                        "!27_320",
+                        "!27_321",
+                        "!27_323",
+                        "!27_325",
+                        "!27_332",
+                        "!27_922",
+                        "26_321",
+                        "26_323",
+                        "26_919",
+                        "26_925",
+                        "27_920",
+                        "27_921",
+                        "27_926",
+                        "27_927"
+                      ]
+                    ],
+                    "X32": [
+                      [
+                        "!26_321",
+                        "!26_919",
+                        "!26_923",
+                        "!26_924",
+                        "!27_321",
+                        "!27_323",
+                        "!27_325",
+                        "!27_920",
+                        "!27_921",
+                        "!27_922",
+                        "26_322",
+                        "26_323",
+                        "26_324",
+                        "26_325",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331",
+                        "26_925",
+                        "27_320",
+                        "27_332",
+                        "27_926",
+                        "27_927"
+                      ]
+                    ],
+                    "X8": [
+                      [
+                        "!26_322",
+                        "!26_919",
+                        "!27_920",
+                        "!27_921",
+                        "26_321",
+                        "26_323",
+                        "26_324",
+                        "26_325",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331",
+                        "26_923",
+                        "26_924",
+                        "26_925",
+                        "27_320",
+                        "27_321",
+                        "27_323",
+                        "27_325",
+                        "27_332",
+                        "27_922",
+                        "27_926",
+                        "27_927"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "4": {
+      "DEFAULT_SITE_TYPE": "FRAME_ECC",
+      "SITE_TYPE": {
+        "FRAME_ECC": {
+          "BEL": {
+            "FRAME_ECC": {
+              "CONFIG": {
+                "FARSRC": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "EFAR": [
+                      []
+                    ],
+                    "FAR": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "5": {
+      "DEFAULT_SITE_TYPE": "STARTUP",
+      "SITE_TYPE": {
+        "STARTUP": {
+          "BEL": {
+            "STARTUP": {
+              "CONFIG": {
+                "PROG_USR": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "!26_321",
+                        "!26_917",
+                        "!26_918",
+                        "!27_322",
+                        "!27_325",
+                        "!27_332",
+                        "!27_916"
+                      ]
+                    ],
+                    "TRUE": [
+                      [
+                        "26_321",
+                        "26_917",
+                        "26_918",
+                        "27_322",
+                        "27_325",
+                        "27_332",
+                        "27_916"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "6": {
+      "DEFAULT_SITE_TYPE": "CAPTURE",
+      "SITE_TYPE": {
+        "CAPTURE": {
+          "BEL": {
+            "CAPTURE": {
+              "CONFIG": {
+                "ONESHOT": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      []
+                    ],
+                    "TRUE": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "7": {
+      "DEFAULT_SITE_TYPE": "DCIRESET",
+      "SITE_TYPE": {
+        "DCIRESET": {
+          "BEL": {
+            "DCIRESET": {
+              "CONFIG": {}
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "8": {
+      "DEFAULT_SITE_TYPE": "BSCAN",
+      "SITE_TYPE": {
+        "BSCAN": {
+          "BEL": {
+            "BSCAN": {
+              "CONFIG": {
+                "DISABLE_JTAG": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "!26_323",
+                        "!26_325",
+                        "!26_922",
+                        "!27_320",
+                        "!27_321",
+                        "!27_322",
+                        "!27_332",
+                        "!27_923",
+                        "!27_924",
+                        "26_321",
+                        "26_324",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331"
+                      ]
+                    ],
+                    "TRUE": [
+                      [
+                        "!26_321",
+                        "!26_324",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "26_323",
+                        "26_325",
+                        "26_922",
+                        "27_320",
+                        "27_321",
+                        "27_322",
+                        "27_332",
+                        "27_923",
+                        "27_924"
+                      ]
+                    ]
+                  }
+                },
+                "JTAG_CHAIN": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      []
+                    ],
+                    "2": [
+                      []
+                    ],
+                    "3": [
+                      []
+                    ],
+                    "4": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "9": {
+      "DEFAULT_SITE_TYPE": "BSCAN",
+      "SITE_TYPE": {
+        "BSCAN": {
+          "BEL": {
+            "BSCAN": {
+              "CONFIG": {
+                "DISABLE_JTAG": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "!26_321",
+                        "!26_323",
+                        "!26_324",
+                        "!26_325",
+                        "!26_326",
+                        "!26_327",
+                        "!26_328",
+                        "!26_329",
+                        "!26_331",
+                        "!26_922",
+                        "!27_322",
+                        "!27_923",
+                        "!27_924",
+                        "27_320",
+                        "27_321",
+                        "27_332"
+                      ]
+                    ],
+                    "TRUE": [
+                      [
+                        "!27_320",
+                        "!27_321",
+                        "!27_332",
+                        "26_321",
+                        "26_323",
+                        "26_324",
+                        "26_325",
+                        "26_326",
+                        "26_327",
+                        "26_328",
+                        "26_329",
+                        "26_331",
+                        "26_922",
+                        "27_322",
+                        "27_923",
+                        "27_924"
+                      ]
+                    ]
+                  }
+                },
+                "JTAG_CHAIN": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      []
+                    ],
+                    "2": [
+                      []
+                    ],
+                    "3": [
+                      []
+                    ],
+                    "4": [
+                      []
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    }
+  },
+  "TILE_PIP": {
+    "CFG_CENTER_BSCAN1_CAPTURE->CFG_CENTER_LOGIC_OUTS_B22_2": [],
+    "CFG_CENTER_BSCAN1_DRCK->CFG_CENTER_LOGIC_OUTS_B20_2": [],
+    "CFG_CENTER_BSCAN1_RESET->CFG_CENTER_LOGIC_OUTS_B18_2": [],
+    "CFG_CENTER_BSCAN1_RUNTEST->CFG_CENTER_LOGIC_OUTS_B8_2": [],
+    "CFG_CENTER_BSCAN1_SEL->CFG_CENTER_LOGIC_OUTS_B14_2": [],
+    "CFG_CENTER_BSCAN1_SHIFT->CFG_CENTER_LOGIC_OUTS_B16_3": [],
+    "CFG_CENTER_BSCAN1_TCK->CFG_CENTER_LOGIC_OUTS_B14_3": [],
+    "CFG_CENTER_BSCAN1_TDI->CFG_CENTER_LOGIC_OUTS_B12_3": [
+      []
+    ],
+    "CFG_CENTER_BSCAN1_TMS->CFG_CENTER_LOGIC_OUTS_B10_3": [],
+    "CFG_CENTER_BSCAN1_UPDATE->CFG_CENTER_LOGIC_OUTS_B16_2": [],
+    "CFG_CENTER_BSCAN2_CAPTURE->CFG_CENTER_LOGIC_OUTS_B23_2": [],
+    "CFG_CENTER_BSCAN2_DRCK->CFG_CENTER_LOGIC_OUTS_B21_2": [],
+    "CFG_CENTER_BSCAN2_RESET->CFG_CENTER_LOGIC_OUTS_B19_2": [],
+    "CFG_CENTER_BSCAN2_RUNTEST->CFG_CENTER_LOGIC_OUTS_B9_2": [],
+    "CFG_CENTER_BSCAN2_SEL->CFG_CENTER_LOGIC_OUTS_B15_2": [],
+    "CFG_CENTER_BSCAN2_SHIFT->CFG_CENTER_LOGIC_OUTS_B17_3": [],
+    "CFG_CENTER_BSCAN2_TCK->CFG_CENTER_LOGIC_OUTS_B15_3": [],
+    "CFG_CENTER_BSCAN2_TDI->CFG_CENTER_LOGIC_OUTS_B13_3": [
+      []
+    ],
+    "CFG_CENTER_BSCAN2_TMS->CFG_CENTER_LOGIC_OUTS_B11_3": [],
+    "CFG_CENTER_BSCAN2_UPDATE->CFG_CENTER_LOGIC_OUTS_B17_2": [],
+    "CFG_CENTER_BSCAN3_CAPTURE->CFG_CENTER_LOGIC_OUTS_B11_11": [],
+    "CFG_CENTER_BSCAN3_DRCK->CFG_CENTER_LOGIC_OUTS_B22_10": [],
+    "CFG_CENTER_BSCAN3_RESET->CFG_CENTER_LOGIC_OUTS_B20_10": [],
+    "CFG_CENTER_BSCAN3_RUNTEST->CFG_CENTER_LOGIC_OUTS_B13_11": [],
+    "CFG_CENTER_BSCAN3_SEL->CFG_CENTER_LOGIC_OUTS_B16_10": [],
+    "CFG_CENTER_BSCAN3_SHIFT->CFG_CENTER_LOGIC_OUTS_B21_11": [],
+    "CFG_CENTER_BSCAN3_TCK->CFG_CENTER_LOGIC_OUTS_B19_11": [],
+    "CFG_CENTER_BSCAN3_TDI->CFG_CENTER_LOGIC_OUTS_B17_11": [
+      []
+    ],
+    "CFG_CENTER_BSCAN3_TMS->CFG_CENTER_LOGIC_OUTS_B15_11": [],
+    "CFG_CENTER_BSCAN3_UPDATE->CFG_CENTER_LOGIC_OUTS_B18_10": [],
+    "CFG_CENTER_BSCAN4_CAPTURE->CFG_CENTER_LOGIC_OUTS_B12_11": [],
+    "CFG_CENTER_BSCAN4_DRCK->CFG_CENTER_LOGIC_OUTS_B23_10": [],
+    "CFG_CENTER_BSCAN4_RESET->CFG_CENTER_LOGIC_OUTS_B21_10": [],
+    "CFG_CENTER_BSCAN4_RUNTEST->CFG_CENTER_LOGIC_OUTS_B14_11": [],
+    "CFG_CENTER_BSCAN4_SEL->CFG_CENTER_LOGIC_OUTS_B17_10": [],
+    "CFG_CENTER_BSCAN4_SHIFT->CFG_CENTER_LOGIC_OUTS_B22_11": [],
+    "CFG_CENTER_BSCAN4_TCK->CFG_CENTER_LOGIC_OUTS_B20_11": [],
+    "CFG_CENTER_BSCAN4_TDI->CFG_CENTER_LOGIC_OUTS_B18_11": [
+      []
+    ],
+    "CFG_CENTER_BSCAN4_TMS->CFG_CENTER_LOGIC_OUTS_B16_11": [],
+    "CFG_CENTER_BSCAN4_UPDATE->CFG_CENTER_LOGIC_OUTS_B19_10": [],
+    "CFG_CENTER_CLK1_5->CFG_CENTER_STARTUP_CLK": [
+      []
+    ],
+    "CFG_CENTER_CLK1_6->CFG_CENTER_ICAP0_CLK": [],
+    "CFG_CENTER_CLK1_7->CFG_CENTER_STARTUP_USRCCLKO": [
+      []
+    ],
+    "CFG_CENTER_CLK1_8->CFG_CENTER_MID_DNA_PORT_CLK": [],
+    "CFG_CENTER_CLK1_9->CFG_CENTER_CAPTURE_CLK": [],
+    "CFG_CENTER_DCIRESET_LOCKED->CFG_CENTER_LOGIC_OUTS_B21_9": [],
+    "CFG_CENTER_FRAME_ECC_CRCERROR->CFG_CENTER_LOGIC_OUTS_B15_10": [],
+    "CFG_CENTER_FRAME_ECC_ECCERROR->CFG_CENTER_LOGIC_OUTS_B20_9": [],
+    "CFG_CENTER_FRAME_ECC_ECCERRORSINGLE->CFG_CENTER_LOGIC_OUTS_B23_8": [],
+    "CFG_CENTER_FRAME_ECC_FAR0->CFG_CENTER_LOGIC_OUTS_B10_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR1->CFG_CENTER_LOGIC_OUTS_B11_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR10->CFG_CENTER_LOGIC_OUTS_B20_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR11->CFG_CENTER_LOGIC_OUTS_B21_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR12->CFG_CENTER_LOGIC_OUTS_B22_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR13->CFG_CENTER_LOGIC_OUTS_B23_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR14->CFG_CENTER_LOGIC_OUTS_B8_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR15->CFG_CENTER_LOGIC_OUTS_B9_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR16->CFG_CENTER_LOGIC_OUTS_B10_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR17->CFG_CENTER_LOGIC_OUTS_B11_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR18->CFG_CENTER_LOGIC_OUTS_B12_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR19->CFG_CENTER_LOGIC_OUTS_B13_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR2->CFG_CENTER_LOGIC_OUTS_B12_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR20->CFG_CENTER_LOGIC_OUTS_B14_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR21->CFG_CENTER_LOGIC_OUTS_B15_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR22->CFG_CENTER_LOGIC_OUTS_B16_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR23->CFG_CENTER_LOGIC_OUTS_B17_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR24->CFG_CENTER_LOGIC_OUTS_B18_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR25->CFG_CENTER_LOGIC_OUTS_B19_7": [],
+    "CFG_CENTER_FRAME_ECC_FAR3->CFG_CENTER_LOGIC_OUTS_B13_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR4->CFG_CENTER_LOGIC_OUTS_B14_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR5->CFG_CENTER_LOGIC_OUTS_B15_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR6->CFG_CENTER_LOGIC_OUTS_B16_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR7->CFG_CENTER_LOGIC_OUTS_B17_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR8->CFG_CENTER_LOGIC_OUTS_B18_6": [],
+    "CFG_CENTER_FRAME_ECC_FAR9->CFG_CENTER_LOGIC_OUTS_B19_6": [],
+    "CFG_CENTER_FRAME_ECC_SYNBIT0->CFG_CENTER_LOGIC_OUTS_B18_8": [],
+    "CFG_CENTER_FRAME_ECC_SYNBIT1->CFG_CENTER_LOGIC_OUTS_B19_8": [],
+    "CFG_CENTER_FRAME_ECC_SYNBIT2->CFG_CENTER_LOGIC_OUTS_B20_8": [],
+    "CFG_CENTER_FRAME_ECC_SYNBIT3->CFG_CENTER_LOGIC_OUTS_B21_8": [],
+    "CFG_CENTER_FRAME_ECC_SYNBIT4->CFG_CENTER_LOGIC_OUTS_B22_8": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME0->CFG_CENTER_LOGIC_OUTS_B14_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME1->CFG_CENTER_LOGIC_OUTS_B15_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME10->CFG_CENTER_LOGIC_OUTS_B10_2": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME11->CFG_CENTER_LOGIC_OUTS_B11_2": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME12->CFG_CENTER_LOGIC_OUTS_B12_2": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME2->CFG_CENTER_LOGIC_OUTS_B16_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME3->CFG_CENTER_LOGIC_OUTS_B17_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME4->CFG_CENTER_LOGIC_OUTS_B18_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME5->CFG_CENTER_LOGIC_OUTS_B19_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME6->CFG_CENTER_LOGIC_OUTS_B20_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME7->CFG_CENTER_LOGIC_OUTS_B21_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME8->CFG_CENTER_LOGIC_OUTS_B22_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROME9->CFG_CENTER_LOGIC_OUTS_B23_1": [],
+    "CFG_CENTER_FRAME_ECC_SYNDROMEVALID->CFG_CENTER_LOGIC_OUTS_B13_2": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD0->CFG_CENTER_LOGIC_OUTS_B20_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD1->CFG_CENTER_LOGIC_OUTS_B21_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD2->CFG_CENTER_LOGIC_OUTS_B22_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD3->CFG_CENTER_LOGIC_OUTS_B23_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD4->CFG_CENTER_LOGIC_OUTS_B8_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD5->CFG_CENTER_LOGIC_OUTS_B9_7": [],
+    "CFG_CENTER_FRAME_ECC_SYNWORD6->CFG_CENTER_LOGIC_OUTS_B17_8": [],
+    "CFG_CENTER_ICAP0_O0->CFG_CENTER_LOGIC_OUTS_B16_4": [],
+    "CFG_CENTER_ICAP0_O1->CFG_CENTER_LOGIC_OUTS_B17_4": [],
+    "CFG_CENTER_ICAP0_O10->CFG_CENTER_LOGIC_OUTS_B10_4": [],
+    "CFG_CENTER_ICAP0_O11->CFG_CENTER_LOGIC_OUTS_B11_4": [],
+    "CFG_CENTER_ICAP0_O12->CFG_CENTER_LOGIC_OUTS_B12_4": [],
+    "CFG_CENTER_ICAP0_O13->CFG_CENTER_LOGIC_OUTS_B13_4": [],
+    "CFG_CENTER_ICAP0_O14->CFG_CENTER_LOGIC_OUTS_B14_4": [],
+    "CFG_CENTER_ICAP0_O15->CFG_CENTER_LOGIC_OUTS_B15_4": [],
+    "CFG_CENTER_ICAP0_O16->CFG_CENTER_LOGIC_OUTS_B16_5": [],
+    "CFG_CENTER_ICAP0_O17->CFG_CENTER_LOGIC_OUTS_B17_5": [],
+    "CFG_CENTER_ICAP0_O18->CFG_CENTER_LOGIC_OUTS_B18_4": [],
+    "CFG_CENTER_ICAP0_O19->CFG_CENTER_LOGIC_OUTS_B19_4": [],
+    "CFG_CENTER_ICAP0_O2->CFG_CENTER_LOGIC_OUTS_B18_3": [],
+    "CFG_CENTER_ICAP0_O20->CFG_CENTER_LOGIC_OUTS_B20_4": [],
+    "CFG_CENTER_ICAP0_O21->CFG_CENTER_LOGIC_OUTS_B21_4": [],
+    "CFG_CENTER_ICAP0_O22->CFG_CENTER_LOGIC_OUTS_B22_4": [],
+    "CFG_CENTER_ICAP0_O23->CFG_CENTER_LOGIC_OUTS_B23_4": [],
+    "CFG_CENTER_ICAP0_O24->CFG_CENTER_LOGIC_OUTS_B8_4": [],
+    "CFG_CENTER_ICAP0_O25->CFG_CENTER_LOGIC_OUTS_B9_4": [],
+    "CFG_CENTER_ICAP0_O26->CFG_CENTER_LOGIC_OUTS_B10_5": [],
+    "CFG_CENTER_ICAP0_O27->CFG_CENTER_LOGIC_OUTS_B11_5": [],
+    "CFG_CENTER_ICAP0_O28->CFG_CENTER_LOGIC_OUTS_B12_5": [],
+    "CFG_CENTER_ICAP0_O29->CFG_CENTER_LOGIC_OUTS_B13_5": [],
+    "CFG_CENTER_ICAP0_O3->CFG_CENTER_LOGIC_OUTS_B19_3": [],
+    "CFG_CENTER_ICAP0_O30->CFG_CENTER_LOGIC_OUTS_B14_5": [],
+    "CFG_CENTER_ICAP0_O31->CFG_CENTER_LOGIC_OUTS_B15_5": [],
+    "CFG_CENTER_ICAP0_O4->CFG_CENTER_LOGIC_OUTS_B20_3": [],
+    "CFG_CENTER_ICAP0_O5->CFG_CENTER_LOGIC_OUTS_B21_3": [],
+    "CFG_CENTER_ICAP0_O6->CFG_CENTER_LOGIC_OUTS_B22_3": [],
+    "CFG_CENTER_ICAP0_O7->CFG_CENTER_LOGIC_OUTS_B23_3": [],
+    "CFG_CENTER_ICAP0_O8->CFG_CENTER_LOGIC_OUTS_B8_3": [],
+    "CFG_CENTER_ICAP0_O9->CFG_CENTER_LOGIC_OUTS_B9_3": [],
+    "CFG_CENTER_ICAP1_O0->CFG_CENTER_LOGIC_OUTS_B23_11": [],
+    "CFG_CENTER_ICAP1_O1->CFG_CENTER_LOGIC_OUTS_B12_12": [],
+    "CFG_CENTER_ICAP1_O10->CFG_CENTER_LOGIC_OUTS_B21_12": [],
+    "CFG_CENTER_ICAP1_O11->CFG_CENTER_LOGIC_OUTS_B22_12": [],
+    "CFG_CENTER_ICAP1_O12->CFG_CENTER_LOGIC_OUTS_B23_12": [],
+    "CFG_CENTER_ICAP1_O13->CFG_CENTER_LOGIC_OUTS_B12_13": [],
+    "CFG_CENTER_ICAP1_O14->CFG_CENTER_LOGIC_OUTS_B13_13": [],
+    "CFG_CENTER_ICAP1_O15->CFG_CENTER_LOGIC_OUTS_B14_13": [],
+    "CFG_CENTER_ICAP1_O16->CFG_CENTER_LOGIC_OUTS_B15_13": [],
+    "CFG_CENTER_ICAP1_O17->CFG_CENTER_LOGIC_OUTS_B16_13": [],
+    "CFG_CENTER_ICAP1_O18->CFG_CENTER_LOGIC_OUTS_B17_13": [],
+    "CFG_CENTER_ICAP1_O19->CFG_CENTER_LOGIC_OUTS_B18_13": [],
+    "CFG_CENTER_ICAP1_O2->CFG_CENTER_LOGIC_OUTS_B13_12": [],
+    "CFG_CENTER_ICAP1_O20->CFG_CENTER_LOGIC_OUTS_B19_13": [],
+    "CFG_CENTER_ICAP1_O21->CFG_CENTER_LOGIC_OUTS_B20_13": [],
+    "CFG_CENTER_ICAP1_O22->CFG_CENTER_LOGIC_OUTS_B21_13": [],
+    "CFG_CENTER_ICAP1_O23->CFG_CENTER_LOGIC_OUTS_B22_13": [],
+    "CFG_CENTER_ICAP1_O24->CFG_CENTER_LOGIC_OUTS_B23_13": [],
+    "CFG_CENTER_ICAP1_O25->CFG_CENTER_LOGIC_OUTS_B10_14": [],
+    "CFG_CENTER_ICAP1_O26->CFG_CENTER_LOGIC_OUTS_B11_14": [],
+    "CFG_CENTER_ICAP1_O27->CFG_CENTER_LOGIC_OUTS_B12_14": [],
+    "CFG_CENTER_ICAP1_O28->CFG_CENTER_LOGIC_OUTS_B13_14": [],
+    "CFG_CENTER_ICAP1_O29->CFG_CENTER_LOGIC_OUTS_B14_14": [],
+    "CFG_CENTER_ICAP1_O3->CFG_CENTER_LOGIC_OUTS_B14_12": [],
+    "CFG_CENTER_ICAP1_O30->CFG_CENTER_LOGIC_OUTS_B15_14": [],
+    "CFG_CENTER_ICAP1_O31->CFG_CENTER_LOGIC_OUTS_B16_14": [],
+    "CFG_CENTER_ICAP1_O4->CFG_CENTER_LOGIC_OUTS_B15_12": [],
+    "CFG_CENTER_ICAP1_O5->CFG_CENTER_LOGIC_OUTS_B16_12": [],
+    "CFG_CENTER_ICAP1_O6->CFG_CENTER_LOGIC_OUTS_B17_12": [],
+    "CFG_CENTER_ICAP1_O7->CFG_CENTER_LOGIC_OUTS_B18_12": [],
+    "CFG_CENTER_ICAP1_O8->CFG_CENTER_LOGIC_OUTS_B19_12": [],
+    "CFG_CENTER_ICAP1_O9->CFG_CENTER_LOGIC_OUTS_B20_12": [],
+    "CFG_CENTER_IMUX27_5->CFG_CENTER_ICAP0_I16": [],
+    "CFG_CENTER_IMUX28_12->CFG_CENTER_ICAP1_I0": [],
+    "CFG_CENTER_IMUX28_13->CFG_CENTER_ICAP1_I16": [],
+    "CFG_CENTER_IMUX28_4->CFG_CENTER_ICAP0_I0": [],
+    "CFG_CENTER_IMUX28_5->CFG_CENTER_ICAP0_I17": [],
+    "CFG_CENTER_IMUX29_12->CFG_CENTER_ICAP1_I1": [],
+    "CFG_CENTER_IMUX29_13->CFG_CENTER_ICAP1_I17": [],
+    "CFG_CENTER_IMUX29_4->CFG_CENTER_ICAP0_I1": [],
+    "CFG_CENTER_IMUX29_5->CFG_CENTER_ICAP0_I18": [],
+    "CFG_CENTER_IMUX30_12->CFG_CENTER_ICAP1_I2": [],
+    "CFG_CENTER_IMUX30_13->CFG_CENTER_ICAP1_I18": [],
+    "CFG_CENTER_IMUX30_4->CFG_CENTER_ICAP0_I2": [],
+    "CFG_CENTER_IMUX30_5->CFG_CENTER_ICAP0_I19": [],
+    "CFG_CENTER_IMUX31_12->CFG_CENTER_ICAP1_I3": [],
+    "CFG_CENTER_IMUX31_13->CFG_CENTER_ICAP1_I19": [],
+    "CFG_CENTER_IMUX31_4->CFG_CENTER_ICAP0_I3": [],
+    "CFG_CENTER_IMUX31_5->CFG_CENTER_ICAP0_I20": [],
+    "CFG_CENTER_IMUX32_12->CFG_CENTER_ICAP1_I4": [],
+    "CFG_CENTER_IMUX32_13->CFG_CENTER_ICAP1_I20": [],
+    "CFG_CENTER_IMUX32_4->CFG_CENTER_ICAP0_I4": [],
+    "CFG_CENTER_IMUX32_5->CFG_CENTER_ICAP0_I21": [],
+    "CFG_CENTER_IMUX33_12->CFG_CENTER_ICAP1_I5": [],
+    "CFG_CENTER_IMUX33_13->CFG_CENTER_ICAP1_I21": [],
+    "CFG_CENTER_IMUX33_3->CFG_CENTER_BSCAN1_TDO": [
+      []
+    ],
+    "CFG_CENTER_IMUX33_4->CFG_CENTER_ICAP0_I5": [],
+    "CFG_CENTER_IMUX33_5->CFG_CENTER_ICAP0_I22": [],
+    "CFG_CENTER_IMUX34_12->CFG_CENTER_ICAP1_I6": [],
+    "CFG_CENTER_IMUX34_13->CFG_CENTER_ICAP1_I22": [],
+    "CFG_CENTER_IMUX34_3->CFG_CENTER_BSCAN2_TDO": [
+      []
+    ],
+    "CFG_CENTER_IMUX34_4->CFG_CENTER_ICAP0_I6": [],
+    "CFG_CENTER_IMUX34_5->CFG_CENTER_ICAP0_I23": [],
+    "CFG_CENTER_IMUX35_12->CFG_CENTER_ICAP1_I7": [],
+    "CFG_CENTER_IMUX35_13->CFG_CENTER_ICAP1_I23": [],
+    "CFG_CENTER_IMUX35_4->CFG_CENTER_ICAP0_I7": [],
+    "CFG_CENTER_IMUX35_5->CFG_CENTER_ICAP0_I24": [],
+    "CFG_CENTER_IMUX35_8->CFG_CENTER_DCIRESET_RST": [],
+    "CFG_CENTER_IMUX36_12->CFG_CENTER_ICAP1_I8": [],
+    "CFG_CENTER_IMUX36_13->CFG_CENTER_ICAP1_I24": [],
+    "CFG_CENTER_IMUX36_4->CFG_CENTER_ICAP0_I8": [],
+    "CFG_CENTER_IMUX36_5->CFG_CENTER_ICAP0_I25": [],
+    "CFG_CENTER_IMUX36_8->CFG_CENTER_STARTUP_KEYCLEARB": [
+      []
+    ],
+    "CFG_CENTER_IMUX37_12->CFG_CENTER_ICAP1_I9": [],
+    "CFG_CENTER_IMUX37_13->CFG_CENTER_ICAP1_I25": [],
+    "CFG_CENTER_IMUX37_4->CFG_CENTER_ICAP0_I9": [],
+    "CFG_CENTER_IMUX37_5->CFG_CENTER_ICAP0_I26": [],
+    "CFG_CENTER_IMUX37_8->CFG_CENTER_CAPTURE_CAP": [
+      []
+    ],
+    "CFG_CENTER_IMUX38_11->CFG_CENTER_BSCAN3_TDO": [
+      []
+    ],
+    "CFG_CENTER_IMUX38_12->CFG_CENTER_ICAP1_I10": [],
+    "CFG_CENTER_IMUX38_13->CFG_CENTER_ICAP1_I26": [],
+    "CFG_CENTER_IMUX38_4->CFG_CENTER_ICAP0_I10": [],
+    "CFG_CENTER_IMUX38_5->CFG_CENTER_ICAP0_I27": [],
+    "CFG_CENTER_IMUX38_8->CFG_CENTER_STARTUP_USRCCLKTS": [
+      []
+    ],
+    "CFG_CENTER_IMUX39_11->CFG_CENTER_BSCAN4_TDO": [
+      []
+    ],
+    "CFG_CENTER_IMUX39_12->CFG_CENTER_ICAP1_I11": [],
+    "CFG_CENTER_IMUX39_13->CFG_CENTER_ICAP1_I27": [],
+    "CFG_CENTER_IMUX39_4->CFG_CENTER_ICAP0_I11": [],
+    "CFG_CENTER_IMUX39_5->CFG_CENTER_ICAP0_I28": [],
+    "CFG_CENTER_IMUX39_8->CFG_CENTER_STARTUP_GTS": [
+      []
+    ],
+    "CFG_CENTER_IMUX40_11->CFG_CENTER_ICAP0_CSIB": [],
+    "CFG_CENTER_IMUX40_12->CFG_CENTER_ICAP1_I12": [],
+    "CFG_CENTER_IMUX40_13->CFG_CENTER_ICAP1_I28": [],
+    "CFG_CENTER_IMUX40_4->CFG_CENTER_ICAP0_I12": [],
+    "CFG_CENTER_IMUX40_5->CFG_CENTER_ICAP0_I29": [],
+    "CFG_CENTER_IMUX40_8->CFG_CENTER_STARTUP_GSR": [
+      []
+    ],
+    "CFG_CENTER_IMUX41_11->CFG_CENTER_ICAP0_RDWRB": [],
+    "CFG_CENTER_IMUX41_12->CFG_CENTER_ICAP1_I13": [],
+    "CFG_CENTER_IMUX41_13->CFG_CENTER_ICAP1_I29": [],
+    "CFG_CENTER_IMUX41_4->CFG_CENTER_ICAP0_I13": [],
+    "CFG_CENTER_IMUX41_5->CFG_CENTER_ICAP0_I30": [],
+    "CFG_CENTER_IMUX41_8->CFG_CENTER_STARTUP_USRDONETS": [
+      []
+    ],
+    "CFG_CENTER_IMUX42_11->CFG_CENTER_ICAP1_RDWRB": [],
+    "CFG_CENTER_IMUX42_12->CFG_CENTER_ICAP1_I14": [],
+    "CFG_CENTER_IMUX42_13->CFG_CENTER_ICAP1_I30": [],
+    "CFG_CENTER_IMUX42_4->CFG_CENTER_ICAP0_I14": [],
+    "CFG_CENTER_IMUX42_5->CFG_CENTER_ICAP0_I31": [],
+    "CFG_CENTER_IMUX42_8->CFG_CENTER_STARTUP_USRDONEO": [
+      []
+    ],
+    "CFG_CENTER_IMUX43_11->CFG_CENTER_ICAP1_CSIB": [],
+    "CFG_CENTER_IMUX43_12->CFG_CENTER_ICAP1_I15": [],
+    "CFG_CENTER_IMUX43_13->CFG_CENTER_ICAP1_I31": [],
+    "CFG_CENTER_IMUX43_4->CFG_CENTER_ICAP0_I15": [],
+    "CFG_CENTER_IMUX43_8->CFG_CENTER_STARTUP_PACK": [
+      []
+    ],
+    "CFG_CENTER_MID_ICAP1_CLK->CFG_CENTER_ICAP1_CLK": [],
+    "CFG_CENTER_STARTUP_CFGCLK->CFG_CENTER_LOGIC_OUTS_B14_10": [],
+    "CFG_CENTER_STARTUP_CFGMCLK->CFG_CENTER_LOGIC_OUTS_B18_5": [],
+    "CFG_CENTER_STARTUP_EOS->CFG_CENTER_LOGIC_OUTS_B23_9": [],
+    "CFG_CENTER_STARTUP_PREQ->CFG_CENTER_LOGIC_OUTS_B22_9": [],
+    "CFG_CENTER_USR_ACCESS_CFGCLK->CFG_CENTER_LOGIC_OUTS_B9_5": [],
+    "CFG_CENTER_USR_ACCESS_DATA0->CFG_CENTER_LOGIC_OUTS_B11_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA1->CFG_CENTER_LOGIC_OUTS_B12_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA10->CFG_CENTER_MID_USR_ACCESS_DATA10": [],
+    "CFG_CENTER_USR_ACCESS_DATA11->CFG_CENTER_MID_USR_ACCESS_DATA11": [],
+    "CFG_CENTER_USR_ACCESS_DATA12->CFG_CENTER_MID_USR_ACCESS_DATA12": [],
+    "CFG_CENTER_USR_ACCESS_DATA13->CFG_CENTER_MID_USR_ACCESS_DATA13": [],
+    "CFG_CENTER_USR_ACCESS_DATA14->CFG_CENTER_MID_USR_ACCESS_DATA14": [],
+    "CFG_CENTER_USR_ACCESS_DATA15->CFG_CENTER_LOGIC_OUTS_B10_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA16->CFG_CENTER_LOGIC_OUTS_B11_1": [],
+    "CFG_CENTER_USR_ACCESS_DATA17->CFG_CENTER_LOGIC_OUTS_B12_1": [],
+    "CFG_CENTER_USR_ACCESS_DATA18->CFG_CENTER_LOGIC_OUTS_B13_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA19->CFG_CENTER_LOGIC_OUTS_B14_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA2->CFG_CENTER_MID_USR_ACCESS_DATA2": [],
+    "CFG_CENTER_USR_ACCESS_DATA20->CFG_CENTER_LOGIC_OUTS_B15_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA21->CFG_CENTER_LOGIC_OUTS_B16_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA22->CFG_CENTER_LOGIC_OUTS_B17_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA23->CFG_CENTER_LOGIC_OUTS_B18_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA24->CFG_CENTER_LOGIC_OUTS_B19_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA25->CFG_CENTER_LOGIC_OUTS_B20_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA26->CFG_CENTER_LOGIC_OUTS_B21_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA27->CFG_CENTER_LOGIC_OUTS_B22_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA28->CFG_CENTER_LOGIC_OUTS_B23_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA29->CFG_CENTER_LOGIC_OUTS_B8_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA3->CFG_CENTER_MID_USR_ACCESS_DATA3": [],
+    "CFG_CENTER_USR_ACCESS_DATA30->CFG_CENTER_LOGIC_OUTS_B9_0": [],
+    "CFG_CENTER_USR_ACCESS_DATA31->CFG_CENTER_LOGIC_OUTS_B10_1": [],
+    "CFG_CENTER_USR_ACCESS_DATA4->CFG_CENTER_MID_USR_ACCESS_DATA4": [],
+    "CFG_CENTER_USR_ACCESS_DATA5->CFG_CENTER_MID_USR_ACCESS_DATA5": [],
+    "CFG_CENTER_USR_ACCESS_DATA6->CFG_CENTER_MID_USR_ACCESS_DATA6": [],
+    "CFG_CENTER_USR_ACCESS_DATA7->CFG_CENTER_MID_USR_ACCESS_DATA7": [],
+    "CFG_CENTER_USR_ACCESS_DATA8->CFG_CENTER_MID_USR_ACCESS_DATA8": [],
+    "CFG_CENTER_USR_ACCESS_DATA9->CFG_CENTER_MID_USR_ACCESS_DATA9": [],
+    "CFG_CENTER_USR_ACCESS_DATAVALID->CFG_CENTER_LOGIC_OUTS_B13_1": []
+  }
+}

@@ -1,0 +1,1258 @@
+{
+  "SITE_INDEX": {
+    "0": {
+      "DEFAULT_SITE_TYPE": "BUFIO",
+      "SITE_TYPE": {
+        "BUFIO": {
+          "BEL": {
+            "BUFIO": {
+              "CONFIG": {
+                "DELAY_BYPASS": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "36_0",
+                        "36_1",
+                        "36_11",
+                        "36_12",
+                        "36_16",
+                        "36_18",
+                        "36_2",
+                        "36_21",
+                        "36_4",
+                        "36_5",
+                        "36_7",
+                        "36_8",
+                        "37_11",
+                        "37_12",
+                        "37_16",
+                        "37_18",
+                        "37_2",
+                        "37_22",
+                        "37_4",
+                        "37_5",
+                        "37_7",
+                        "37_8"
+                      ]
+                    ],
+                    "TRUE": []
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "1": {
+      "DEFAULT_SITE_TYPE": "BUFIO",
+      "SITE_TYPE": {
+        "BUFIO": {
+          "BEL": {
+            "BUFIO": {
+              "CONFIG": {
+                "DELAY_BYPASS": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "36_0",
+                        "36_1",
+                        "36_11",
+                        "36_12",
+                        "36_16",
+                        "36_18",
+                        "36_2",
+                        "36_21",
+                        "36_4",
+                        "36_5",
+                        "36_7",
+                        "36_8",
+                        "37_11",
+                        "37_12",
+                        "37_16",
+                        "37_18",
+                        "37_2",
+                        "37_22",
+                        "37_4",
+                        "37_5",
+                        "37_7",
+                        "37_8"
+                      ]
+                    ],
+                    "TRUE": []
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "2": {
+      "DEFAULT_SITE_TYPE": "BUFIO",
+      "SITE_TYPE": {
+        "BUFIO": {
+          "BEL": {
+            "BUFIO": {
+              "CONFIG": {
+                "DELAY_BYPASS": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [
+                      [
+                        "36_0",
+                        "36_1",
+                        "36_11",
+                        "36_12",
+                        "36_16",
+                        "36_18",
+                        "36_2",
+                        "36_21",
+                        "36_4",
+                        "36_5",
+                        "36_7",
+                        "36_8",
+                        "37_11",
+                        "37_12",
+                        "37_16",
+                        "37_18",
+                        "37_2",
+                        "37_22",
+                        "37_4",
+                        "37_5",
+                        "37_7",
+                        "37_8"
+                      ]
+                    ],
+                    "TRUE": []
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "3": {
+      "DEFAULT_SITE_TYPE": "BUFIO",
+      "SITE_TYPE": {
+        "BUFIO": {
+          "BEL": {
+            "BUFIO": {
+              "CONFIG": {
+                "DELAY_BYPASS": {
+                  "VALUE": {
+                    "FALSE": [],
+                    "TRUE": []
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "4": {
+      "DEFAULT_SITE_TYPE": "BUFR",
+      "SITE_TYPE": {
+        "BUFR": {
+          "BEL": {
+            "BUFR": {
+              "CONFIG": {
+                "BUFR_DIVIDE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      [
+                        "!32_0",
+                        "!33_0",
+                        "!33_12",
+                        "!33_15",
+                        "!33_16",
+                        "!33_17",
+                        "!33_4",
+                        "32_17",
+                        "33_1",
+                        "33_11",
+                        "33_14",
+                        "33_2",
+                        "33_3",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "2": [
+                      [
+                        "!32_0",
+                        "!33_11",
+                        "!33_15",
+                        "!33_16",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_17",
+                        "33_0",
+                        "33_1",
+                        "33_12",
+                        "33_14",
+                        "33_17",
+                        "33_2",
+                        "33_3",
+                        "33_4"
+                      ]
+                    ],
+                    "3": [
+                      [
+                        "!32_0",
+                        "!33_0",
+                        "!33_11",
+                        "!33_12",
+                        "!33_15",
+                        "!33_17",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_17",
+                        "33_1",
+                        "33_14",
+                        "33_16",
+                        "33_2",
+                        "33_3",
+                        "33_4"
+                      ]
+                    ],
+                    "4": [
+                      [
+                        "!32_0",
+                        "!33_15",
+                        "!33_4",
+                        "32_17",
+                        "33_0",
+                        "33_1",
+                        "33_11",
+                        "33_12",
+                        "33_14",
+                        "33_16",
+                        "33_17",
+                        "33_2",
+                        "33_3",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "5": [
+                      [
+                        "!32_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_16",
+                        "!33_17",
+                        "!33_2",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_17",
+                        "33_0",
+                        "33_12",
+                        "33_14",
+                        "33_15"
+                      ]
+                    ],
+                    "6": [
+                      [
+                        "!32_0",
+                        "!33_0",
+                        "!33_1",
+                        "!33_12",
+                        "!33_16",
+                        "!33_2",
+                        "!33_3",
+                        "32_17",
+                        "33_11",
+                        "33_14",
+                        "33_15",
+                        "33_17",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "7": [
+                      [
+                        "!32_0",
+                        "!33_1",
+                        "!33_17",
+                        "!33_2",
+                        "!33_3",
+                        "32_17",
+                        "33_0",
+                        "33_11",
+                        "33_12",
+                        "33_14",
+                        "33_15",
+                        "33_16",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "8": [
+                      [
+                        "!32_0",
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_2",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_17",
+                        "33_14",
+                        "33_15",
+                        "33_16",
+                        "33_17"
+                      ]
+                    ],
+                    "BYPASS": [
+                      [
+                        "!32_17",
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_14",
+                        "!33_15",
+                        "!33_16",
+                        "!33_17",
+                        "!33_2",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_0"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "5": {
+      "DEFAULT_SITE_TYPE": "BUFR",
+      "SITE_TYPE": {
+        "BUFR": {
+          "BEL": {
+            "BUFR": {
+              "CONFIG": {
+                "BUFR_DIVIDE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      [
+                        "!33_0",
+                        "!33_19",
+                        "!33_2",
+                        "!33_20",
+                        "!33_21",
+                        "32_22",
+                        "33_1",
+                        "33_11",
+                        "33_12",
+                        "33_18",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "2": [
+                      [
+                        "!33_11",
+                        "!33_19",
+                        "!33_20",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_22",
+                        "33_0",
+                        "33_1",
+                        "33_12",
+                        "33_18",
+                        "33_2",
+                        "33_21"
+                      ]
+                    ],
+                    "3": [
+                      [
+                        "!33_0",
+                        "!33_11",
+                        "!33_12",
+                        "!33_19",
+                        "!33_21",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_22",
+                        "33_1",
+                        "33_18",
+                        "33_2",
+                        "33_20"
+                      ]
+                    ],
+                    "4": [
+                      [
+                        "!33_12",
+                        "!33_19",
+                        "!33_2",
+                        "32_22",
+                        "33_0",
+                        "33_1",
+                        "33_11",
+                        "33_18",
+                        "33_20",
+                        "33_21",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "5": [
+                      [
+                        "!33_1",
+                        "!33_11",
+                        "!33_2",
+                        "!33_20",
+                        "!33_21",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_22",
+                        "33_0",
+                        "33_12",
+                        "33_18",
+                        "33_19"
+                      ]
+                    ],
+                    "6": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_20",
+                        "32_22",
+                        "33_11",
+                        "33_12",
+                        "33_18",
+                        "33_19",
+                        "33_2",
+                        "33_21",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "7": [
+                      [
+                        "!33_1",
+                        "!33_12",
+                        "!33_21",
+                        "32_22",
+                        "33_0",
+                        "33_11",
+                        "33_18",
+                        "33_19",
+                        "33_2",
+                        "33_20",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "8": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_2",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_22",
+                        "33_18",
+                        "33_19",
+                        "33_20",
+                        "33_21"
+                      ]
+                    ],
+                    "BYPASS": [
+                      [
+                        "!32_22",
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_18",
+                        "!33_19",
+                        "!33_2",
+                        "!33_20",
+                        "!33_21",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "6": {
+      "DEFAULT_SITE_TYPE": "BUFR",
+      "SITE_TYPE": {
+        "BUFR": {
+          "BEL": {
+            "BUFR": {
+              "CONFIG": {
+                "BUFR_DIVIDE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      [
+                        "!33_24",
+                        "!33_25",
+                        "!33_26",
+                        "!33_3",
+                        "32_28",
+                        "33_0",
+                        "33_1",
+                        "33_11",
+                        "33_12",
+                        "33_2",
+                        "33_23",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "2": [
+                      [
+                        "!33_1",
+                        "!33_11",
+                        "!33_24",
+                        "!33_25",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_28",
+                        "33_0",
+                        "33_12",
+                        "33_2",
+                        "33_23",
+                        "33_26",
+                        "33_3"
+                      ]
+                    ],
+                    "3": [
+                      [
+                        "!33_0",
+                        "!33_11",
+                        "!33_24",
+                        "!33_26",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_28",
+                        "33_1",
+                        "33_12",
+                        "33_2",
+                        "33_23",
+                        "33_25",
+                        "33_3"
+                      ]
+                    ],
+                    "4": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_24",
+                        "!33_3",
+                        "32_28",
+                        "33_11",
+                        "33_12",
+                        "33_2",
+                        "33_23",
+                        "33_25",
+                        "33_26",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "5": [
+                      [
+                        "!33_11",
+                        "!33_12",
+                        "!33_25",
+                        "!33_26",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_28",
+                        "33_0",
+                        "33_1",
+                        "33_2",
+                        "33_23",
+                        "33_24",
+                        "33_3"
+                      ]
+                    ],
+                    "6": [
+                      [
+                        "!33_1",
+                        "!33_12",
+                        "!33_25",
+                        "!33_3",
+                        "32_28",
+                        "33_0",
+                        "33_11",
+                        "33_2",
+                        "33_23",
+                        "33_24",
+                        "33_26",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "7": [
+                      [
+                        "!33_0",
+                        "!33_12",
+                        "!33_26",
+                        "!33_3",
+                        "32_28",
+                        "33_1",
+                        "33_11",
+                        "33_2",
+                        "33_23",
+                        "33_24",
+                        "33_25",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "8": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "32_28",
+                        "33_2",
+                        "33_23",
+                        "33_24",
+                        "33_25",
+                        "33_26",
+                        "33_3"
+                      ]
+                    ],
+                    "BYPASS": [
+                      [
+                        "!32_28",
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_2",
+                        "!33_23",
+                        "!33_24",
+                        "!33_25",
+                        "!33_26",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "7": {
+      "DEFAULT_SITE_TYPE": "BUFR",
+      "SITE_TYPE": {
+        "BUFR": {
+          "BEL": {
+            "BUFR": {
+              "CONFIG": {
+                "BUFR_DIVIDE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "1": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_28",
+                        "!33_29",
+                        "!33_3",
+                        "!33_30",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "33_12",
+                        "33_2",
+                        "33_27",
+                        "33_31"
+                      ]
+                    ],
+                    "2": [
+                      [
+                        "!33_0",
+                        "!33_12",
+                        "!33_2",
+                        "!33_28",
+                        "!33_29",
+                        "33_1",
+                        "33_11",
+                        "33_27",
+                        "33_3",
+                        "33_30",
+                        "33_31",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "3": [
+                      [
+                        "!33_1",
+                        "!33_12",
+                        "!33_2",
+                        "!33_28",
+                        "!33_30",
+                        "33_0",
+                        "33_11",
+                        "33_27",
+                        "33_29",
+                        "33_3",
+                        "33_31",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "4": [
+                      [
+                        "!33_11",
+                        "!33_28",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "33_0",
+                        "33_1",
+                        "33_12",
+                        "33_2",
+                        "33_27",
+                        "33_29",
+                        "33_30",
+                        "33_31"
+                      ]
+                    ],
+                    "5": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_2",
+                        "!33_29",
+                        "!33_30",
+                        "33_11",
+                        "33_12",
+                        "33_27",
+                        "33_28",
+                        "33_3",
+                        "33_31",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "6": [
+                      [
+                        "!33_0",
+                        "!33_11",
+                        "!33_12",
+                        "!33_29",
+                        "!33_3",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "33_1",
+                        "33_2",
+                        "33_27",
+                        "33_28",
+                        "33_30",
+                        "33_31"
+                      ]
+                    ],
+                    "7": [
+                      [
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_3",
+                        "!33_30",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8",
+                        "33_0",
+                        "33_2",
+                        "33_27",
+                        "33_28",
+                        "33_29",
+                        "33_31"
+                      ]
+                    ],
+                    "8": [
+                      [
+                        "!33_2",
+                        "33_0",
+                        "33_1",
+                        "33_11",
+                        "33_12",
+                        "33_27",
+                        "33_28",
+                        "33_29",
+                        "33_3",
+                        "33_30",
+                        "33_31",
+                        "33_4",
+                        "33_5",
+                        "33_7",
+                        "33_8"
+                      ]
+                    ],
+                    "BYPASS": [
+                      [
+                        "!33_0",
+                        "!33_1",
+                        "!33_11",
+                        "!33_12",
+                        "!33_2",
+                        "!33_27",
+                        "!33_28",
+                        "!33_29",
+                        "!33_3",
+                        "!33_30",
+                        "!33_31",
+                        "!33_4",
+                        "!33_5",
+                        "!33_7",
+                        "!33_8"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    },
+    "8": {
+      "DEFAULT_SITE_TYPE": "IDELAYCTRL",
+      "SITE_TYPE": {
+        "IDELAYCTRL": {
+          "BEL": {
+            "IDELAYCTRL": {
+              "CONFIG": {
+                "BIAS_MODE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "0": [
+                      [
+                        "37_0",
+                        "37_12",
+                        "37_28",
+                        "37_29"
+                      ]
+                    ],
+                    "1": [],
+                    "2": []
+                  }
+                },
+                "HIGH_PERFORMANCE_MODE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "FALSE": [],
+                    "NOT CONFIGURED": [
+                      [
+                        "37_0",
+                        "37_12",
+                        "37_28",
+                        "37_29"
+                      ]
+                    ],
+                    "TRUE": []
+                  }
+                },
+                "IDELAYCTRL_EN": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "DEFAULT": [],
+                    "DISABLE": [],
+                    "ENABLE": [
+                      [
+                        "37_0",
+                        "37_12",
+                        "37_28",
+                        "37_29"
+                      ]
+                    ]
+                  }
+                },
+                "RESET_STYLE": {
+                  "BUS": "CLB_IO_CLK",
+                  "VALUE": {
+                    "NOT CONFIGURED": [
+                      [
+                        "37_0",
+                        "37_12",
+                        "37_28",
+                        "37_29"
+                      ]
+                    ],
+                    "V4": [],
+                    "V5": []
+                  }
+                }
+              }
+            }
+          },
+          "SITE_PIP": {}
+        }
+      }
+    }
+  },
+  "TILE_PIP": {
+    "HCLK_IOI_BUFIO_O0->>HCLK_IOI_IOCLK0": [],
+    "HCLK_IOI_BUFIO_O1->>HCLK_IOI_IOCLK1": [],
+    "HCLK_IOI_BUFIO_O2->>HCLK_IOI_IOCLK2": [],
+    "HCLK_IOI_BUFIO_O3->>HCLK_IOI_IOCLK3": [],
+    "HCLK_IOI_CK_BUFHCLK0->>HCLK_IOI_CK_IGCLK0": [],
+    "HCLK_IOI_CK_BUFHCLK1->>HCLK_IOI_CK_IGCLK1": [],
+    "HCLK_IOI_CK_BUFHCLK10->>HCLK_IOI_CK_IGCLK10": [],
+    "HCLK_IOI_CK_BUFHCLK11->>HCLK_IOI_CK_IGCLK11": [],
+    "HCLK_IOI_CK_BUFHCLK2->>HCLK_IOI_CK_IGCLK2": [],
+    "HCLK_IOI_CK_BUFHCLK3->>HCLK_IOI_CK_IGCLK3": [],
+    "HCLK_IOI_CK_BUFHCLK4->>HCLK_IOI_CK_IGCLK4": [],
+    "HCLK_IOI_CK_BUFHCLK5->>HCLK_IOI_CK_IGCLK5": [],
+    "HCLK_IOI_CK_BUFHCLK6->>HCLK_IOI_CK_IGCLK6": [],
+    "HCLK_IOI_CK_BUFHCLK7->>HCLK_IOI_CK_IGCLK7": [],
+    "HCLK_IOI_CK_BUFHCLK8->>HCLK_IOI_CK_IGCLK8": [],
+    "HCLK_IOI_CK_BUFHCLK9->>HCLK_IOI_CK_IGCLK9": [],
+    "HCLK_IOI_CK_BUFRCLK0->>HCLK_IOI_RCLK2IO0": [],
+    "HCLK_IOI_CK_BUFRCLK1->>HCLK_IOI_RCLK2IO1": [],
+    "HCLK_IOI_CK_BUFRCLK2->>HCLK_IOI_RCLK2IO2": [],
+    "HCLK_IOI_CK_BUFRCLK3->>HCLK_IOI_RCLK2IO3": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK0->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK1->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK10->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK11->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK2->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK3->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK4->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK5->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK6->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK7->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK8->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT0": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT1": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT2": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT3": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT4": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_BOT5": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP0": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP1": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP2": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP3": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP4": [],
+    "HCLK_IOI_CK_IGCLK9->>HCLK_IOI_LEAF_GCLK_TOP5": [],
+    "HCLK_IOI_I2IOCLK_BOT0->>HCLK_IOI_IO_PLL_CLK2_DMUX": [],
+    "HCLK_IOI_I2IOCLK_BOT1->>HCLK_IOI_IO_PLL_CLK3_DMUX": [],
+    "HCLK_IOI_I2IOCLK_TOP0->>HCLK_IOI_IO_PLL_CLK0_DMUX": [],
+    "HCLK_IOI_I2IOCLK_TOP1->>HCLK_IOI_IO_PLL_CLK1_DMUX": [],
+    "HCLK_IOI_IOCLK_PLL0->>HCLK_IOI_IO_PLL_CLK0_DMUX": [],
+    "HCLK_IOI_IOCLK_PLL1->>HCLK_IOI_IO_PLL_CLK1_DMUX": [],
+    "HCLK_IOI_IOCLK_PLL2->>HCLK_IOI_IO_PLL_CLK2_DMUX": [],
+    "HCLK_IOI_IOCLK_PLL3->>HCLK_IOI_IO_PLL_CLK3_DMUX": [],
+    "HCLK_IOI_IO_PLL_CLK0_DMUX->>HCLK_IOI_IO_PLL_CLK0": [],
+    "HCLK_IOI_IO_PLL_CLK0_DMUX->>HCLK_IOI_RCLK0": [],
+    "HCLK_IOI_IO_PLL_CLK1_DMUX->>HCLK_IOI_IO_PLL_CLK1": [],
+    "HCLK_IOI_IO_PLL_CLK1_DMUX->>HCLK_IOI_RCLK1": [],
+    "HCLK_IOI_IO_PLL_CLK2_DMUX->>HCLK_IOI_IO_PLL_CLK2": [],
+    "HCLK_IOI_IO_PLL_CLK2_DMUX->>HCLK_IOI_RCLK2": [],
+    "HCLK_IOI_IO_PLL_CLK3_DMUX->>HCLK_IOI_IO_PLL_CLK3": [],
+    "HCLK_IOI_IO_PLL_CLK3_DMUX->>HCLK_IOI_RCLK3": [],
+    "HCLK_IOI_LEAF_GCLK_BOT0->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_BOT1->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_BOT2->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_BOT3->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_BOT4->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_BOT5->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP0->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP1->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP2->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP3->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP4->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_LEAF_GCLK_TOP5->>HCLK_IOI_IDELAYCTRL_REFCLK": [],
+    "HCLK_IOI_RCLK0->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK0->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK0->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK0->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK1->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK1->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK1->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK1->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK2->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK2->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK2->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK2->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK2RCLK0->>HCLK_IOI_CK_BUFRCLK0": [],
+    "HCLK_IOI_RCLK2RCLK1->>HCLK_IOI_CK_BUFRCLK1": [],
+    "HCLK_IOI_RCLK2RCLK2->>HCLK_IOI_CK_BUFRCLK2": [],
+    "HCLK_IOI_RCLK2RCLK3->>HCLK_IOI_CK_BUFRCLK3": [],
+    "HCLK_IOI_RCLK3->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK3->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK3->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK3->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK_BEFORE_DIV0->>HCLK_IOI_RCLK_OUT0": [],
+    "HCLK_IOI_RCLK_BEFORE_DIV1->>HCLK_IOI_RCLK_OUT1": [],
+    "HCLK_IOI_RCLK_BEFORE_DIV2->>HCLK_IOI_RCLK_OUT2": [],
+    "HCLK_IOI_RCLK_BEFORE_DIV3->>HCLK_IOI_RCLK_OUT3": [],
+    "HCLK_IOI_RCLK_IMUX0->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK_IMUX0->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK_IMUX0->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK_IMUX0->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK_IMUX1->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK_IMUX1->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK_IMUX1->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK_IMUX1->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK_IMUX2->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK_IMUX2->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK_IMUX2->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK_IMUX2->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK_IMUX3->>HCLK_IOI_RCLK_BEFORE_DIV0": [],
+    "HCLK_IOI_RCLK_IMUX3->>HCLK_IOI_RCLK_BEFORE_DIV1": [],
+    "HCLK_IOI_RCLK_IMUX3->>HCLK_IOI_RCLK_BEFORE_DIV2": [],
+    "HCLK_IOI_RCLK_IMUX3->>HCLK_IOI_RCLK_BEFORE_DIV3": [],
+    "HCLK_IOI_RCLK_OUT0->>HCLK_IOI_RCLK2RCLK0": [],
+    "HCLK_IOI_RCLK_OUT1->>HCLK_IOI_RCLK2RCLK1": [],
+    "HCLK_IOI_RCLK_OUT2->>HCLK_IOI_RCLK2RCLK2": [],
+    "HCLK_IOI_RCLK_OUT3->>HCLK_IOI_RCLK2RCLK3": [],
+    "HCLK_RCLK_DIV_CE0->HCLK_IOI_BUFR0_CE": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CE1->HCLK_IOI_BUFR1_CE": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CE2->HCLK_IOI_BUFR2_CE": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CE3->HCLK_IOI_BUFR3_CE": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CLR0->HCLK_IOI_BUFR0_CLR": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CLR1->HCLK_IOI_BUFR1_CLR": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CLR2->HCLK_IOI_BUFR2_CLR": [
+      []
+    ],
+    "HCLK_RCLK_DIV_CLR3->HCLK_IOI_BUFR3_CLR": [
+      []
+    ]
+  }
+}
