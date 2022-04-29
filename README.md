@@ -1,6 +1,6 @@
 # BitRec - Bitstream Documentation
 
-Corey Simpson's tools for documenting Xilinx bitstreams.
+Pythoon/Tcl tools for documenting Xilinx bitstreams.  Lead author Corey Simpson.
 
 README files for the instructions are contained in the various directories.
 
