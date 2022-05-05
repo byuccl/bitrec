@@ -102,8 +102,8 @@ series7_run_commands = [
     ]
 
 series7_run_commands_pips = [
-    "INT_L --pips=1 --pip_iterations=100",
-    "INT_R --pips=1 --pip_iterations=100",
+    "INT_L --pips=1 --pip_iterations=25",
+    "INT_R --pips=1 --pip_iterations=25",
     "DSP_L --pips=1 --pip_iterations=5",
     "DSP_R --pips=1 --pip_iterations=5",
     "BRAM_L --pips=1 --pip_iterations=5",
