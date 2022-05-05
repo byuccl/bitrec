@@ -1,5 +1,5 @@
 fuzzer/artix7
 fuzzer/__pycache__
 fuzzer/rapidwright*
-*.jou
-*.log
+vivado.jou
+vivado.log
