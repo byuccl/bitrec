@@ -18,6 +18,8 @@
 import random
 import re
 import json
+import os
+import datetime
 import jpype
 import jpype.imports
 from jpype.types import *
@@ -409,6 +411,7 @@ def run_pip_generation(tile_list,pip_list):
         series_depth = 7
         max_route_attempt = 20
     
+    print(f"Starting run_pip_generation, len(pip_list)={len(pip_list)}  {datetime.datetime.now()}", file=sys.stderr)
     while(1):
         random.shuffle(pip_list)
         current_pip_count = 0
@@ -468,9 +471,11 @@ def run_pip_generation(tile_list,pip_list):
         pips = tile_list[0].getPIPs()
         pip_list = check_pip_files(pips)
 
-        print(f"len(pip_list)={len(pip_list)}, iteration={iteration}", file=sys.stderr)
+        print(f"len(pip_list)={len(pip_list)}, iteration={iteration}  {datetime.datetime.now()}", file=sys.stderr)
+        os.system(f"cp data/{fuzz_path}/fuzz_pips.tcl data/{fuzz_path}/fuzz_pips_{iteration}.tcl")
         if len(pip_list) == 0 or iteration >= int(args.pip_iterations):
             break
+
         init_file()
         iteration+=1
         if iteration >= 2:
