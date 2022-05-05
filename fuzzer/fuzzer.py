@@ -110,4 +110,4 @@ run_data_analysis(top_fuzz_path,args)
 os.chdir("../..")
 
 # Force exit
-os._exit()
+os._exit(0)
