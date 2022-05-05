@@ -28,7 +28,7 @@ wget https://github.com/Xilinx/RapidWright/releases/download/v2021.2.0-beta/rapi
 python3 run_snapshot.py --family=artix7 --tile=DSP_L
 ```
 
-This will take approximately 15 minutes to run (depending on the machine), and generate around 28 bitstreams under <family_name>/<part_name>/data/0000/. Final output products will be under <family_name>/<part_name>/db/db.DSP_L.json. Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. The first time you run the fuzzer "get_db.tcl" will be run, which will generate the file structure, as well as 4 json dictionaries for the fuzzer to use.  
+This will take approximately 30 minutes to run (depending on the machine), and generate around 56 bitstreams under <family_name>/<part_name>/data/0000/. Final output products will be under <family_name>/<part_name>/db/db.DSP_L.json. Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. The first time you run the fuzzer "get_db.tcl" will be run, which will generate the file structure, as well as 4 json dictionaries for the fuzzer to use.  
 
 2. Run the database generation for the artix7 - This will take 12+ hours.  
 
