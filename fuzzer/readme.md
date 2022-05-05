@@ -95,7 +95,7 @@ After completing the Quick Start Guide, the following file structure will be gen
 * tilegrid.json - This contains a dictionary of every tile, and all grid coordinates, and bitstream address information. 
 
 ## Fuzzing PIPs
-At the current time only these tiles need to have pip fuzzing done: INT_L and INT_R (7 Series) and INT (US and US+).  To fuzz INT_L for 7 Series yould execute:
+At the current time only these tiles need to have pip fuzzing done: INT_L and INT_R (7 Series) and INT (US and US+).  To fuzz INT_L for 7 Series you would execute:
 ```
 python3 run_snapshot.py --family=artix7 --tile=INT_L --pips=1
 ```
