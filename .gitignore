@@ -1,0 +1,5 @@
+fuzzer/artix7
+fuzzer/__pycache__
+fuzzer/rapidwright*
+vivado.jou
+vivado.log
