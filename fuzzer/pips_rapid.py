@@ -468,6 +468,7 @@ def run_pip_generation(tile_list,pip_list):
         pips = tile_list[0].getPIPs()
         pip_list = check_pip_files(pips)
 
+        print(f"len(pip_list)={len(pip_list)}, iteration={iteration}", file=sys.stderr)
         if len(pip_list) == 0 or iteration >= int(args.pip_iterations):
             break
         init_file()
