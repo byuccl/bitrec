@@ -94,7 +94,30 @@ After completing the Quick Start Guide, the following file structure will be gen
 * tile_dict.json - This contains a dictionary of every tile type, their sites and respective site types, and what primitives are placeable in every bel.   Additionally, all cell pins are shown with their respective bel pins.  
 * tilegrid.json - This contains a dictionary of every tile, and all grid coordinates, and bitstream address information. 
 
+## Fuzzing PIPs
+At the current time only these tiles need to have pip fuzzing done: INT_L and INT_R (7 Series) and INT (US and US+).  To fuzz INT_L for 7 Series yould execute:
+```
+python3 run_snapshot.py --family=artix7 --tile=INT_L --pips=1
+```
+This takes approximately ??? hours on our lab machine.
 
+### Vivado Crashes When Fuzzing PIPs
+Vivado segfaults every once in a while when fuzzing pips and we have never able to consistently recreate it.  What we have found is "if you do too much in a single TCL script it may segfault". Segfaults just mean that all of the data for that iteration of the while loop won't complete, but the next iteration will repeat it.
+
+### PIP Fuzzer Explanation
+The pip fuzzer works by sitting in a while loop, per iteration it will generate 1 net that traverses through each pip, then it will check if "each pip can be unambiguously distinguished from all other pips", which means that for each pip it is the only thing used within the tile, or if another pip is used then it will need to create a net with the target pip plus a different used pip using either A) a different mux, or B) an example of each pip within the same mux. Where the pip mux is defined as all of the pips with the same dest node. The while loop will repeat, generating a new net to further disambiguate all currently ambiguous pips, and then break once all pips are disambiguated. 
+
+Also, in Vivado a "pip junction" is what we mean when we say pip mux, a collection of pips that all share a destination, where the bitstream bits select what source is being used (a mux...). However, Vivado doesn't consider a pip junction a "first class object", so they are non-existent when it comes to the TCL interface.
+
+If you don't run the pip fuzzer for long enough (the len(pip_list) in run_pip_generation never reaches 0), then there is a chance that those pips left in the pip_list are not going to be fully solved (there will be pollution - extra pips from other independent pips within the equation).
+
+But it is just a chance because consider pip "A1". The only way to reach pip A1 is to traverse pip junction B (junction B's destination node is pip A1's source node), and junction A and B are within the same tile. Junction B has 3 different inputs B1-B3, controlled by bitstream bits X, Y and Z. Consider if junction B's rules are:
+```
+B1: XY
+B2: XZ
+B3: Z
+```
+Our goal is to have examples within our data set of B1 A1, B2 A1 and B3 A1, but we were never able to create B3 A1 because of either DRC checks, or this B3 A1 is a difficult complete net to create (think routing difficulty because B3 could only be connected in the INT_L tile on the top of the FPGA or something like that).  In this case it will never be removed from the pip_list and the while loop will never exit. The rule for A1 will think that X is a part of A1 because it was never "toggled within our data set". So to completely disambiguate A1, we need all three cases of B1-B3, but we don't know the rules of junction B until we solve for them, so we can only settle on "at least one example of each". Now if we were able to generate an example of B1 and B3, but not B2, then we are fine - hence the "chance of it not being solved for, but there is a chance we are okay". Most pip junctions have ~23 different sources, so hitting 20 of the 23 is usually sufficient but not guaranteed.
 
 ## Database Gaps
 
