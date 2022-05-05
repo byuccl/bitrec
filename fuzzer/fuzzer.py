@@ -109,5 +109,5 @@ run_data_analysis(top_fuzz_path,args)
         
 os.chdir("../..")
 
-# Not sure why it is not exiting...
-sys.exit()
+# Force exit
+os._exit()
