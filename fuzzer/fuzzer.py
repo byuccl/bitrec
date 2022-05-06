@@ -110,5 +110,5 @@ run_data_analysis(top_fuzz_path,args)
 os.chdir("../..")
 
 # Force exit
-print(f"   Exiting fuzzer for tile={args.tile_type}", file=sys.stderr)
+print(f"[LOG]: Exiting fuzzer for tile={args.tile_type}", file=sys.stderr)
 os._exit(0)
