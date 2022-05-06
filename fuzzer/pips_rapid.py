@@ -413,11 +413,11 @@ def run_pip_generation(tile_list,pip_list):
         series_depth = 7
         max_route_attempt = 20
     
-    print(f"Starting run_pip_generation, len(pip_list)={len(pip_list)}  {datetime.datetime.now()}", file=sys.stderr)
+    print(f"[LOG]: Starting run_pip_generation, len(pip_list)={len(pip_list)}  {datetime.datetime.now()}", file=sys.stderr)
     while(1):
         random.shuffle(pip_list)
         current_pip_count = 0
-        for i in pip_list:
+        for nn,i in enumerate(pip_list):
             attempt_count = 0
             current_pip_count += 1
             max_depth = series_depth
@@ -433,7 +433,9 @@ def run_pip_generation(tile_list,pip_list):
                 if max_attempt[i] > 15:
                     max_route_attempt = 30
                     max_depth+=2
+            print(f"\n  {nn}:{i} ", end="", file=sys.stderr, flush=True)
             while (1):
+                print(".", end="", file=sys.stderr, flush=True)
                 attempt_count += 1
                 T = random.choice(cur_tile_list)
                 P = T.getPIPs()[i]
@@ -459,6 +461,7 @@ def run_pip_generation(tile_list,pip_list):
                         max_attempt[i] = 1
                     else:
                         max_attempt[i] = max_attempt[i] + 1
+                    print(f" {T} {P}", file=sys.stderr, end="")
                     break
 
             if current_pip_count%max_pips_test == max_pips_test-1:
@@ -469,11 +472,12 @@ def run_pip_generation(tile_list,pip_list):
             #    break
         generate_pip_bitstream()
         ft.close()
+        print("\n[LOG]: Running Vivado...", file=sys.stderr)
         os.system("vivado -mode batch -source data/" + fuzz_path + "/fuzz_pips.tcl -stack 2000")
         pips = tile_list[0].getPIPs()
         pip_list = check_pip_files(pips)
 
-        print(f"len(pip_list)={len(pip_list)}, iteration={iteration}  {datetime.datetime.now()}", file=sys.stderr)
+        print(f"[LOG]: len(pip_list)={len(pip_list)}, iteration={iteration}  {datetime.datetime.now()}", file=sys.stderr)
         os.system(f"cp data/{fuzz_path}/fuzz_pips.tcl data/{fuzz_path}/fuzz_pips_{iteration}.tcl")
         # There are 3 ways to stop iterating:
         #   a) We disambiguate all the pips in the list of pips
@@ -492,6 +496,7 @@ def run_pip_generation(tile_list,pip_list):
         iteration+=1
         if iteration >= 2:
             banned_pin_list = []
+    print("[LOG]: Exiting run_pip_generation", file=sys.stderr)  
 
 
 
