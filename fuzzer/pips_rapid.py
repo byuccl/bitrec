@@ -19,6 +19,8 @@ import random
 import re
 import json
 import os
+import os.path
+from os import path
 import datetime
 import jpype
 import jpype.imports
@@ -473,7 +475,17 @@ def run_pip_generation(tile_list,pip_list):
 
         print(f"len(pip_list)={len(pip_list)}, iteration={iteration}  {datetime.datetime.now()}", file=sys.stderr)
         os.system(f"cp data/{fuzz_path}/fuzz_pips.tcl data/{fuzz_path}/fuzz_pips_{iteration}.tcl")
-        if len(pip_list) == 0 or iteration >= int(args.pip_iterations):
+        # There are 3 ways to stop iterating:
+        #   a) We disambiguate all the pips in the list of pips
+        #   b) We hit our iteration count
+        #   c) A file named "STOP" has been placed into the directory with the .bit files
+        # The last method is a way to force an early stop if the iteration count is not getting reached
+        # Examples for INT_L: iteration count=20 takes 8 hrs, 23 takes 18 hrs
+        # At 8 hrs there were ~150 signals still in pip_list and at 18 hrs it was ~115
+        # See bitrec/fuzzer/readme.md for discussion on disambiguatin pips in pip fuzzer
+        if len(pip_list) == 0 or \
+              iteration >= int(args.pip_iterations) or \
+              path.exists(f"data/{fuzz_path}/STOP"):
             break
 
         init_file()
