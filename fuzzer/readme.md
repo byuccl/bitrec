@@ -1,126 +1,172 @@
 
 
-# PY FUZZER
+# THE PY FUZZER
 
+# 1. Quick Start Guide  
 
-
-## Quick Start Guide  
-
-**Requirements:**   
-* Currently supported Python 3.8.10
+## 1.1 Requirements
+* Currently supported **Python 3.8.10**
 * **Vivado 2020.2** is installed and sourced: 
 ```
-source /tools/Xilinx/Vivado/2020.2/settings64.sh
+source /tools/Xilinx/Vivado/2020.2/settings64.sh   # To setup Vivado
 ```
 
-* RapidWright 2021.2.0 - this file needs to be installed within the BitRec folder (on the same level as run_snapshot.py)  
+* RapidWright 2021.2.0 - this file needs to be installed within the `bitrec/fuzzer` folder (on the same level as `run_snapshot.py`)  
 ```
+cd cd bitrec/fuzzer
 wget https://github.com/Xilinx/RapidWright/releases/download/v2021.2.0-beta/rapidwright-2021.2.0-standalone-lin64.jar
 ```
 
+## 1.2 Initial Sanity Check Run
 
-
-**Run:**  
-
-1. Run the fuzzer for the DSP_L tile, targeting the artix7 using the default part xc7a100ticsg324-1L
+Run the fuzzer for the DSP_L tile, targeting the artix7 using the default part xc7a100ticsg324-1L
 
 ```
+cd bitrec/fuzzer
 python3 run_snapshot.py --family=artix7 --tile=DSP_L
 ```
 
-This will take approximately 30 minutes to run (depending on the machine), and generate around 56 bitstreams under <family_name>/<part_name>/data/0000/. Final output products will be under <family_name>/<part_name>/db/db.DSP_L.json. Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. The first time you run the fuzzer "get_db.tcl" will be run, which will generate the file structure, as well as 4 json dictionaries for the fuzzer to use.  
+- This will take approximately 30 minutes to run (depending on the machine). 
+- It will generate about 56 bitstreams in the directory `artix7/xc7a100ticsg324-1L/data/0000`. 
+- Final output products (the database entries derived by the fuzzer will be found in `artix7/xc7a100ticsg324-1L/db/db.DSP_L.json` where the actual bit numbers for the various features have been filled in.
+- Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. 
 
-2. Run the database generation for the artix7 - This will take 12+ hours.  
+The first time you run a fuzzer for a family the program `get_db.tcl` will be run, which will generate the required file structure, as well as 4 json dictionaries for the fuzzer to use.  These files can be found in `artix7/xc7a100ticsg324-1L/db/vivado-db`.  Of the 30 minutes of time mentioned above, about half is for creating this initial file structures and the four files.  Subsequent runs do not require this step.
+
+## 1.3 File Structure
+After completing the above run, the following file structure will result:
+
+📦artix7  
+┗ 📂xc7a100ticsg324-1L  
+┃ ┣ 📂checkpoints  
+┃ ┃ ┣ 📜DSP_L.0.DSP48E1.DSP48E1.DSP48E1.dcp  
+┃ ┃ ┗ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.dcp  
+┃ ┣ 📂data  
+┃ ┃ ┣ 📂0000  
+┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.bit  
+┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.ft  
+┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.pkl  
+┃ ┃ ┃ ┣ 📜27.DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.bit  
+┃ ┃ ┃ ┣ 📜27.DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.ft  
+┃ ┃ ┃ ┣ 📜DSP_L.0.DSP48E1.DSP48E1.DSP48E1.tcl  
+┃ ┃ ┃ ┣ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tcl  
+┃ ┃ ┃ ┗ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.tcl  
+┃ ┃ ┃ ┗ etc..  
+┃ ┣ 📂db  
+┃ ┃ ┣ 📜db.DSP_L.json  
+┃ ┣ 📂fuzzer_data       # Unused?  
+┃ ┃ ┗ 📜DSP_L.data.pkl  # left in data/0000?   
+┃ ┗ 📂vivado_db  
+┃ ┃ ┣ 📜bel_dict.json  
+┃ ┃ ┣ 📜init.dcp  
+┃ ┃ ┣ 📜primitive_dict.json  
+┃ ┃ ┣ 📜tile_dict.json  
+┃ ┃ ┗ 📜tilegrid.json  
+
+## 1.4 Continuing On
+Each tile type can be individually fuzzed by executing the command above with a different tile type.  
+
+However, the sections below show how to do all tile types at once, as well as the options available to the `run_snapshot.py` program.
+<hr>
+
+# 2. The `run_snapshot.py` Program
+
+## 2.1 Overview
+The `run_snapshot.py` program is a python script which is used to drive the actual fuzzer (`fuzzer.py`).  It contains lists of tile types to be fuzzed for a variety of parts from 7 Series, Ultrascale, and Ulstrascale+.  For each tile type it provides reasonable default parameters.
+
+There are two major types of fuzzing to be done.  The first is called *BEL fuzzing* and deals with the configurable properties on BELs.  Two typical examples of such configurable BEL properties are: (a) FFINIT property for a SLICE flip flop and (b) the EQN property used to initialize the contents of an A6LUT in a SLICE. 
+
+The second type of fuzzing to be done is called *PIP fuzzing* and is used to fuzz the PIPs in INT tiles.
+
+
+## 2.2 BEL Fuzzing
+
+To fuzz the basic cells in the artix76 family run the following (this will take 12+ hours):  
 
 ```
 python3 run_snapshot.py --family=artix7
 ```
 
-## Run Snapshot Arguments
+Examining the code for `run_snapshot.py` shows this will do the following tile types: CLBLL_L, CLBLL_R, 
+CLBLM_L, CLBLM_R, DSP_L, DSP_R, BRAM_L BRAM_R, INT_L, INT_R, LIOI3, RIOI3, LIOB33, RIOB33, 
+CMT_FIFO_L, CMT_FIFO_R, CFG_CENTER_MID, CLK_HROW_BOT_R, CLK_HROW_TOP_R, CLK_BUFG_BOT_R, CLK_BUFG_TOP_R, 
+HCLK_CMT_L, HCLK_CMT, HCLK_IOI3.  
+
+These represent the most commonly used tile types.  The extended tile types could be added to the list by executing:
+```
+python3 run_snapshot.py --family=artix7 --extended=1
+```
+
+This will add the following additional tile types: "LIOI3_TBYTESRC,
+LIOI3_TBYTETERM, LIOI3_SING, RIOI3_TBYTESRC, RIOI3_TBYTETERM, RIOI3_SING, LIOB33_SING, RIOB33_SING, MONITOR_BOT, PCIE_BOT, GTP_CHANNEL_0, GTP_COMMON.
+
+As can be seen, this is not all the tile types in the 7 Series but represents those solved for thus far.
+
+A similar examination of the `run_snapshot.py` program will show what tile types can be fuzzed in the Ultrascale and Ultrascale+ families.
+
+### 2.2.1 Run Snapshot Arguments
 <pre>
 parser.add_argument('--family',default="spartan7")      # Selects the FPGA architecture family  
 parser.add_argument('--part',default="DEFAULT")         # Selects the FPGA part - family's default part is chosen if no part is given  
 parser.add_argument('--tilegrid_only',default="0")      # 1: Only runs the tilegrid generation for the part 0: Run both database and tilegrid generation  
 parser.add_argument('--extended',default="0")           # 1: Runs fuzzer on the extended set of tiles 0: only runs on the basic tiles  
-parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or <TILE_NAME> Will run only the single tile  
+parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or will run only the single named tile  
 </pre>
 
+### 2.2.2 Explanatory Notes on BEL Fuzzing
+- Every fuzzer run is family and part specific, so everything will be generated under a family and a part folder, in this case `artix7/xc7a100ticsg324-1L`.   
+- Fuzzer data will be stored in the `data` folder. Every run of the fuzzer will create a new sequentially named folder, starting at `0000`. These files within the `0000` folder have the syntax of `specimen_number.TILE_TYPE.SITE_INDEX.SITE_TYPE.BEL.PRIMITIVE.extension`.  
+- The next tile will have its results placed into `0001` and so on.
+- The fuzzer will attempt to place all possible primitives on every site-type bel combination.  As it does this it will generate a collection of designs, each represented by a bitstream (.bit) file.  
+- The .ft files are the textual representation of each design (specimen).  The .bit file is the bitstream for the design, and the .pkl file containes a Python pickled array of two elements, containing the combination of the .ft and .bit files, but on a per-tile basis.   
+- The .tcl files are the scripts generated by the fuzzer and which are run by Vivado to generate all of the specimen designs within the folder.
+- The .tile files are the specimens that are specific to solving for the tilegrid - designs whose differences are limited to a single column in the device.  
+- The checkpoint designs are the placed and routed designs and are located in the `checkpoints` folder.  
+- The `db` folder contains the final output of the fuzzer with one JSON file per tile type. 
+- The `vivado_db` folder contains several databases used by the fuzzer. 
+   - `init.dcp` - This is the "initialized" state of the FPGA for the targeted part. The fuzzer will open this checkpoint as opposed to recreating a new empty design for speedup purposes.  
+   - `bel_dict.json` - this contains a dictionary of all tile types, their sites and respective site types, all BELs and their respective properties.  
+   - `primitive_dict.json` - this contains a list of every primitive with all cell properties and their possible values.  
+   - `tile_dict.json` - This contains a dictionary of every tile type, their sites and respective site types, and what primitives are placeable in every bel.   Additionally, all cell pins are shown with their respective bel pins.  
+   - `tilegrid.json` - This contains a dictionary of every tile, and all grid coordinates, and bitstream address information. This is the important file for bitstream->netlist purposes.  
+- The final bitstream database (such as that found in `bitrec/byu_db`) consists of two things: (1) all the .json files from the `artix7/xc7a100ticsg324-1L/db` directory and (2) the `tilegrid.json` file from the `artix7/xc7a100ticsg324-1L/vivado_db` directory.
 
 
-## File Structure   
+## 2.3 PIP Fuzzing
+The above BEL fuzzing process solves for not only BEL properties but also site pips (sometimes also known as routing PIPs).  However, it does not solve for tile PIPs (what we normally think of as general routing pips in the interconnect of an FPGA).  PIP fuzzing specifically solves for those kinds of PIPs.
 
-After completing the Quick Start Guide, the following file structure will be generated:
-
-📦artix7  
- ┗ 📂xc7a100ticsg324-1L  
- ┃ ┣ 📂checkpoints  
- ┃ ┃ ┣ 📜DSP_L.0.DSP48E1.DSP48E1.DSP48E1.dcp  
- ┃ ┃ ┗ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.dcp  
- ┃ ┣ 📂data  
- ┃ ┃ ┣ 📂0000  
- ┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.bit  
- ┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.ft  
- ┃ ┃ ┃ ┣ 📜0.DSP_L.0.DSP48E1.DSP48E1.DSP48E1.pkl  
- ┃ ┃ ┃ ┣ 📜27.DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.bit  
- ┃ ┃ ┃ ┣ 📜27.DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.ft  
- ┃ ┃ ┃ ┣ 📜DSP_L.0.DSP48E1.DSP48E1.DSP48E1.tcl  
- ┃ ┃ ┃ ┣ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tcl  
- ┃ ┃ ┃ ┗ 📜DSP_L.1.DSP48E1.DSP48E1.DSP48E1.tile.tcl  
- ┃ ┃ ┃ ┗ etc..  
- ┃ ┣ 📂db  
- ┃ ┃ ┣ 📜db.DSP_L.json  
- ┃ ┣ 📂fuzzer_data  
- ┃ ┃ ┗ 📜DSP_L.data.pkl  
- ┃ ┗ 📂vivado_db  
- ┃ ┃ ┣ 📜bel_dict.json  
- ┃ ┃ ┣ 📜init.dcp  
- ┃ ┃ ┣ 📜primitive_dict.json  
- ┃ ┃ ┣ 📜tile_dict.json  
- ┃ ┃ ┗ 📜tilegrid.json  
-
-* Every fuzzer run is family and part specific, so everything will be generated under a family and a part folder, in this case artix7/xc7a100ticsg324-1L.   
-* Fuzzer data will be stored in the "data" folder. Every run of the fuzzer will create a new sequentially named folder, starting at 0000. These files within the 0000 folder have the syntax of specimen_number.TILE_TYPE.SITE_INDEX.SITE_TYPE.BEL.PRIMITIVE.extension.  
-* The fuzzer will attempt to place all possible primitives on every site-type bel combination.   
-* The .ft files are the textual representation of the design, the .bit file is the bitstream for the design, and the .pkl file containes a pickled array of two elements, containing the combination of the .ft and .bit files, but on a per-tile basis.   
-* The .tcl files are the scripts that are run on vivado to generate all of the specimen designs within the folder.
-* The .tile files are the specimens that are specific to solving for the tilegrid - designs whose differences are limited to a single column in the device.
-* The checkpoint designs which are placed and routed designs are located in the checkpoints folder.  
-* The db folder contains the final output of the fuzzer. 
-* vivado_db contains several databases used by the fuzzer. The important one for bitstream->netlist purposes is the tilegrid.json.
-
-* init.dcp - This is the "initialized" state of the FPGA for the targeted part. The fuzzer will open this checkpoint as opposed to recreating a new empty design for speedup purposes.  
-* bel_dict.json - this contains a dictionary of all tile types, their sites and respective site types, all BELs and their respective properties.  
-* primitive_dict.json - this contains a list of every primitive with all cell properties and their possible values.  
-* tile_dict.json - This contains a dictionary of every tile type, their sites and respective site types, and what primitives are placeable in every bel.   Additionally, all cell pins are shown with their respective bel pins.  
-* tilegrid.json - This contains a dictionary of every tile, and all grid coordinates, and bitstream address information. 
-
-## Fuzzing PIPs
-At the current time only these tiles need to have pip fuzzing done: INT_L and INT_R (7 Series) and INT (US and US+).  To fuzz INT_L for 7 Series you would execute:
+For 7 Series parts only INT_L and IN T_R tiles need to have pip fuzzing done (it would be INT tiles for Ultrascale and US+).  To fuzz INT_L for 7 Series you would execute:
 ```
 python3 run_snapshot.py --family=artix7 --tile=INT_L --pips=1
 ```
-This takes approximately ??? hours on our lab machine.
+This takes approximately 8-21 hours on one our lab machines.  Why the variation?  Imagine fuzzing a single PIP.  To do so the tools run a net through that PIP that originates in a site pin in some tile and terminates in another site pin in then same of a different tile.  The challenge is it can become difficult to have the PIP being fuzzed be the only  thing turned on in the INT tile.  For example, if the only way to get a net run through a PIP is to also run it through another PIP in the same tile then the analysis won't be able to distinguish the bits for the two PIPs since they are always programmed together.  
 
-### Vivado Crashes When Fuzzing PIPs
-Vivado segfaults every once in a while when fuzzing pips and we have never able to consistently recreate it.  What we have found is "if you do too much in a single TCL script it may segfault". Segfaults just mean that all of the data for that iteration of the while loop won't complete, but the next iteration will repeat it.
+At a high level, what the PIP fuzzer does is it attempts to fuzz all the PIPs.  It then goes through and does an analysis of whether the prior run resulted in data which was able to fully distinguish the bits for the various PIPs. Those that still are not distinguishable are left on the list  and another iteration of the algorithm is run.  For each iteration, the order of the remaining pips are randomized to try to help in the process.  After each iteration the tool prints out how many PIPs are not yet fully solved for.  
 
-### PIP Fuzzer Explanation
-The pip fuzzer works by sitting in a while loop, per iteration it will generate 1 net that traverses through each pip, then it will check if "each pip can be unambiguously distinguished from all other pips", which means that for each pip it is the only thing used within the tile, or if another pip is used then it will need to create a net with the target pip plus a different used pip using either A) a different mux, or B) an example of each pip within the same mux. Where the pip mux is defined as all of the pips with the same dest node. The while loop will repeat, generating a new net to further disambiguate all currently ambiguous pips, and then break once all pips are disambiguated. 
+How's an example, for the seven series and the integer tile, it takes 21 hours to run 25 iterations.  When it is finished, there are still 95 pips which it is not able to prove it has fully solved (but it may have).  The current approach is to run for some extended period of time, realizing that there still may be some ambiguity on some PIPs. See the comments below ("PIP Fuzzer Additional Explanation") for more details.
 
-Also, in Vivado a "pip junction" is what we mean when we say pip mux, a collection of pips that all share a destination, where the bitstream bits select what source is being used (a mux...). However, Vivado doesn't consider a pip junction a "first class object", so they are non-existent when it comes to the TCL interface.
+### 2.3.1 Vivado Crashes When Fuzzing PIPs
+Vivado segfaults every once in a while when fuzzing pips and we have never able to consistently recreate it.  What we have found is "if you do too much in a single TCL script it may segfault".  Segfaults just mean that all of the data for that iteration didn't complete.  But the design of the program is that the next iteration will pick up where it left off and complete the needed work.  So, the segfaults are not a problem.
 
-If you don't run the pip fuzzer for long enough (the len(pip_list) in run_pip_generation never reaches 0), then there is a chance that those pips left in the pip_list are not going to be fully solved (there will be pollution - extra pips from other independent pips within the equation).
+### 2.3.2 PIP Fuzzer Additional Explanation
+The pip fuzzer works by sitting in a while loop.  In each iterate over every unsolved PIP and will generate 1 net that traverses through each such PIP. When done, it will check if "each PIP can be unambiguously distinguished from all other PIPs", which means that for each PIP it is the only thing used within the tile, or if another PIP is used then it will need to create a net with the target PIP plus a different used PIP using either (1) a different mux, or (2) an example of each PIP within the same mux (where a PIP mux is defined as all of the PIPs with the same destination node). The while loop will then repeat, generating a new net to further disambiguate all currently ambiguous PIPs, and then break once all PIPs are disambiguated. 
 
-But it is just a chance because consider pip "A1". The only way to reach pip A1 is to traverse pip junction B (junction B's destination node is pip A1's source node), and junction A and B are within the same tile. Junction B has 3 different inputs B1-B3, controlled by bitstream bits X, Y and Z. Consider if junction B's rules are:
+Also, in Vivado a "PIP junction" is what we mean when we say "PIP mux", that is: "a collection of PIPs that all share a destination, where the bitstream bits select what source is being used (a mux...)". However, Vivado doesn't consider a PIP junction a "first class object", so they are inaccessible when it comes to the TCL interface.
+
+The upshot of all this is if you don't run the PIP fuzzer for long enough (the `len(pip_list`) in `run_pip_generation()` never reaches 0), then there is a chance that those PIPs left in the `pip_list` data structure are not going to be fully solved (there will be pollution - extra bits from other independent PIPs within the equation).
+
+But it is just *a chance* they are not fully solved.  To understand why consider pip "A1" where the only way to reach pip A1 is to traverse PIP junction B (junction B's destination node is PIP A1's source node).  Further consider that junction A and B are within the same tile. Junction B has 3 different inputs B1-B3, controlled by bitstream bits X, Y and Z. Consider if junction B's rules are:
 ```
 B1: XY
 B2: XZ
 B3: Z
 ```
-Our goal is to have examples within our data set of B1 A1, B2 A1 and B3 A1, but we were never able to create B3 A1 because of either DRC checks, or this B3 A1 is a difficult complete net to create (think routing difficulty because B3 could only be connected in the INT_L tile on the top of the FPGA or something like that).  In this case it will never be removed from the pip_list and the while loop will never exit. The rule for A1 will think that X is a part of A1 because it was never "toggled within our data set". So to completely disambiguate A1, we need all three cases of B1-B3, but we don't know the rules of junction B until we solve for them, so we can only settle on "at least one example of each". Now if we were able to generate an example of B1 and B3, but not B2, then we are fine - hence the "chance of it not being solved for, but there is a chance we are okay". Most pip junctions have ~23 different sources, so hitting 20 of the 23 is usually sufficient but not guaranteed.
+Our goal is to have examples within our data set of 'B1 A1', 'B2 A1' and 'B3 A1', but we were never able to create 'B3 A1' because of either DRC check violations, or maybe this 'B3 A1' is a difficult complete net to create (think routing difficulty because B3 could only be connected in the INT_L tile on the top of the FPGA or something like that).  In this case it will never be removed from the pip_list and the while loop will never exit. 
 
-## Database Gaps
+The rule for A1 will think that X is a part of A1 because it was never "toggled within our data set". (we saw XY and XZ in addition to the Aq bits).  So to completely disambiguate A1, we need to see it in conjunction with all three cases of B1-B3.  However, we won't know the rules for junction B until we solve for them, so we can only settle on "at least one example of each".  Now, if we were able to generate an example of 'B1 A1' and 'B3 A1', but not 'B2 A1', then we are fine because we will have seen X toggle - hence the statement above regarding the "chance of it not being solved for".  That is, there is also a chance that it was solved for".  Most pip junctions have ~23 different sources, so hitting 20 of the 23 is usually sufficient but not guaranteed.
 
+# 3. Database Gaps
+There are known gaps in the coverage of the database:
 
 1. DRC Property Fixes   
    Not all configurations of a primitive are valid. These invalid combinations of configurations are enumerated in the DRC checks under the "AVAL" group of DRC checks (under All Rules, Netlist, Instance, Invalid attribute value, in the DRC report window). These DRC checks may be supressed, and Vivado will still generate a valid bitstream, however the issue is that the properties that Vivado reports for a given bel will not match the contents of the bitstream. Essentially, the bel properties can be in an invalid state, and Vivado will generate a bitstream ,ignoring some of these properties to fit it back into a valid state, and the only indication of vivado "ignoring bel properties" are in the DRC AVAL checks. This check is harder to identify. Turning on AVAL drc checks is a good way, as well as incorporating hardcoded fixes to ensure the invalid property combinations are never met.  
@@ -129,20 +175,25 @@ Our goal is to have examples within our data set of B1 A1, B2 A1 and B3 A1, but 
    These rules have to do with being able to generate a bitstream or not. For a given primitive, there exists rules that need to be followed to place the primitive in a valid manner. The difference from "DRC Property Fixes" is that the bitstream generation won't even run if these rules are invalid. Some example rules are LUTRAMs, where to place a LUTRAM on a A6LUT bel, you also have to place a LUTRAM on the D6LUT. Failed bitstreams are a good indication of failing this check. Solutions to this problem have to be hardcoded and based on experience, DRC checks, and documentation.  
 
 3. Dependent Bits  
-   There exists bits that configure multiple properties at the same time. One exmaple is in the DSP_L tile, where the ACASCREG and AREG need to be the same value at all times (values 0, 1 or 2), except for the in the case where ACASCREG=1, then AREG can equal 2. There exists a single set of bits to choose between AREG equaling 0, 1 or 2, as to be expected. However the exists no bits to indicate the values of ACASCREG, and instead there exists a bit that is 1 when ACASCREG == AREG, and 0 otherwise. This case in the DSP (along with the BCASCREG/BREG properties), is the only current example we have. This may occur in many other tiles as well. For future work, the solution is to have a second pass at the differential analysis, running on just the pips that were never associated with a property, and search for all situations that the bit was on, and off. A more complex algorithm can then deduce the dependency. Fixing this situation would also fix others that we have not detected.  
+   There exist bits that configure multiple properties at the same time. One example is in the DSP_L tile, where the ACASCREG and AREG need to be the same value at all times (values 0, 1 or 2), except for in the case where ACASCREG=1, then AREG can equal 2. There exists a single set of bits to choose between AREG equaling 0, 1 or 2, as to be expected. However there exist no bits to indicate the values of ACASCREG, and instead there exists a bit that is 1 for the special case when ACASCREG == AREG, and 0 otherwise. This case in the DSP (along with the BCASCREG/BREG properties), is the only current example we have, but this may occur in other tiles as well (possibly many). For future work, the solution is to have a second pass at the differential analysis, running on just the bits that were never associated with a property, and search for all situations that the bit was on, and off. A more complex algorithm can then deduce the dependency. Fixing this situation would also fix others that we have not yet detected.  
 
-4. "Polluted" Pip bits  
-   This occurs when a property value's on bit have more than just the bits that configure the given feature, and in our current state of our fuzzer, is inseperable to the bits that configure a nearby pip. This is due to the fact that our fuzzer doesn't solve for Pips. One solution is to incoporate Prjxray's database of bits, and filter those out of each property. Future work can also add a pip fuzzer.  
+4. "Polluted" PIP bits  
+   This occurs when a property value's on bits have more than just the bits that configure the given feature, and in our current state of our fuzzer, is inseperable from the bits that configure a nearby PIP. This is due to the fact that our BEL Fuzzer doesn't solve for PIPs (a separate set of code, the PIP Fuzzer does). One solution is to incorporate Prjxray's database of bits, and filter those out of each property. Future work can also add a PIP fuzzer.  
 
 5. Invisible Properties  
-   This one is the hardest to detect, hardest to fix, and is always in the back of my mind, because we don't know if it is localized to a few tiles, or if other tiles have similar properties. This occurs in at least 2 tile types: CMT_TOP_L/R_LOWER_B, and CMT_TOP_L/R_UPPER_T, or the "MMCM" and "PLLE2" tiles, and more than likely in the Phaser In and Phaser Out tiles as well (CMT_TOP_L/R_LOWER_T, CMT_TOP_L/R_UPPER_B). This tile however is fairly low on the priorty list. The issue is that the bel properties that are normally written directly into the bitstream, go through a "transformation phase" that is not visible to the user in any way. For example, properties that are encoded into the primitive, such as delay_time, phase, and clk_cycle, and then transformmed into variables such as high time, low time, and edge. The sign of this occurance is the property type of "double", where a property is given a string double type, however it is never directly written to the bitstream. The only current solution to this is by reading Xilinx documentation - XAPP888 - can we deduce the memory mapping for the MMCM and PLLE2 primitives. Future work can hard code this mapping directly into our database - prjxray has essentially done the same. No similar documentation for the Phase tiles has been found to date.  
+   This one is the hardest to detect, hardest to fix, and is always lurking in the background, because we don't know if it is localized to a few tiles, or if other tiles have similar properties. This occurs in at least 2 tile types: CMT_TOP_L/R_LOWER_B, and CMT_TOP_L/R_UPPER_T, or the "MMCM" and "PLLE2" tiles, and more than likely in the Phaser In and Phaser Out tiles as well.  This tile however is fairly low on the priorty list. 
+   
+   The issue is that, normally, BEL property values directly map onto bits that are written into the bitstream.  But, in the cases above, the BEL properties go through a "transformation phase" that is not visible to the user in any way. For example, properties that are encoded into the MMCM primitive, such as `delay_time`, `phase`, and `clk_cycle` are transformmed into different variables such as `high time`, `low time`, and `edge`. It is these later properties that are actually encoded into the bitstream.  The sign of this occurring is the property type of "double", where a property is given a string double type, however it is never directly written to the bitstream. 
+   
+   The only current solution to this for MMCM/PLL is by reading Xilinx documentation - XAPP888 for example.  From this we can deduce the memory mapping for the MMCM and PLLE2 primitives and future work can hard code this mapping directly into our database - Prjxray has essentially done the same. 
+   
+   However, no similar documentation for the Phase tiles has been found to date.  
 
+# 4. Fuzzer.py Arguments  
 
+Then filen `run_snapshot.py` is just a wrapper for `fuzzer.py`, using known working arguments for each tile - some tiles need more data than others, which is dependent on the number of BEL properties a tile contains. Some arguments are used for testing purposes, as well as rerunning portions of the fuzzer.  
 
-
-## Fuzzer.py Arguments  
-
-run_snapshot.py is just a wrapper for fuzzer.py, using known working arguments for each tile - some tiles need more data than others, which is dependent on the number of bel properties a tile contains. Some arguments are used for testing purposes, as well as rerunning portions of the fuzzer.  
+However, `fuzzer.py` can be run directly without the use of `run_snapshot.py`.  Here are its arguments:
 
 <pre>
 parser.add_argument('tile_type', nargs=1)                   # Selects the target tile type
