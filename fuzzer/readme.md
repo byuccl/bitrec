@@ -141,7 +141,9 @@ For 7 Series parts only INT_L and IN T_R tiles need to have pip fuzzing done (it
 ```
 python3 run_snapshot.py --family=artix7 --tile=INT_L --pips=1
 ```
-This takes approximately 8-21 hours on one our lab machines.  Why the variation?  
+Note that BEL fuzzing for a tile type must be done prior to doing PIP fuzzing for that tile type - this is because BEL fuzzing creates some needed files in the database.
+
+Running the above command takes approximately 8-21 hours on one our lab machines.  Why the variation?  
 
 Imagine fuzzing a single PIP.  To do so the tools run a net through that PIP that originates in a site pin in some tile and terminates in another site pin in the same or a different tile.  The challenge is it can become difficult to have the PIP being fuzzed be the only  thing turned on in the INT tile or interest.  For example, if the only way to get a net run through a PIP is to also run it through another PIP in the same tile then the analysis won't be able to distinguish the bits for the two PIPs since they are always programmed together.  
 
