@@ -53,7 +53,7 @@ parser.add_argument('--parallel',default=8)                 # Runs tile in paral
 parser.add_argument('--pips',default=0)                     # 1: Turns on the pip_fuzzer, 0: turns it off
 parser.add_argument('--pip_iterations',default=0)           # Number of iterations to run the pip fuzzer for
 
-
+parser.add_argument("--vrbs", action='store_true')
 
 args = parser.parse_args()
 is_first_run = 0
