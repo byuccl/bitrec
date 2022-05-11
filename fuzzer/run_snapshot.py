@@ -28,9 +28,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--family',default="spartan7")      # Selects the FPGA architecture family
 parser.add_argument('--part',default="DEFAULT")         # Selects the FPGA part - family's default part is chosen if no part is given
 parser.add_argument('--tilegrid_only',default="0")      # 1: Only runs the tilegrid generation for the part 0: Run both database and tilegrid generation
+parser.add_argument('--basic',default="1")              # 1: Runs fuzzer on the basic set of tiles 0: doesn't run on the basic tiles
 parser.add_argument('--extended',default="0")           # 1: Runs fuzzer on the extended set of tiles 0: only runs on the basic tiles
-parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or <TILE_NAME> Will run only the single tile
 parser.add_argument('--pips',default="0")               # 1: Runs fuzzer on pips 0: dont run pip fuzzer
+parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or <TILE_NAME> Will run only the single tile
 
 
 
@@ -217,21 +218,24 @@ def run_command(run_commands):
 
 if args.family[-1] == "7":
     print("[LOG]: RUNNING 7 SERIES", args.family,part)
-    run_command(series7_run_commands)
+    if args.basic == "1":
+        run_command(series7_run_commands)
     if args.pips == "1":
         run_command(series7_run_commands_pips)
     if args.extended == "1":
         run_command(series7_extended_run_commands)
 elif args.family[-1] == "u":
     print("[LOG]: RUNNING ULTRASCALE", args.family,part)
-    run_command(ultrascale_run_commands)
+    if args.basic == "1":
+        run_command(ultrascale_run_commands)
     if args.pips == "1":
         run_command(ultrascale_run_commands_pips)
     if args.extended == "1":
         run_command(ultrascale_extended_run_commands)
 elif args.family[-1] == "s":
     print("[LOG]: RUNNING ULTRASCALE+", args.family,part)
-    run_command(ultrascale_plus_run_commands)
+    if args.basic == "1":
+        run_command(ultrascale_plus_run_commands)
     if args.pips == "1":
         run_command(ultrascale_plus_run_commands_pips)
     if args.extended == "1":
