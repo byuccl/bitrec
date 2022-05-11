@@ -31,7 +31,7 @@ python3 run_snapshot.py --family=artix7 --tile=DSP_L
 - Final output products (the database entries derived by the fuzzer) will be found in `artix7/xc7a100ticsg324-1L/db/db.DSP_L.json` where the actual bit numbers for the various features have been filled in.
 - Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. 
 
-The first time you run a fuzzer for a family the program `get_db.tcl` will be run, which will generate the required file structure, as well as 4 json dictionaries for the fuzzer to use.  These files can be found in `artix7/xc7a100ticsg324-1L/db/vivado-db`.  Of the 30 minutes of time mentioned above, about half is for creating this initial file structures and the four files.  Subsequent runs do not require this step.
+The first time you run the fuzzer for a family the program `get_db.tcl` will be run, which will generate the required file structure, as well as 4 json dictionaries for the fuzzer to use.  These files can be found in `artix7/xc7a100ticsg324-1L/db/vivado-db`.  Of the 30 minutes of time mentioned above, about half is for creating this initial file structures and the four files.  Subsequent runs do not require this step.
 
 ## 1.3 File Structure
 After completing the above run, the following file structure will result:
@@ -54,8 +54,7 @@ After completing the above run, the following file structure will result:
 ┃ ┃ ┃ ┗ etc..  
 ┃ ┣ 📂db  
 ┃ ┃ ┣ 📜db.DSP_L.json  
-┃ ┣ 📂fuzzer_data       # Unused?  
-┃ ┃ ┗ 📜DSP_L.data.pkl  # left in data/0000?   
+┃ ┣ 📂fuzzer_data  
 ┃ ┗ 📂vivado_db  
 ┃ ┃ ┣ 📜bel_dict.json  
 ┃ ┃ ┣ 📜init.dcp  
@@ -64,7 +63,7 @@ After completing the above run, the following file structure will result:
 ┃ ┃ ┗ 📜tilegrid.json  
 
 ## 1.4 Continuing On
-Each tile type can be individually fuzzed by executing the command above with a different tile type.  
+Each tile type could be individually fuzzed by executing the command above with a different tile type and that is often done.  
 
 However, the sections below show how to do all tile types at once, as well as the options available to the `run_snapshot.py` program.
 <hr>
@@ -74,14 +73,14 @@ However, the sections below show how to do all tile types at once, as well as th
 ## 2.1 Overview
 The `run_snapshot.py` program is a python script which is used to drive the actual fuzzer (`fuzzer.py`).  It contains lists of tile types to be fuzzed for a variety of parts from 7 Series, Ultrascale, and Ulstrascale+.  For each tile type it provides reasonable default parameters.
 
-There are two major types of fuzzing to be done.  The first is called *BEL fuzzing* and deals with the configurable properties on BELs.  Two typical examples of such configurable BEL properties are: (a) FFINIT property for a SLICE flip flop and (b) the EQN property used to initialize the contents of an A6LUT in a SLICE. 
+There are two major types of fuzzing to be done.  The first is called *BEL fuzzing* and deals with the configurable properties on BELs.  Two typical examples of such configurable BEL properties are: (a) the FFINIT property for a SLICE flip flop and (b) the EQN property used to initialize the contents of an A6LUT in a SLICE. 
 
 The second type of fuzzing to be done is called *PIP fuzzing* and is used to fuzz the PIPs in INT tiles.
 
 
 ## 2.2 BEL Fuzzing
 
-To fuzz the basic cells in the artix76 family run the following (this will take 12+ hours):  
+To fuzz the basic cells in the artix7 family, run the following (this will take 12+ hours):  
 
 ```
 python3 run_snapshot.py --family=artix7
@@ -90,9 +89,9 @@ python3 run_snapshot.py --family=artix7
 Examining the code for `run_snapshot.py` shows this will do the following tile types: CLBLL_L, CLBLL_R, 
 CLBLM_L, CLBLM_R, DSP_L, DSP_R, BRAM_L BRAM_R, INT_L, INT_R, LIOI3, RIOI3, LIOB33, RIOB33, 
 CMT_FIFO_L, CMT_FIFO_R, CFG_CENTER_MID, CLK_HROW_BOT_R, CLK_HROW_TOP_R, CLK_BUFG_BOT_R, CLK_BUFG_TOP_R, 
-HCLK_CMT_L, HCLK_CMT, HCLK_IOI3.  
-
-These represent the most commonly used tile types.  The extended tile types could be added to the list by executing:
+HCLK_CMT_L, HCLK_CMT, HCLK_IOI3.  These represent the most commonly used tile types.  
+   
+The extended tile types could be added to the list by executing:
 ```
 python3 run_snapshot.py --family=artix7 --extended=1
 ```
@@ -105,30 +104,33 @@ As can be seen, this is not all the tile types in the 7 Series but represents th
 A similar examination of the `run_snapshot.py` program will show what tile types can be fuzzed in the Ultrascale and Ultrascale+ families.
 
 ### 2.2.1 Run Snapshot Arguments
+By default, `run_snapshot.py` will fuzz the basic tile types and nothing else.  From the arguments below it can be seen that there are parameters to prevent this (maybe you already did it previousoy) and also to fuzz the extended tiles or do PIP fuzzing.
 <pre>
-parser.add_argument('--family',default="spartan7")      # Selects the FPGA architecture family  
-parser.add_argument('--part',default="DEFAULT")         # Selects the FPGA part - family's default part is chosen if no part is given  
-parser.add_argument('--tilegrid_only',default="0")      # 1: Only runs the tilegrid generation for the part 0: Run both database and tilegrid generation  
-parser.add_argument('--extended',default="0")           # 1: Runs fuzzer on the extended set of tiles 0: only runs on the basic tiles  
-parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or will run only the single named tile  
+parser.add_argument('--family',default="spartan7")      # Selects the FPGA architecture family
+parser.add_argument('--part',default="DEFAULT")         # Selects the FPGA part - family's default part is chosen if no part is given
+parser.add_argument('--tilegrid_only',default="0")      # 1: Only runs the tilegrid generation for the part 0: Run both database and tilegrid generation
+parser.add_argument('--basic',default="1")              # 1: Runs fuzzer on the basic set of tiles 0: doesn't run on the basic tiles
+parser.add_argument('--extended',default="0")           # 1: Runs fuzzer on the extended set of tiles 0: only runs on the basic tiles
+parser.add_argument('--pips',default="0")               # 1: Runs fuzzer on pips 0: dont run pip fuzzer
+parser.add_argument('--tile',default="NONE")            # NONE: Runs all tiles, or <TILE_NAME> Will run only the single tile
 </pre>
 
 ### 2.2.2 Explanatory Notes on BEL Fuzzing
 - Every fuzzer run is family and part specific, so everything will be generated under a family and a part folder, in this case `artix7/xc7a100ticsg324-1L`.   
 - Fuzzer data will be stored in the `data` folder. Every run of the fuzzer will create a new sequentially named folder, starting at `0000`. These files within the `0000` folder have the syntax of `specimen_number.TILE_TYPE.SITE_INDEX.SITE_TYPE.BEL.PRIMITIVE.extension`.  
 - The next tile will have its results placed into `0001` and so on.
-- The fuzzer will attempt to place all possible primitives on every site-type bel combination.  As it does this it will generate a collection of designs, each represented by a bitstream (.bit) file.  
-- The .ft files are the textual representation of each design (specimen).  The .bit file is the bitstream for the design, and the .pkl file containes a Python pickled array of two elements, containing the combination of the .ft and .bit files, but on a per-tile basis.   
+- The fuzzer will attempt to place all possible primitives on every site-type/BEL combination.  As it does this it will generate a collection of designs (specimens), each represented by a bitstream (.bit) file.  
+- The .ft files are the textual representation of each such design.  The .bit file is the bitstream for the design, and the .pkl file containes a Python pickled array of two elements, containing the combination of the .ft and .bit files, but on a per-tile basis.   
 - The .tcl files are the scripts generated by the fuzzer and which are run by Vivado to generate all of the specimen designs within the folder.
 - The .tile files are the specimens that are specific to solving for the tilegrid - designs whose differences are limited to a single column in the device.  
 - The checkpoint designs are the placed and routed designs and are located in the `checkpoints` folder.  
 - The `db` folder contains the final output of the fuzzer with one JSON file per tile type. 
-- The `vivado_db` folder contains several databases used by the fuzzer. 
-   - `init.dcp` - This is the "initialized" state of the FPGA for the targeted part. The fuzzer will open this checkpoint as opposed to recreating a new empty design for speedup purposes.  
-   - `bel_dict.json` - this contains a dictionary of all tile types, their sites and respective site types, all BELs and their respective properties.  
+- The `vivado_db` folder contains several files used by the fuzzer. 
+   - `init.dcp` - this is the "initialized" state of the FPGA for the targeted part. The fuzzer will open this checkpoint as opposed to re-creating a new empty design for speedup purposes.  
+   - `bel_dict.json` - this contains a dictionary of all tile types, their sites and respective site types, and all BELs and their respective properties.  
    - `primitive_dict.json` - this contains a list of every primitive with all cell properties and their possible values.  
-   - `tile_dict.json` - This contains a dictionary of every tile type, their sites and respective site types, and what primitives are placeable in every bel.   Additionally, all cell pins are shown with their respective bel pins.  
-   - `tilegrid.json` - This contains a dictionary of every tile, and all grid coordinates, and bitstream address information. This is the important file for bitstream->netlist purposes.  
+   - `tile_dict.json` - This contains a dictionary of every tile type, their sites and respective site types, and what primitives are place-able on every BEL.   Additionally, all cell pins are shown with their respective BEL pins.  
+   - `tilegrid.json` - this contains a dictionary of every tile, all grid coordinates, and bitstream address information. This is the important file for bitstream->netlist purposes.  
 - The final bitstream database (such as that found in `bitrec/byu_db`) consists of two things: (1) all the .json files from the `artix7/xc7a100ticsg324-1L/db` directory and (2) the `tilegrid.json` file from the `artix7/xc7a100ticsg324-1L/vivado_db` directory.
 
 
