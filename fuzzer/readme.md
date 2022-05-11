@@ -1,6 +1,7 @@
 
 
 # THE PY FUZZER
+Many additional details regarding this tool can be found in [the following MS Thesis](https://scholarsarchive.byu.edu/etd/9456/).
 
 # 1. Quick Start Guide  
 
