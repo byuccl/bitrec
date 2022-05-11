@@ -28,7 +28,7 @@ python3 run_snapshot.py --family=artix7 --tile=DSP_L
 
 - This will take approximately 30 minutes to run (depending on the machine). 
 - It will generate about 56 bitstreams in the directory `artix7/xc7a100ticsg324-1L/data/0000`. 
-- Final output products (the database entries derived by the fuzzer will be found in `artix7/xc7a100ticsg324-1L/db/db.DSP_L.json` where the actual bit numbers for the various features have been filled in.
+- Final output products (the database entries derived by the fuzzer) will be found in `artix7/xc7a100ticsg324-1L/db/db.DSP_L.json` where the actual bit numbers for the various features have been filled in.
 - Errors such as "*Site <xxx> cannot be sitetype ...*" are expected at the beginning of the fuzzer. 
 
 The first time you run a fuzzer for a family the program `get_db.tcl` will be run, which will generate the required file structure, as well as 4 json dictionaries for the fuzzer to use.  These files can be found in `artix7/xc7a100ticsg324-1L/db/vivado-db`.  Of the 30 minutes of time mentioned above, about half is for creating this initial file structures and the four files.  Subsequent runs do not require this step.
