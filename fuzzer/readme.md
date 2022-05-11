@@ -190,17 +190,18 @@ There are known gaps in the coverage of the database:
    This one is the hardest to detect, hardest to fix, and is always lurking in the background, because we don't know if it is localized to a few tiles, or if other tiles have similar properties. This occurs in at least 2 tile types we know of:
    - CMT_TOP_L/R_LOWER_B and CMT_TOP_L/R_UPPER_T
    - MMCM and PLL
-I alkso more than likely occurs in the Phaser In and Phaser Out tiles as well.  This tile however is fairly low on the priorty list. 
+
+It also more than likely occurs in the Phaser In and Phaser Out tile types as well.  These tiles, however, are fairly low on the priorty list. 
    
-   The issue is that, normally, BEL property values directly map onto bits that are written into the bitstream.  But, in the cases above, the BEL properties go through a "transformation phase" that is not visible to the user in any way. For example, properties that are encoded into the MMCM primitive, such as `delay_time`, `phase`, and `clk_cycle` are transformmed into different variables such as `high time`, `low time`, and `edge`. It is these later properties that are actually encoded into the bitstream.  The sign of this occurring is the property type of "double", where a property is given a string double type, however it is never directly written to the bitstream. 
+The issue is that, normally, BEL property values directly map onto bits that are written into the bitstream.  But, in the cases above, the BEL properties go through a "transformation phase" that is not visible to the user in any way. For example, properties that are encoded into the MMCM primitive, such as `delay_time`, `phase`, and `clk_cycle` are transformmed into different variables such as `high time`, `low time`, and `edge`. It is these later properties that are actually encoded into the bitstream.  The sign of this occurring is the property type of "double", where a property is given a string double type, however it is never directly written to the bitstream. 
    
-   The only current solution to this for MMCM/PLL is by reading Xilinx documentation - XAPP888 for example.  From this we can deduce the memory mapping for the MMCM and PLLE2 primitives and future work can hard code this mapping directly into our database - Prjxray has essentially done the same. 
+The only current solution to this for MMCM/PLL is by reading Xilinx documentation - XAPP888 for example.  From this we can deduce the memory mapping for the MMCM and PLLE2 primitives and future work can hard code this mapping directly into our database - Prjxray has essentially done the same. 
    
-   However, no similar documentation for the Phase tiles has been found to date.  
+However, no similar documentation for the CMT oor Phaser tiles has been found to date.  
 
 # 4. Fuzzer.py Arguments  
 
-Then filen `run_snapshot.py` is just a wrapper for `fuzzer.py`, using known working arguments for each tile - some tiles need more data than others, which is dependent on the number of BEL properties a tile contains. Some arguments are used for testing purposes, as well as rerunning portions of the fuzzer.  
+Then file `run_snapshot.py` is just a wrapper for `fuzzer.py`, using known working arguments for each tile - some tiles need more data than others, which is dependent on the number of BEL properties a tile contains. Some arguments are used for testing purposes, as well as rerunning portions of the fuzzer.  
 
 However, `fuzzer.py` can be run directly without the use of `run_snapshot.py`.  Here are its arguments:
 
