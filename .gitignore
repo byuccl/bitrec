@@ -3,3 +3,5 @@ fuzzer/__pycache__
 fuzzer/rapidwright*
 vivado.jou
 vivado.log
+launch.json
+NOTES.md

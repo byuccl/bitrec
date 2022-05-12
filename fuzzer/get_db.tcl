@@ -383,12 +383,17 @@ proc create_database {} {
             } else {
                 incr f6
             }
+            # Permanent or pseudo pips are always on
+            # They are pips which are the only driver of their output wire
             if {[llength $out_list] == 1} {
                 puts $::f "\"$P_name\":\{ \"TYPE\":\"ALWAYS\",\"BITS\":\[\] \}"
+            # Default pips are essentially pullups and have a name that starts with "VCC_WIRE"
             } elseif {[string first "VCC_WIRE" $P_name] == 0} {
                 puts $::f "\"$P_name\":\{ \"TYPE\":\"DEFAULT\",\"BITS\":\[\] \}"
+            # Route through pips can be determined by the combination of properties below
             } elseif {([get_property IS_BUFFERED_2_1 $P] == 1) && ([get_property IS_PSEUDO $P] == 1)} {
                 puts $::f "\"$P_name\":\{ \"TYPE\":\"ROUTETHRU\",\"BITS\":\[\] \}"
+            # Everything else is a normal pip
             } else {
                 puts $::f "\"$P_name\":\{ \"TYPE\":\"PIP\",\"BITS\":\[\] \}"
             }
