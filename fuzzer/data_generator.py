@@ -180,6 +180,7 @@ def pre_placement_drc(checkpoint,tile_list):
         for tile in tile_list:
             site = "[lindex [get_sites -of_objects [get_tiles " + tile + "]] " + site_index + "]"
             print("tcl_drc_lut_rams " + primitive + " " + bel + " " + site,file=ft)
+    # Mark cells from the list of FF's (FDSE, FDRE, ...) with the property IOB=TRUE
     print("tcl_ff_iob",file=ft)
     
 
@@ -287,7 +288,7 @@ def gen_bitstream(file_name):
     else:
         tile_type, site_index, site_type, bel, primitive = file_name.split(".")
     
-    
+    # TODO: why do we need to reset site type, reroute, then set site type again?
     reset_site_type(tile_type,site_index)
     pre_bitstream_drc(primitive,site_type)
     #if ("7" not in args.family):
@@ -388,11 +389,13 @@ def fuzzer():
     db = tile_dict["TILE_TYPE"][tile_type]
     tile_list = []
     col_tile_list = get_column_list()
+
     for T in tilegrid:
         if tile_type == tilegrid[T]["TYPE"]:
             if "IS_BONDED" not in tilegrid[T] or tilegrid[T]["IS_BONDED"] == True:
                 tile_list.append(T)
-    #print("TILE_LIST_LENGTH:",len(tile_list))
+    if args.vrbs:
+        print("TILE_LIST_LENGTH:",len(tile_list))
     if len(tile_list) > int(args.cell_count):
         tile_list = tile_list[0: int(args.cell_count)]
     if tile_type not in ["LIOB33","LIOB33_SING","RIOB33","RIOB33_SING"]:
@@ -400,10 +403,13 @@ def fuzzer():
             if x not in tile_list:
                 tile_list.append(x)
 
-    #print(tile_list)
+    if args.vrbs:
+        print("Adusted TILE_LIST_LENGTH:",len(tile_list))
     cur_tile = 0
     checkpoint_list = []
     # Primitives and BELS
+    if args.vrbs:
+        print(f'SITE_INDEX_KEYS: {db["SITE_INDEX"].keys()}')
     for i in db["SITE_INDEX"].keys():
         if int(i) < int(args.site_count):
             for j in db["SITE_INDEX"][i]["SITE_TYPE"].keys():
@@ -415,15 +421,20 @@ def fuzzer():
                                     checkpoint_name = tile_type+"."+i+"."+j+"."+B+"."+P 
                                     if int(args.fuzzer) == 1:
                                         ft = open("data/" + fuzz_path + "/" + checkpoint_name + ".tcl","w",buffering=1)
-                                        add_sources()
+                                        print("\n#### Load scripts that will be called later and set family and part name", file=ft)
+                                        add_sources()  # Add source cmds to .tcl file
                                     print(checkpoint_name)
                                     checkpoint_list.append(checkpoint_name)
                                     if os.path.exists("checkpoints/"  + checkpoint_name + ".dcp") and int(args.init) == 0:
                                         open_checkpoint("checkpoints/" + checkpoint_name)
                                         disable_drc()
                                     else:
+                                        # Close previous design and open init.dcp
+                                        print("\n#### Init design", file=ft)
                                         init_design()
+                                        print("\n#### Disable DRC", file=ft)
                                         disable_drc()
+                                        print("\n#### Set site type", file=ft)
                                         set_site_type(tile_type,i,j)
                                         cell_count = 0
                                         cell_name_str = ""
@@ -432,13 +443,19 @@ def fuzzer():
                                             cell_name_str += "C_" + str(cell_count) + " "
                                             placement_str += place_cell_str(tile_list[x],i,B,cell_count) + " "
                                             cell_count += 1
+                                        print("\n#### Create cells", file=ft)
                                         create_cells(P, cell_name_str)
+                                        print("\n#### Run pre_placement_drc", file=ft)
                                         pre_placement_drc(checkpoint_name,tile_list)
+                                        print("\n#### Place cells", file=ft)
                                         place_cells(placement_str)
                                         #DRC Fixes
+                                        print("\n#### Run post_placement_drc", file=ft)
                                         post_placement_drc(0)
+                                        print("\n#### Write checkpoint", file=ft)
                                         write_checkpoint("checkpoints/" + checkpoint_name)
-                                    if int(args.tilegrid) != 2:
+                                    # If not running JUST tilegrid calculation
+                                    if int(args.tilegrid) != 2:    
                                         # if this is a port, fuzz the port along with each primitive
                                         if "PORT" in db["SITE_INDEX"][i]["SITE_TYPE"][j]["BEL"][B]["PRIMITIVE"].keys():
                                             for io_stand in primitive_dict["PRIMITIVE"]["PORT"]["PROPERTIES"]["IOSTANDARD"]["VALUE"]:
@@ -451,11 +468,17 @@ def fuzzer():
                                                 randomized_method(checkpoint_name,tile_list,0)
                                                 gen_bitstream(checkpoint_name)
                                         else: # Fuzzing non-IO Tiles
+                                            # Do the iterative BEL property/value fuzzing...
                                             if int(args.iterative) == 1:
+                                                print("\n#### Fuzz primitives", file=ft)
                                                 fuzz_primitive(checkpoint_name,tile_list,0)
+                                            print("\n#### Fuzz site pips", file=ft)
                                             fuzz_site_pips(checkpoint_name,tile_list)
+                                            print("\n#### Fuzz bel pins", file=ft)
                                             fuzz_bel_pins(checkpoint_name,tile_list)
+                                            print("\n#### Randomized fuzz", file=ft)
                                             randomized_method(checkpoint_name,tile_list,0)
+                                            print("\n#### Generate bitstream", file=ft)
                                             gen_bitstream(checkpoint_name)
                                     if int(args.fuzzer) == 1:
                                         ft.close()
@@ -503,12 +526,19 @@ def fuzz_bel_pins(checkpoint,tile_list):
     pol_selector = 0
     if "SITE_PIP" in db:
         for SP in db["SITE_PIP"].keys():
+            # Only do if not polarity selector
             if "INV" not in SP:
+                if args.vrbs:
+                    print(f'FUZZ_BEL_PINS BEL={SP}, SITE_PIP_KEYS: {db["SITE_PIP"][SP]["SITE_PIP_VALUE"].keys()}')
+                # Loop across possible site pip values
                 for V in db["SITE_PIP"][SP]["SITE_PIP_VALUE"].keys():
                     create_site_pip(tile_list[tile_count],site_index,SP,V)
                     tile_count = get_next_count(tile_count,len_tile_list,checkpoint)
             elif "CLK" in SP:
                 if tile_type not in ["BRAM_L","BRAM_R"]:
+                    # Loop across possible site pip values
+                    if args.vrbs:
+                        print(f'FUZZ_BEL_PINS BEL={SP}, SITE_PIP_KEYS: {db["SITE_PIP"][SP]["SITE_PIP_VALUE"].keys()}')
                     for V in db["SITE_PIP"][SP]["SITE_PIP_VALUE"].keys():
                         create_site_pip(tile_list[tile_count],site_index,SP,V)
                         tile_count = get_next_count(tile_count,len_tile_list,checkpoint)
@@ -521,6 +551,7 @@ def fuzz_primitive(checkpoint,tile_list,is_port):
         primitive="PORT"
     count = len(tile_list)
     cell_count = 0
+    ## Get info for specific primitive (example for FDCE: INVERTIBLE_PINS, PROPERTIES)
     P_dict = primitive_dict["PRIMITIVE"][primitive]
     # Iterative Brute Force Method
     for prop in P_dict["PROPERTIES"]:

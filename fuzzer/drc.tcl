@@ -151,6 +151,7 @@ proc tcl_drc_bscan {} {
     }
 }
 
+# Mark cells from the list below (FDSE, FDRE, ...) with the property IOB=TRUE
 proc tcl_ff_iob {} {
     foreach C [get_cells] {
         set ref [get_property REF_NAME $C]
@@ -470,7 +471,7 @@ proc tcl_drc_port_standards { site_type } {
     }
 }
 
-
+# TODO: why this fix?
 proc bufgctrl_pins {} {
     if {[llength [get_cells -filter "REF_NAME==BUFGCTRL"]] > 0} {
         if {[llength [get_nets -filter "ROUTE_STATUS==CONFLICTS"]] > 0} {

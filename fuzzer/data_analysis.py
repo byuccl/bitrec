@@ -317,7 +317,8 @@ def sensitivity_analysis_v2(tile_data):
     global tile_type, features, solved_feature_dict
     solved_feature_dict = {}
 
-    default = list(tile_data.keys())[0]
+    # BEN - commented out (default not used)
+    # default = list(tile_data.keys())[0]
     tile_data_keys = list(tile_data.keys())
     for i in range(len(tile_data_keys)):
         T1 = tile_data_keys[i]
