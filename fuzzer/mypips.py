@@ -30,8 +30,14 @@ def init_rapidwright(part_name):
     design = Design("temp",part_name)
     return (device,design)
 
-def printSolution(sol):
-    msg(sol)
+def printSolution(dir, i, sol):
+    msg(f"\n{dir} Solution #{i}:")
+    for st in [' '+str(s) for s in sol]:
+        msg(st)
+
+def printSolutions(sol, dir):
+    for i,s in enumerate(sol):
+        printSolution(dir,i+1,s)
 
 ####################################################################################################
 
@@ -90,7 +96,7 @@ def is_valid_SP(SP,direction,N, tile_type):
 
 ####################################################################################################
 
-def traceUpDn(pip, tile_type, dir, stack, indnt, depth):
+def traceUpDn(pip, tile_type, solutions, dir, stack, indnt, depth):
     stack.append(pip)
 
     if dir == "UP":
@@ -105,6 +111,9 @@ def traceUpDn(pip, tile_type, dir, stack, indnt, depth):
     sp = n.getSitePin()
     if not is_valid_SP(sp, dir, n, tile_type):
         sp = None
+    else:
+        # Found a solution, add a copy of it to list of solutions
+        solutions.append(stack[:])
 
     if args.verbose:
         msg(f"{pip}", hdr=f"{indnt}{len(stack)}: ", end='')
@@ -117,7 +126,7 @@ def traceUpDn(pip, tile_type, dir, stack, indnt, depth):
     depth -=1
     if depth > 0:
         for p in pipsToFollow:
-            traceUpDn(p, tile_type, dir, stack, indnt+'  ', depth)
+            traceUpDn(p, tile_type, solutions, dir, stack, indnt+'  ', depth)
 
     stack.pop()
 
@@ -145,12 +154,15 @@ def processPIP(device, pipName, lodepth, hidepth):
     msg("\n############################################")
     msg("Searching UP...")
     msg("############################################")
-    sol = traceUpDn(pip, tile_type=tile_type, dir="UP", stack=[], indnt='', depth=3)
+    usol = []
+    traceUpDn(pip, tile_type=tile_type, solutions=usol, dir="UP", stack=[], indnt='', depth=4)
+    printSolutions(usol, "UP")
     msg("\n############################################")
     msg("Searching DOWN...")
     msg("############################################")
-    sol = traceUpDn(pip, tile_type=tile_type, dir="DOWN", stack=[], indnt='', depth=3)
-    printSolution(sol)
+    dsol = []
+    traceUpDn(pip, tile_type=tile_type, solutions=dsol, dir="DOWN", stack=[], indnt='', depth=4)
+    printSolutions(dsol, "DOWN")
 
 #################################################################################################################
 
