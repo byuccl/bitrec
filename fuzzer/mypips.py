@@ -17,9 +17,9 @@ def msg(s='', hdr='', file=sys.stdout, end="\n"):
 def errmsg(s, hdr='', end="\n"):
     msg(s, hdr, file=sys.stderr, end=end)
 
-def getTileOfType(device, tile_type):
+def getTileOfType(device, ttype):
     for T in device.getAllTiles():
-        if T.getTileTypeEnum().toString() == tile_type:
+        if T.getTileTypeEnum().toString() == ttype:
             return T
     return None
 
@@ -32,19 +32,23 @@ def init_rapidwright(part_name):
 
 def printSolution(dir, i, sol):
     msg(f"\n{dir} Solution #{i}:")
-    for st in [' '+str(s) for s in sol]:
-        msg(st)
+    for pip in sol:
+        printPip(pip, "    ", dir)
 
-def printSolutions(sol, dir):
+def printSolutions(sol, dir, reverse):
     for i,s in enumerate(sol):
-        printSolution(dir,i+1,s)
+        if reverse:
+            printSolution(dir,i+1,s[::-1])
+        else:
+            printSolution(dir,i+1,s)
+
 
 ####################################################################################################
 
 # Determine if a site pin found can be used for one end of a net to solve for a PIP
 # See comments below for explanation on the rules used to determine this
-def is_valid_SP(SP,direction,N, tile_type):
-    global used_sites, banned_pin_list, args
+def is_valid_SP(SP,direction,N):
+    global used_sites, banned_pin_list, args, tile_type
     # Also need a list of nodes that are used to prevent path collisions
 
     # Is it actually not a site pin?
@@ -96,7 +100,7 @@ def is_valid_SP(SP,direction,N, tile_type):
 
 ####################################################################################################
 
-def traceUpDn(pip, tile_type, solutions, dir, stack, indnt, depth):
+def traceUpDn(pip, solutions, dir, stack, indnt, depth):
     stack.append(pip)
 
     if dir == "UP":
@@ -109,31 +113,90 @@ def traceUpDn(pip, tile_type, solutions, dir, stack, indnt, depth):
         pipsToFollow = n.getAllDownhillPIPs()
     
     sp = n.getSitePin()
-    if not is_valid_SP(sp, dir, n, tile_type):
+    if not is_valid_SP(sp, dir, n):
         sp = None
     else:
         # Found a solution, add a copy of it to list of solutions
         solutions.append(stack[:])
 
     if args.verbose:
-        msg(f"{pip}", hdr=f"{indnt}{len(stack)}: ", end='')
-        if sp:
-            msg(f"    Site pin: {sp}")
-        else:
-            msg()
-        #msg(f"{[str(p) for p in pipsToFollow]}")
+        printPip(pip, f"{indnt}{len(stack)}: ", dir)
 
     depth -=1
     if depth > 0:
         for p in pipsToFollow:
-            traceUpDn(p, tile_type, solutions, dir, stack, indnt+'  ', depth)
+            traceUpDn(p, solutions, dir, stack, indnt+'  ', depth)
 
     stack.pop()
 
 ######################################################################################
 
+def lsort(e):
+    return len(e)
+
+######################################################################################
+
+def findDisjointPairs(sol):
+    ret = []
+
+    tmp = [set(s[1:]) for s in sol]
+    for i in range(len(tmp)):
+        for j in range(i,len(tmp)):
+            if tmp[i].isdisjoint(tmp[j]):
+                ret.append( (sol[i], sol[j]) )
+    return ret
+
+######################################################################################
+
+def printPip(pip, hdr, dir):
+    global tile_type
+    msg(f"{hdr}{pip}  ({id(pip)})", end='')
+    
+    n = pip.getStartNode() if dir == "UP" else pip.getEndNode()
+    sp = n.getSitePin()
+    if is_valid_SP(sp, dir, n):
+        msg(f" (Site pin: {sp})")
+    else:
+        msg()
+  
+
+######################################################################################
+
+def printPair(pr, dir):
+    if dir=="UP":
+        a = pr[0][::-1]
+        b = pr[1][::-1]
+    else:
+        a = pr[0]
+        b = pr[1]
+    for e in a:
+        printPip(e, "    ", dir)
+    msg()
+    for e in b:
+        printPip(e, "    ", dir)
+
+def printPairs(pairs, dir):
+    msg("\n##################################################\n")
+    msg(f"{dir} Pairs:")
+    for i,pr in enumerate(pairs):
+        msg(f"Pair {i}:")
+        printPair(pr, dir)
+
+######################################################################################
+
+def find4Way(upairs, dpairs):
+    u = [set(pr[0][1:]).union(set(pr[1][1:])) for pr in upairs]
+    d = [set(pr[0][1:]).union(set(pr[1][1:])) for pr in dpairs]
+    for i in range(len(u)):
+        for j in range(len(d)):
+            if u[i].isdisjoint(u[j]):
+                return( upairs[i], dpairs[j] )    
+    return None
+
+######################################################################################
+
 def processPIP(device, pipName, lodepth, hidepth):
-    global banned_pin_list, used_sites
+    global banned_pin_list, used_sites, tile_type
 
     banned_pin_list = []
     used_sites = []
@@ -155,19 +218,46 @@ def processPIP(device, pipName, lodepth, hidepth):
     msg("Searching UP...")
     msg("############################################")
     usol = []
-    traceUpDn(pip, tile_type=tile_type, solutions=usol, dir="UP", stack=[], indnt='', depth=4)
-    printSolutions(usol, "UP")
+    traceUpDn(pip, solutions=usol, dir="UP", stack=[], indnt='', depth=4)
     msg("\n############################################")
     msg("Searching DOWN...")
     msg("############################################")
     dsol = []
-    traceUpDn(pip, tile_type=tile_type, solutions=dsol, dir="DOWN", stack=[], indnt='', depth=4)
-    printSolutions(dsol, "DOWN")
+    traceUpDn(pip, solutions=dsol, dir="DOWN", stack=[], indnt='', depth=4)
 
+    # Sort solutions from shortest to longest
+    usol.sort(key=lsort)
+    dsol.sort(key=lsort)
+
+    if args.verbose:
+        msg("\n################################################################################")
+        printSolutions(usol, "UP", reverse=True)
+        msg("\n################################################################################")
+        printSolutions(dsol, "DOWN", reverse=False)
+
+    # Find lists of uphill pairs that are disjoint
+    upairs = findDisjointPairs(usol)
+    msg(f"{len(upairs)}")
+    # Repeat for downhill 
+    dpairs = findDisjointPairs(dsol)
+    if args.verbose:
+        printPairs(upairs, "UP")
+        printPairs(dpairs, "DOWN")
+
+    # Finally look for a 4 way solution
+    uFinalPair, dFinalPair = find4Way(upairs, dpairs)
+    msg("\n\n############################################################################################################")
+    msg(f"\nFinal UP Pair:")
+    printPair(uFinalPair, "UP")
+    msg(f"\nFinal DOWN Pair:")
+    printPair(dFinalPair, "DOWN")
+
+
+    
 #################################################################################################################
 
 def main():
-    global args, allowedSLICEMpins
+    global device, args, allowedSLICEMpins
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--family',default="artix7")         # Selects the FPGA architecture family
