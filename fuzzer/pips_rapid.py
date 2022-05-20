@@ -43,9 +43,12 @@ def init_rapidwright(part_name):
 
 def get_placement_dict(primitive_dict):
     global device,design
+    # Remove AND2B1L from primitive dictionary
+    # TODO: why?  Must be something special about it (in a bad way)...
     primitive_dict.pop("AND2B1L",None)
     #print(primitive_dict.keys())
     placement_map = {}
+    print(f"UNISIM values: {Unisim.values}")
     for x in Unisim.values():
         # If x in primitive json - Unisim.getTransform(series) isn't working
         if str(x) in primitive_dict:
@@ -88,12 +91,17 @@ def is_ultrascale_tieoff(N):
     else:
         return 0
 
-
+# Determine if a site pin found can be used for one end of a net to solve for a PIP
+# See comments below for explanation on the rules used to determine this
 def is_valid_SP(SP,direction,N):
     global used_sites, banned_pin_list, args, tile_type
     # Also need a list of nodes that are used to prevent path collisions
+
+    # Is it actually not a site pin?
     if SP == None:
         return 0
+
+    # Is it the right direction?  That is, if looking uphill it cannot be an inpin.
     if direction == "UP": 
         if SP.isInput():
             return 0
@@ -101,23 +109,44 @@ def is_valid_SP(SP,direction,N):
         if SP.isInput() == False:
             return 0
 
+    # Next, check some family- and tile-specific rules
     S = SP.getSite()
     ST = str(S.getSiteTypeEnum())
     T = S.getTile()
     TT = str(T.getTileTypeEnum())
+    # For anything other than 7 series (US/US+) and for which CTRL is in the net name:
+    #    if the site pin is NOT from a SLICEL/SLICEM/TIEOFF site then can't use it.
     if "CTRL" in str(N) and "7" not in args.family:
         if ST not in ["SLICEL","TIEOFF","SLICEM"]:
             return 0
+
+    # Next, CANNOT use a site pin if:
+    #   the site is not either SLICEL or TIEOFF AND the site is in a different tile type than being solved for 
+    # Put in a positive logic way (using DeMorgan's) you CAN use a site pin if:
+    #   the site is either SLICEL or TIEOFF
+    #      OR
+    #   the site pin is from a tile of the same type being solved for
+    # This means that when solving for INT_L/INT_R tiles, site pins must either be on TIEOFF sites (which are in INT tiles) or on SLICEL's.
+    #    Corey said he did this to simplify obeying the DRC rules on what things can drive what other things.
+    #    He said relaxing this rule would likely require handling a bunch of DRC checks.
+    # This also means that if you are solving for a DSP_L tile then the site pin must also come from a DSP_L tile.
+    # TODO: seems a bit strict - is it necessary?
     elif ST not in ["SLICEL","TIEOFF"] and TT != tile_type :
         return 0
     if str(SP).split("/")[-1] in banned_pin_list:
         return 0
+    
+    # Finally, cannot use a site pin from a site that is aready providing a site pin to another net
     if str(S) in used_sites:
         return 0
     return 1
 
-
-def dfs(P,direction,path,depth,max_depth, banned_pips):
+# This is a basic depth first search (depth-limited by max_depth) which goes either uphill (toward a source) or downhill (toward a sink).
+# When a node (N) is encountered which ties to a site pin, the site pin is checked to see if it is 
+#   a valid site pin (going the right direction, not used, not in a used site, a few other edge case checks).
+# If it is a valid site pin then success is declared - one end of the wire has been determined.
+# Otherwise the search continues until max_depth is reached or a valid site pin is found.
+def dfs(P, direction, path, depth, max_depth, banned_pips):
     global ft
     if depth > max_depth:
         return None
@@ -127,11 +156,14 @@ def dfs(P,direction,path,depth,max_depth, banned_pips):
     else:
         N = P.getEndNode()
 
+    sP = str(P)
+    sN = str(N)
     if N is None or N.isInvalidNode():
         return None
     else:
         path.append(str(N))
         SP = N.getSitePin()
+        sSP = str(SP)
         #print("\tSP:",SP)
         if is_valid_SP(SP,direction,N):
             return [path,N.getSitePin()]
@@ -143,9 +175,11 @@ def dfs(P,direction,path,depth,max_depth, banned_pips):
         else:
             pips = N.getAllDownhillPIPs()
         #print("\tNODES",list(str(x) for x in nodes),file=ft)
+        #BEN Comment out next line to get repeatable behavior
         random.shuffle(pips)
         if len(banned_pips) > 0:
             for PP in pips:
+                sPP = str(PP)
                 p_simple = str(PP).split("/")[-1]
                 if p_simple not in banned_pips:
                     #print("\t\tCHOOSE:",P,PP,p_simple,direction,path)
@@ -155,13 +189,14 @@ def dfs(P,direction,path,depth,max_depth, banned_pips):
                         return ret
         else:
            for PP in pips:
+                sPP = str(PP)
                 ret = dfs(PP,direction,path.copy(),depth+1,max_depth,[])
                 if ret is not None:
                     return ret 
     return None
 
 
-def dfs_main(P,direction,max_depth):
+def dfs_main(P, direction, max_depth):
     global ft, pip_dict
 
     banned_pips = []
@@ -172,9 +207,10 @@ def dfs_main(P,direction,max_depth):
             for p in pd[ps]:
                 p_name = p.rsplit(":")[-1]
                 banned_pips.append(p_name)
-    print("FINAL BAN",P,banned_pips)
-    return dfs(P,direction,[],0,max_depth, banned_pips)
+    print("      FINAL BAN", P, banned_pips)
+    return dfs(P, direction, [], 0, max_depth, banned_pips)
 
+# Return a list of all the tiles in the current device which are of the specified type
 def get_rapid_tile_list(tile_type):
     tile_list = []
     for T in device.getAllTiles():
@@ -183,18 +219,22 @@ def get_rapid_tile_list(tile_type):
     return tile_list
 
 
-
 def create_and_place(primitive,site, site_type,bel):
     if bel == "PHY":
         cell_name = site+"."+bel+"."+primitive
         loc = site+"/"+bel
+        # Just create the PHY cell - don't place it - it gets placed later 
+        # TODO: why the different treatment?
         print("create_cell -reference",primitive,cell_name,file=ft)
     else:
         cell_name = site+"."+bel+"."+primitive
         loc = site+"/"+bel
+        # Create cell
         print("create_cell -reference",primitive,cell_name,file=ft)
+        # Handle special case of SLICEM's
         if str(site_type) == "SLICEM":
             print("tcl_drc_lut_rams ",primitive, bel, "[get_sites",site,"]",file=ft) 
+        # Place cell
         print("catch { set_property MANUAL_ROUTING",str(site_type),"[get_sites",site,"]}",file=ft)
         print("catch { place_cell",cell_name,loc,"}",file=ft)
         print("catch { reset_property MANUAL_ROUTING","[get_sites",site,"]}",file=ft)
@@ -202,7 +242,7 @@ def create_and_place(primitive,site, site_type,bel):
 
 def get_bel_of_pin(BP):
     B = BP.getBEL()
-    print("GETTING BEL OF PIN:", BP)
+    print("        GETTING BEL OF PIN:", BP)
     if "RBEL" in str(B):
         if BP.isInput():
             rbel_pins = B.getPins()
@@ -250,16 +290,17 @@ def get_placement(site_pin):
         S = site_pin.getSite()
         site_types = list(x for x in S.getAlternateSiteTypeEnums()) + [S.getSiteTypeEnum()]
         for ST in site_types:
+            sST = str(ST)
             #print("\t\t",ST)
             try:
                 port_bel_pin = site_pin.getBELPin(ST)
             except:
                 continue
             bel_conns = port_bel_pin.getSiteConns()
-            print("\t\tGETTING PLACEMENT:",ST,S,bel_conns)
+            print("      GETTING PLACEMENT:",ST,S,bel_conns)
             for BP in bel_conns:
                 B,BP_sink = get_bel_of_pin(BP)
-                print("\tRETURNED:",B,BP_sink)
+                print("      RETURNED:",B,BP_sink)
                 #print("\t\t\tGETTING CONNS:",B,BP_sink)
                 if str(ST) in ["SLICEM","SLICEL"] and "5LUT" in str(B):
                     B = str(B).replace("5","6")
@@ -415,6 +456,7 @@ def run_pip_generation(tile_list,pip_list):
     
     print(f"[LOG]: Starting run_pip_generation, len(pip_list)={len(pip_list)}  {datetime.datetime.now()}", file=sys.stderr)
     while(1):
+        #BEN Comment out next line to get repeatable behavior
         random.shuffle(pip_list)
         current_pip_count = 0
         for nn,i in enumerate(pip_list):
@@ -433,11 +475,13 @@ def run_pip_generation(tile_list,pip_list):
                 if max_attempt[i] > 15:
                     max_route_attempt = 30
                     max_depth+=2
-            print(f"\n  {nn}:{i} ", end="", file=sys.stderr, flush=True)
+            print(f"\n{nn}:{i}", file=sys.stderr, flush=True)
             while (1):
-                print(".", end="", file=sys.stderr, flush=True)
+                print(".", file=sys.stderr, flush=True)
                 attempt_count += 1
+                #BEN Swap next two lines to get repeatable behavior
                 T = random.choice(cur_tile_list)
+                # T = cur_tile_list[0]
                 P = T.getPIPs()[i]
                 #path_up, site_pin_up = bfs(P,"DOWN")
                 #path_down, site_pin_down = bfs(P,"UP")
@@ -447,6 +491,8 @@ def run_pip_generation(tile_list,pip_list):
                 if ret_up != None and ret_down != None:
                     path_up, site_pin_up = ret_down
                     path_down, site_pin_down = ret_up
+                    sspu = str(site_pin_up)
+                    sspd = str(site_pin_down)
                     print("##",T,P,max_depth,file=ft)
                     print("##",ret_up,ret_down,file=ft)
                     net_name = str(T)+"."+str(P).split("/")[1]
@@ -461,7 +507,7 @@ def run_pip_generation(tile_list,pip_list):
                         max_attempt[i] = 1
                     else:
                         max_attempt[i] = max_attempt[i] + 1
-                    print(f" {T} {P}", file=sys.stderr, end="")
+                    print(f"  MAX REACHED: {T} {P}", file=sys.stderr, end="")
                     break
 
             if current_pip_count%max_pips_test == max_pips_test-1:
@@ -500,7 +546,7 @@ def run_pip_generation(tile_list,pip_list):
 
 
 
-
+# Create a dictionary mapping pip output wires to all the pips that drive them
 def add_pip_to_set(set_name,P):
     global pip_set
     if set_name not in pip_set:
@@ -509,7 +555,10 @@ def add_pip_to_set(set_name,P):
         pip_set[set_name] += [P.rsplit("/",1)[-1]]
 
 
-
+# pip_list is a list of all pips in the examplary tile
+# result is a dictionary mapping pip output wires to the set of all pips that drive them
+# example entry: 
+# CMT_IN_FIFO_WRCLK: ['CMT_FIFO_L.CMT_FIFO_L_CLK1_6->CMT_IN_FIFO_WRCLK', 'CMT_FIFO_L.CMT_FIFO_L_PHASER_WRCLK->CMT_IN_FIFO_WRCLK']
 def generate_pip_sets(pip_list):
     global pip_set
     pip_set = {}
@@ -527,9 +576,11 @@ def generate_pip_sets(pip_list):
         else:
             add_pip_to_set(set_name,P)
 
+    print("PIP_SET from generate_pip_sets():")
     for x in pip_set:
-        print(x,len(pip_set[x]),pip_set[x])
+        print("  ", x,len(pip_set[x]),pip_set[x])
 
+# Create list of pips that are still not dis-ambiguated and therefore still need to be solved for
 def check_pip_files(pip_list):
     global fuzz_path, pip_dict, bel_dict, pip_set
     pip_dict = {}
@@ -606,7 +657,7 @@ def check_pip_files(pip_list):
     #        remaining_pips.append(pips.index(x.split(":")[-1]))
     print("REMAINING:", len(remaining_pips))
     for x in remaining_pips:
-        print(x,pips[x])
+        print('  ', x,pips[x])
         if pips[x] in pip_dict:
             print("\t",pip_dict[pips[x]])
     print("DONE CHECK")
@@ -646,9 +697,13 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     init_rapidwright(args.part)
     primitive_map = get_placement_dict(primitive_dict["PRIMITIVE"])
     tile_list = get_rapid_tile_list(tile_type)
+
+    # Create a dictionary mapping each pip output wire to the set of all pips that drive that wire.
+    # Example entry where two pips drive the output wire: 
+    # CMT_IN_FIFO_WRCLK: ['CMT_FIFO_L.CMT_FIFO_L_CLK1_6->CMT_IN_FIFO_WRCLK', 'CMT_FIFO_L.CMT_FIFO_L_PHASER_WRCLK->CMT_IN_FIFO_WRCLK']
     generate_pip_sets(tile_list[0].getPIPs())
 
-
+    # Create list of pips that are still not dis-ambiguated and therefore still need to be solved for
     pip_list = check_pip_files(tile_list[0].getPIPs())
     
     run_pip_generation(tile_list,pip_list)
