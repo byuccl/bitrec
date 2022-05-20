@@ -75,7 +75,10 @@ def is_valid_SP(SP,direction,N, tile_type):
     #    He said relaxing this rule would likely require handling a bunch of DRC checks.
     # This also means that if you are solving for a DSP_L tile then the site pin must also come from a DSP_L tile.
     # TODO: seems a bit strict - is it necessary?
-    elif ST not in ["SLICEL","TIEOFF"] and TT != tile_type :
+
+    elif ST == "SLICEM" and SP.getPinName() not in allowedSLICEMpins:
+        return 0
+    elif ST not in ["SLICEL", "SLICEM", "TIEOFF"] and TT != tile_type :
         return 0
     if str(SP).split("/")[-1] in banned_pin_list:
         return 0
