@@ -12,9 +12,9 @@ from com.xilinx.rapidwright.design import Design
 from com.xilinx.rapidwright.design import Unisim
 
 def msg(s='', hdr='', file=sys.stdout, end="\n"):
-    print(f"{hdr}{str(s)}", file=sys.stdout, end=end)
+    print(f"{hdr}{str(s)}", file=file, end=end)
 
-def errmsg(s, hdr='', end="\n"):
+def errmsg(s='', hdr='', end="\n"):
     msg(s, hdr, file=sys.stderr, end=end)
 
 def getTileOfType(device, ttype):
@@ -150,7 +150,7 @@ def findDisjointPairs(sol):
 
 def printPip(pip, hdr, dir):
     global tile_type
-    msg(f"{hdr}{pip}  ({id(pip)})", end='')
+    msg(f"{hdr}{pip}", end='')
     
     n = pip.getStartNode() if dir == "UP" else pip.getEndNode()
     sp = n.getSitePin()
@@ -189,7 +189,7 @@ def find4Way(upairs, dpairs):
     d = [set(pr[0][1:]).union(set(pr[1][1:])) for pr in dpairs]
     for i in range(len(u)):
         for j in range(len(d)):
-            if u[i].isdisjoint(u[j]):
+            if u[i].isdisjoint(d[j]):
                 return( upairs[i], dpairs[j] )    
     return None
 
@@ -208,20 +208,24 @@ def processPIP(device, pipName, lodepth, hidepth):
         msg("\n----------------------------------------------------------------")
         msg("<<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>>")
         msg(f"Doing PIP: {pip}")
+        errmsg(f"  Doing PIP: {pip}")
         msg("<<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>> <<>>")
         msg("----------------------------------------------------------------")
     else:
         errmsg(f"No such pip: {pip}, ignoring")
         return
 
-    msg("\n############################################")
-    msg("Searching UP...")
-    msg("############################################")
+    if args.verbose:
+        msg("\n############################################")
+        msg("Searching UP...")
+        msg("############################################")
     usol = []
     traceUpDn(pip, solutions=usol, dir="UP", stack=[], indnt='', depth=4)
-    msg("\n############################################")
-    msg("Searching DOWN...")
-    msg("############################################")
+
+    if args.verbose:
+        msg("\n############################################")
+        msg("Searching DOWN...")
+        msg("############################################")
     dsol = []
     traceUpDn(pip, solutions=dsol, dir="DOWN", stack=[], indnt='', depth=4)
 
@@ -237,20 +241,39 @@ def processPIP(device, pipName, lodepth, hidepth):
 
     # Find lists of uphill pairs that are disjoint
     upairs = findDisjointPairs(usol)
-    msg(f"{len(upairs)}")
     # Repeat for downhill 
     dpairs = findDisjointPairs(dsol)
+
     if args.verbose:
         printPairs(upairs, "UP")
         printPairs(dpairs, "DOWN")
 
     # Finally look for a 4 way solution
-    uFinalPair, dFinalPair = find4Way(upairs, dpairs)
-    msg("\n\n############################################################################################################")
-    msg(f"\nFinal UP Pair:")
-    printPair(uFinalPair, "UP")
-    msg(f"\nFinal DOWN Pair:")
-    printPair(dFinalPair, "DOWN")
+    finalSol = find4Way(upairs, dpairs)
+    msg("\n\n####################################################################################")
+    if finalSol is None:
+        msg(f"No 4 way solution found for {pip}")
+    else:
+        uFinalPair = finalSol[0]
+        dFinalPair = finalSol[1]
+
+        msg(f"\nFinal UP Pair:")
+        printPair(uFinalPair, "UP")
+        msg(f"\nFinal DOWN Pair:")
+        printPair(dFinalPair, "DOWN")
+    
+        # Let's do a final sanity check
+        u0 = set([str(p) for p in uFinalPair[0][1:]])
+        u1 = set([str(p) for p in uFinalPair[1][1:]])
+        d0 = set([str(p) for p in dFinalPair[0][1:]])
+        d1 = set([str(p) for p in dFinalPair[1][1:]])
+        assert u0.isdisjoint(u1), f"Not disjoint: {u0.intersection(u1)}"
+        assert d0.isdisjoint(d1), f"Not disjoint: {d0.intersection(d1)}"
+
+        assert u0.isdisjoint(d0), f"Not disjoint: {u0.intersection(d0)}"
+        assert u1.isdisjoint(d0), f"Not disjoint: {u1.intersection(d0)}"
+        assert u0.isdisjoint(d1), f"Not disjoint: {u0.intersection(d1)}"
+        assert u1.isdisjoint(d1), f"Not disjoint: {u1.intersection(d1)}"
 
 
     
@@ -258,6 +281,7 @@ def processPIP(device, pipName, lodepth, hidepth):
 
 def main():
     global device, args, allowedSLICEMpins
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--family',default="artix7")         # Selects the FPGA architecture family
@@ -268,6 +292,8 @@ def main():
     parser.add_argument('--lodepth',default=4)
     parser.add_argument('--hidepth',default=5)
     args = parser.parse_args()
+
+    errmsg(f"\n[LOG] main, args = {args}")
 
     device, design = init_rapidwright(args.part)
 
@@ -290,6 +316,7 @@ def main():
 
     for pipName in pips:
         processPIP(device, pipName, args.lodepth, args.hidepth)
+    errmsg()
 
 #####################################################################################################################
 
