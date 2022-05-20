@@ -175,7 +175,8 @@ def dfs(P, direction, path, depth, max_depth, banned_pips):
         else:
             pips = N.getAllDownhillPIPs()
         #print("\tNODES",list(str(x) for x in nodes),file=ft)
-        #BEN CHANGE BACK random.shuffle(pips)
+        #BEN Comment out next line to get repeatable behavior
+        random.shuffle(pips)
         if len(banned_pips) > 0:
             for PP in pips:
                 sPP = str(PP)
@@ -455,7 +456,8 @@ def run_pip_generation(tile_list,pip_list):
     
     print(f"[LOG]: Starting run_pip_generation, len(pip_list)={len(pip_list)}  {datetime.datetime.now()}", file=sys.stderr)
     while(1):
-        #BEN CHANGE BACK random.shuffle(pip_list)
+        #BEN Comment out next line to get repeatable behavior
+        random.shuffle(pip_list)
         current_pip_count = 0
         for nn,i in enumerate(pip_list):
             attempt_count = 0
@@ -477,8 +479,9 @@ def run_pip_generation(tile_list,pip_list):
             while (1):
                 print(".", file=sys.stderr, flush=True)
                 attempt_count += 1
-                #BEN CHANGE BACK AND LINE BELOW T = random.choice(cur_tile_list)
-                T = cur_tile_list[0]
+                #BEN Swap next two lines to get repeatable behavior
+                T = random.choice(cur_tile_list)
+                # T = cur_tile_list[0]
                 P = T.getPIPs()[i]
                 #path_up, site_pin_up = bfs(P,"DOWN")
                 #path_down, site_pin_down = bfs(P,"UP")
@@ -573,9 +576,9 @@ def generate_pip_sets(pip_list):
         else:
             add_pip_to_set(set_name,P)
 
-    #print("PIP_SET from generate_pip_sets():")
-    #for x in pip_set:
-    #    print("  ", x,len(pip_set[x]),pip_set[x])
+    print("PIP_SET from generate_pip_sets():")
+    for x in pip_set:
+        print("  ", x,len(pip_set[x]),pip_set[x])
 
 # Create list of pips that are still not dis-ambiguated and therefore still need to be solved for
 def check_pip_files(pip_list):
