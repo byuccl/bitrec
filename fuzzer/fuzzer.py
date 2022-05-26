@@ -77,7 +77,7 @@ def make_folders():
             return str(i).zfill(4)
 
 top_fuzz_path = make_folders()
-
+print("Running in directory: " + top_fuzz_path, file = sys.stderr)
 
 
 os.chdir(args.family + "/" + args.part + "/")
