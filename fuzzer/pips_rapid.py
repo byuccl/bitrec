@@ -1014,6 +1014,8 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     fj.close()
     bel_dict = bel_dict["TILE_TYPE"][tile_type]
     specimen_number = 0
+    
+    # Superfluous assignment, done for real in check_pip_files
     pip_dict = {}
 
     # Create TCL file, write first few commands, turn off DRC.
