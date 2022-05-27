@@ -777,7 +777,7 @@ def run_pip_generation(tile_list,pip_list):
                     # They are invaluable for understanding what tool is doing/debugging
                     print("##",T,P,max_depth,file=ft)
                     print("##",ret_up,ret_down,file=ft)
-                    # Net name will be tile.tile_type.pip_name: INT_L_X7Y29.INT_L.GFAN0->>BYP_ALT1
+                    # Net name will be tile.tile_type.pip_name.  Ex: INT_L_X7Y29.INT_L.GFAN3->>BYP_ALT7
                     net_name = str(T)+"."+str(P).split("/")[1]
                     # Place endpoint cells for net and put net on list to be created later.
                     if export_path(path_up, site_pin_up,path_down, site_pin_down,net_name):
@@ -884,21 +884,37 @@ def generate_pip_sets(pip_list):
     for x in pip_set:
         print("  ", x,len(pip_set[x]),pip_set[x])
 
-# Create list of pips that are still not dis-ambiguated and therefore still need to be solved for
+
 def check_pip_files(pip_list):
+    """
+    Create list of pips that are still not dis-ambiguated and therefore still need to be solved for.
+
+    Parameters
+    ----------
+    pip_list : [ Device.PIP, ... ]
+        List of pips in current tile to check.
+
+    Returns
+    -------
+    [ int, ...]
+        List of indices to PIPs from tile_type that this *thinks still need to be solved for.
+    """
     global fuzz_path, pip_dict, bel_dict, pip_set
+    # Step 1: Start with an empty pip_dict and add to it
     pip_dict = {}
     fileList = os.listdir("data/" + fuzz_path + "/")
     for file in sorted(fileList):
         if ".ft" in file:
+            # Look for specimens we have a .ft and .bit for...
             if os.path.exists("data/" + fuzz_path + "/" + file.replace(".ft", '.bit')):
                 specimen, tile_type, pip_ext, ext = file.split(".")
-                # Parse Feature file
+                # Parse feature file and build tile_feature_dict
                 f = open("data/" + fuzz_path + "/" + file)
                 tile_feature_dict = parse_feature_file(f, fuzz_path + "." + specimen, tile_type)
                 print("PARSED FEATURE")
                 f.close()
                 for T in tile_feature_dict:
+                    # Only worry about features in tile_type of interest
                     if tile_type in T:
                         for F in tile_feature_dict[T]:
                             F_name = F.rsplit(":",1)[-1]
@@ -925,6 +941,7 @@ def check_pip_files(pip_list):
     #for F in pip_dict:
     #    print(F,pip_dict[F])
 
+    # Step 2: Throw out all default/always PIPs
     for F in pip_dict:
         # If pip is default/always, then remove it entirely
         if F.split(".")[-1] in bel_dict["TILE_PIP"] and bel_dict["TILE_PIP"][F.split(".")[-1]]["TYPE"] != "PIP":
@@ -945,6 +962,7 @@ def check_pip_files(pip_list):
         
         #print(F,len(pip_dict[F]),pip_dict[F])
 
+    # Step 3: From the entries in pip_dict create list of pips that *may not* have been solved for
     remaining_pips = []
     pips = list(str(x).split("/")[-1] for x in pip_list)
     #print(pip_dict.keys())
@@ -953,6 +971,10 @@ def check_pip_files(pip_list):
         F = x.split(".")[-1]
         if bel_dict["TILE_PIP"][F]["TYPE"] != "PIP":
             continue
+        # There are 2 conditions for this to think a pip has not been solved for.
+        # The first is it is not in the pip_dict
+        # The second is that is in the pip_dict but has an entry longer than 1 
+        #   (meaning it is not the only PIP turned on in its tile)
         if x not in pip_dict or len(pip_dict[x]) > 1:
             remaining_pips.append(idx)
     
