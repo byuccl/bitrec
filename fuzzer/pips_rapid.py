@@ -694,7 +694,7 @@ def run_pip_generation(tile_list,pip_list):
     --------------
     ????
     """
-    global specimen_number,tile_type,fuzz_path, used_sites, ft, banned_pin_list,args
+    global specimen_number,tile_type,fuzz_path, used_sites, ft, banned_pin_list,args, pipsToDo
     
     used_tiles = [] # need to make sure placement doesn't collide with other tiles
     max_pips_test = 75
@@ -731,12 +731,12 @@ def run_pip_generation(tile_list,pip_list):
         random.shuffle(pip_list)
         current_pip_count = 0
         for nn,i in enumerate(pip_list):
-            # BEN Use next 5 lines for 1 pip behavior
-            #T = random.choice(cur_tile_list)
-            #pname = str(T.getPIPs()[i])
-            #print(pname)
-            #if not pname.endswith("GFAN0->>BYP_ALT1"):
-            #    continue
+            # Next 5 lines are for selecting pips to process
+            T = random.choice(cur_tile_list)
+            pname = str(T.getPIPs()[i])
+            print(pname)
+            if len(pipsToDo) > 0 and not pname.split('.')[-1] in pipsToDo:
+                continue
             attempt_count = 0
             current_pip_count += 1
             max_depth = series_depth
@@ -905,7 +905,7 @@ def check_pip_files(pip_list):
     [ int, ...]
         List of indices to PIPs from tile_type that this *thinks still need to be solved for.
     """
-    global fuzz_path, pip_dict, bel_dict, pip_set
+    global fuzz_path, pip_dict, bel_dict, pip_set, pipsToDo
     # Step 1: Start with an empty pip_dict and add to it
     pip_dict = {}
     fileList = os.listdir("data/" + fuzz_path + "/")
@@ -916,13 +916,19 @@ def check_pip_files(pip_list):
                 specimen, tile_type, pip_ext, ext = file.split(".")
                 # Parse feature file and build tile_feature_dict
                 f = open("data/" + fuzz_path + "/" + file)
+                # Build a dict called tile_feature_dict
+                # It has keys such as: CLB.0105.0.INT_L_X20Y25 (one for each tile that has PIPs turned on)
+                #   These are of the form: CONFIGBUS.FUZZ_PATH.SPECIMEN.TILE
+                # Each entry contains a list of strings such as: [ 'C:Tile_Pip:INT_L.NR1END1->>GFAN0', 'C:Tile_Pip:INT_L.GFAN0->>BYP_ALT1', ... ]
+                #   These are of the form: CONFIGBUS_FIRSTCHAR:FEATURE_TYPE:FEATURE_NAME
                 tile_feature_dict = parse_feature_file(f, fuzz_path + "." + specimen, tile_type)
                 print("PARSED FEATURE")
                 f.close()
                 for T in tile_feature_dict:
-                    # Only worry about features in tile_type of interest
+                    # Only worry about features (PIPS) in tile_type of interest
                     if tile_type in T:
                         for F in tile_feature_dict[T]:
+                            # Get the PIP name and see if already in dict
                             F_name = F.rsplit(":",1)[-1]
                             if F_name not in pip_dict:
                                 tmp = {}
@@ -946,6 +952,12 @@ def check_pip_files(pip_list):
     #print("PRINTING PIP DICT:")
     #for F in pip_dict:
     #    print(F,pip_dict[F])
+    pd = pip_dict
+    print("^^^ ", type(pd), len(pd))
+    for e in pd:
+        print("    ", e, type(e), type(pd[e]))
+        for f in pd[e]:
+            print("        ", f, type(f), type(pd[e][f]), pd[e][f])
 
     # Step 2: Throw out all default/always PIPs
     for F in pip_dict:
@@ -982,9 +994,9 @@ def check_pip_files(pip_list):
         # The second is that is in the pip_dict but has an entry longer than 1 
         #   (meaning it is not the only PIP turned on in its tile)
         if x not in pip_dict or len(pip_dict[x]) > 1:
-              # BEN  Use next 2 lines for 1 pip operation
-              #if not F.endswith("GFAN0->>BYP_ALT1"):
-              #    continue
+            # Next 2 lines are for selecting pips to process
+            if len(pipsToDo) > 0 and not F.split('.')[-1] in pipsToDo:
+                continue
 
             remaining_pips.append(idx)
     
@@ -1031,7 +1043,7 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     in_args : parseargs::args
         Command line args.
     """ 
-    global args, tile_type, tile_dict, primitive_map, nets, ft, fuzz_path, specimen_number, bel_dict, pip_dict
+    global args, tile_type, tile_dict, primitive_map, nets, ft, fuzz_path, specimen_number, bel_dict, pip_dict, pipsToDo
 
     tile_type = in_args.tile_type[0]
     fuzz_path = in_fuzz_path
@@ -1047,6 +1059,8 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     bel_dict = bel_dict["TILE_TYPE"][tile_type]
     specimen_number = 0
     
+    pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1"]
+
     # Superfluous assignment, done for real in check_pip_files
     pip_dict = {}
 
