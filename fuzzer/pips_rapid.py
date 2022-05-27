@@ -895,6 +895,10 @@ def check_pip_files(pip_list):
     """
     Create list of pips that are still not dis-ambiguated and therefore still need to be solved for.
 
+    A PIP is not yet disambiguated in either of 2 cases.
+    1. It doesn't appear in any .ft files
+    2. It does appear in a .ft file but is not by itself in any tiles
+
     Parameters
     ----------
     pip_list : [ Device.PIP, ... ]
@@ -903,7 +907,7 @@ def check_pip_files(pip_list):
     Returns
     -------
     [ int, ...]
-        List of indices to PIPs from tile_type that this *thinks still need to be solved for.
+        List of indices to PIPs from tile_type that this thinks still need to be solved for.
     """
     global fuzz_path, pip_dict, bel_dict, pip_set, pipsToDo
     # Step 1: Start with an empty pip_dict and add to it
@@ -997,7 +1001,8 @@ def check_pip_files(pip_list):
             # Next 2 lines are for selecting pips to process
             if len(pipsToDo) > 0 and not F.split('.')[-1] in pipsToDo:
                 continue
-
+            if len(pipsToDo) > 0:
+                print("New remaining pip: ", F, idx)
             remaining_pips.append(idx)
     
     #for x in pip_dict:
@@ -1059,7 +1064,7 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     bel_dict = bel_dict["TILE_TYPE"][tile_type]
     specimen_number = 0
     
-    pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1"]
+    pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
 
     # Superfluous assignment, done for real in check_pip_files
     pip_dict = {}
