@@ -731,6 +731,12 @@ def run_pip_generation(tile_list,pip_list):
         random.shuffle(pip_list)
         current_pip_count = 0
         for nn,i in enumerate(pip_list):
+            # BEN Use next 5 lines for 1 pip behavior
+            #T = random.choice(cur_tile_list)
+            #pname = str(T.getPIPs()[i])
+            #print(pname)
+            #if not pname.endswith("GFAN0->>BYP_ALT1"):
+            #    continue
             attempt_count = 0
             current_pip_count += 1
             max_depth = series_depth
@@ -976,6 +982,10 @@ def check_pip_files(pip_list):
         # The second is that is in the pip_dict but has an entry longer than 1 
         #   (meaning it is not the only PIP turned on in its tile)
         if x not in pip_dict or len(pip_dict[x]) > 1:
+              # BEN  Use next 2 lines for 1 pip operation
+              #if not F.endswith("GFAN0->>BYP_ALT1"):
+              #    continue
+
             remaining_pips.append(idx)
     
     #for x in pip_dict:
