@@ -58,13 +58,28 @@ def get_placement_dict(primitive_dict):
 
     Parameters
     ----------
-    primitive_dict : list of str
+    primitive_dict : { primitiveName : { dict of properties }, ... }
+        Ex: {   
+                'FDCE' : {
+                        'INVERTIBLE_PINS': [ ... ],
+                        'PROPERTIES': { ... }
+                        },
+                'BUFG' : {
+                        'INVERTIBLE_PINS': [ ... ],
+                        'PROPERTIES': { ... }
+                        }
+            }
+
+
     
     Returns
     -------
     bel_prim : 
         dict of { (siteType, belType) : [primitiveName, ...] }.
-        Ex: { ('SLICEL', 'A5FF'): ['FDCE', 'FDPE', 'FDRE', 'FDSE'], ('BUFG', 'BUFG'): ['BUFG'] }.
+        Ex: { ('SLICEL', 'A5FF'): ['FDCE', 'FDPE', 'FDRE', 'FDSE'], 
+              ('SLICEM', 'CARRY4'): ['CARRY4'],
+              ...
+            }
     """
 
     global device,design
@@ -121,14 +136,17 @@ def is_valid_SP(SP,direction,N):
     """
     Determine if a site pin found can be used for one end of a net to solve for a PIP.
 
-    Reasons why it might not be suitable: is None, is wrong direction, is on wrong kind of site.
+a    Reasons why it might not be suitable include: 
+    1. Is None
+    2. Is wrong direction
+    3. Is on wrong kind of site.
 
     Parameters
     ----------
     SP : Device.SitePin 
         Candidate site pin.
     direction : str
-        Direction going.
+        "UP" or "DOWN".
     N : Device.Node
         Node site pin is tied to.
 
@@ -202,8 +220,8 @@ def dfs(P, direction, path, depth, max_depth, banned_pips):
         Starting PIP.
     direction : str
         "UP" or "DOWN""
-    path : [ str ]]
-        Accumulated path as search progresses.
+    path : [ str(Device.Node), ... ]
+        Accumulated path as search progresses in terms of nodes passed through..
     depth : int
         How far deep we are.
     max_depth : int
@@ -309,8 +327,8 @@ def get_rapid_tile_list(tile_type):
 
     Returns
     -------
-    [ Device.Tile ]
-        List of tile objects.
+    [ Device.Tile, ... ]
+        List of tile objects of the requested type..
     """
     tile_list = []
     for T in device.getAllTiles():
@@ -321,7 +339,7 @@ def get_rapid_tile_list(tile_type):
 
 def create_and_place(primitive,site, site_type,bel):
     """
-    Write commands to create and place a cell in the TCL file.
+    Write commands to TCL file toceate and place a cell.
 
     Parameters
     ----------
@@ -332,7 +350,7 @@ def create_and_place(primitive,site, site_type,bel):
     site_type : str
         Ex: "SLICEL"
     bel : str
-        "B6LUT""
+        "B6LUT"
     """
     if bel == "PHY":
         cell_name = site+"."+bel+"."+primitive
@@ -341,8 +359,8 @@ def create_and_place(primitive,site, site_type,bel):
         # TODO: why the different treatment?
         print("create_cell -reference",primitive,cell_name,file=ft)
     else:
-        cell_name = site+"."+bel+"."+primitive
-        loc = site+"/"+bel
+        cell_name = site+"."+bel+"."+primitive   # Example cell_name: "SLICE_X12Y30.B6LUT.LUT6"
+        loc = site+"/"+bel                       # Example loc: "SLICE_X12Y30/B6LUT"
         # Create cell
         print("create_cell -reference",primitive,cell_name,file=ft)
         # Handle special case of SLICEM's
@@ -359,13 +377,13 @@ def get_bel_of_pin(BP):
     Get the BEL of a BEL pin.
 
     This is a recursive function.
-    If the BEL for this BEL pin is a normal BEL (not a routing MUX) then return it.
+    If the BEL for this BEL pin is a normal BEL (not a routing MUX, also known as an RBEL) then return it.
     Otherwise search uphill or downhill as appropriate through routing BELs until you hit a real BEL.
 
     Parameters
     ----------
     BP : Device.BelPin
-        The BEL pin of interest.
+        The BEL pin of interest.  Example of typica; str(BP) = 'C6LUT.A1'
 
     Returns
     -------
@@ -393,33 +411,36 @@ def get_bel_of_pin(BP):
                     for RBP in rbel_conns:
                         return get_bel_of_pin(RBP)
     else:
-        # We already are at a real BEL so return it
+        # We are at a real BEL so return it
         return B,str(BP).replace(".","/")
 
 def get_placement(site_pin):
     """
     Determine what to place for this site pin
 
-    Knowing the site pin we need to:
-    1. Figure out a site_type that uses this pin
-    2. Get the BEL pin tied to this site pin
+    Knowing the site pin we need to do a  number of things:
+    1. Figure out a site_type that contains this site pin
+    2. Get a handle on the BEL pin tied to this site pin
     3. Handle a bunch of special cases
-    4. Return a tuple summarizing what you have determined.
+    4. Return a tuple summarizing what you have determined
 
     Parameters
     ----------
     site_pin : Device.SitePin
-        The site pin of interest.
+        The site pin of interest.  Ex. of typical str(site_pin) = 'SLICE_X11Y5/D5'
 
     Returns
     -------
-    A large tuple.  
+    A large tuple of what was determined.  
     Ex: ("SLICE_X13Y37/B6LUT/A3", "LUT6", "SLICE_X13Y37", "SLICEL",    "B6LUT",    1)
-            BP_sink               primitive     site      site_type       bel  is_bp
-        
+            BP_sink               primitive     site      site_type       bel    is_bp
+    Meaning of the is_bp return value: 
+        0 = Is not 7 series AND is one of ["CARRY4/CYINIT","CARRY4/CI","CARRY8/CI","CARRY8/CI_TOP"]
+        2 = Is not 7 series AND is the CE or SR pin on a FF
+        1 = all other cases (is 7 Series or is not one of the cases above)
     """
     global primitive_map
-    ff_regex = re.compile('([A-H]FF.?/CE)|([A-H]FF.?/SR)')
+    ff_regex = re.compile('([A-H]FF.?/CE)|([A-H]FF.?/SR)')  # Matches: AFF/CE, AFFx/SR, DFFF/SR
 
     if "HARD1" in str(site_pin):
         if "US" in str(site_pin):
@@ -484,7 +505,7 @@ def get_placement(site_pin):
                             continue
                             # These pins don't automatically have their cell pins mapped to these bel pins - not sure how to remap them
                                 # Remap by unplace, attach pin, then replace
-                        elif ff_regex.match(BP_sink): #{ABCDEFG}/FF{2}/{SR|CE}
+                        elif ff_regex.match(BP_sink): #{ABCDEFG}/FF{2}/{SR|CE}  Ex. 'AFF/CE' or 'GFF/SR
                             is_bp = 2
                             BP_sink = str(S)+"/"+BP_sink
                         else:
@@ -506,6 +527,7 @@ def get_placement(site_pin):
                     print("\t#",B,BP_sink,"NO PRIMITIVE",file=ft)
                     return 0
 
+# Uncalled function?
 def reset_manual_routing(CP):
     print("set S [get_sites -of_objects [get_cells -of_objects [get_pins",CP,"]]]",file=ft)
     print("set ST [get_property MANUAL_ROUTING $S]",file=ft)
@@ -525,9 +547,9 @@ def attach_net(BP,is_bp,net_name):
     BP : str
         Name of BEL pin.  Ex: "SLICE_X6Y98/D6LUT/A3"
     is_bp : int
-        Means various things, 1 is normal BEL pin.  See elsewhere for others.
+        Means various things, 1 is normal BEL pin.  See get_placement() for other meanings.
     net_name : str
-        The net name.
+        The net name.  Ex. : 'INT_L_X12Y64.INT_L.EE2END2->>IMUX_L20'
     """
     if is_bp == 1:
         print("set P [get_pins -of_objects [get_bel_pins ",BP,"]]",file=ft)
@@ -551,7 +573,7 @@ def add_nets():
     """
     Output TCL code to create nets in the global nets list.
 
-    Previously, the create_net() function just aded net ionfo to a global list.
+    Previously, the create_net() function just aded net info to a global list called 'nets'.
     This actually emits the Tcl code to create all those nets and set their routing.
     """
     global nets, ft
@@ -571,17 +593,18 @@ def create_net(is_bp_up,is_bp_down,BP_up, BP_down, path,net_name):
     ----------
     is_bp_up : int
         There are 3 different int values for this depending on what the BEL pin is tied to.  
-        For 7series is always 1, for others can be 0, 1, or 2.
+        See above for details.
     is_bp_down : int
-        See description for is_bp_up.
+        See above for details.
     BP_up : str
         Ex: "SLICE_X6Y8/B6LUT/A4"
     BP_down : str
-        Ex: "SLICE_X6Y8/B6LUT/A4"
-    path : [ str, ... ]
-        List of names of nodes making up the net's path.
+        Ex: "SLICE_X83Y101/A6LUT/O6"
+    path : str
+        Single string listing names of nodes making up the net's path.  Enclosed in { }.
+        Ex. '{CLBLL_L_X52Y101/CLBLL_L_A CLBLL_L_X52Y101/CLBLL_LOGIC_OUTS8 INT_L_X52Y101/NN6BEG0 INT_L_X52Y107/EE2BEG0}'
     net_name : str
-        Name of net.
+        Name of net.  Ex. 'SLICE_X12Y3.INT_L.LV_L18<<->>LH0'
 
     Global Effects
     --------------
@@ -1064,6 +1087,10 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     bel_dict = bel_dict["TILE_TYPE"][tile_type]
     specimen_number = 0
     
+    # If the following list is empty it will do all pips.
+    # Otherwise, it will do just the pips you specify.  Ex:
+    #pipsToDo = [ ]
+    #pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
     pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
 
     # Superfluous assignment, done for real in check_pip_files
