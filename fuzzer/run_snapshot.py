@@ -25,7 +25,7 @@ import pickle
 from time import sleep
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--family',default="spartan7")      # Selects the FPGA architecture family
+parser.add_argument('--family',default="artix7")      # Selects the FPGA architecture family
 parser.add_argument('--part',default="DEFAULT")         # Selects the FPGA part - family's default part is chosen if no part is given
 parser.add_argument('--tilegrid_only',default="0")      # 1: Only runs the tilegrid generation for the part 0: Run both database and tilegrid generation
 parser.add_argument('--basic',default="1")              # 1: Runs fuzzer on the basic set of tiles 0: doesn't run on the basic tiles
@@ -103,8 +103,8 @@ series7_run_commands = [
     ]
 
 series7_run_commands_pips = [
-    "INT_L --pips=1 --pip_iterations=20",
-    "INT_R --pips=1 --pip_iterations=20",
+    "INT_L --pips=1 --pip_iterations=300",
+    "INT_R --pips=1 --pip_iterations=300",
     "DSP_L --pips=1 --pip_iterations=5",
     "DSP_R --pips=1 --pip_iterations=5",
     "BRAM_L --pips=1 --pip_iterations=5",

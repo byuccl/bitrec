@@ -1,7 +1,8 @@
 fuzzer/artix7
 fuzzer/__pycache__
 fuzzer/rapidwright*
-vivado.jou
-vivado.log
+vivado*.jou
+vivado*.log
+hs_err*.log
 launch.json
 NOTES.md

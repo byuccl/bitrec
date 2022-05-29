@@ -517,7 +517,7 @@ def merge_json(db,bel_dict):
     if (type(bel_dict) is dict):
         for key in bel_dict:
             if key not in db:
-                print("ADDED KEY:",key,bel_dict[key])
+                #print("ADDED KEY:",key,bel_dict[key])
                 db[key] = bel_dict[key]
             else:
                 db[key] = merge_json(db[key],bel_dict[key])
