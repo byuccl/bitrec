@@ -20,11 +20,12 @@ import argparse
 import sys
 import random
 import pickle
-from bit_parser import print_frame
+#from bit_parser import print_frame
 from bit_parser import parse_bitstream
 
 from jpype.types import *
-from data_generator import *
+#import data_generator as dg
+
 from com.xilinx.rapidwright.device import Device
 from com.xilinx.rapidwright.device import Series
 from com.xilinx.rapidwright.design import Design
