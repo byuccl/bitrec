@@ -28,6 +28,9 @@ import jpype
 import jpype.imports
 from jpype.types import *
 
+# Next line needs to be run before any com.xilinx.rapidwright.. things can be imported (like in pips_rapid.py)
+jpype.startJVM(classpath=["rapidwright-2021.2.0-standalone-lin64.jar"])
+
 import pips_rapid
 import data_analysis
 import data_generator as dg
@@ -92,7 +95,6 @@ os.chdir(args.family + "/" + args.part + "/")
 ##                                  CONTROL                                       ##
 ##================================================================================##
 
-jpype.startJVM(classpath=["rapidwright-2021.2.0-standalone-lin64.jar"])
 
 if is_first_run == 1:
     rapid_tilegrid.run_tilegrid_solver(args)
