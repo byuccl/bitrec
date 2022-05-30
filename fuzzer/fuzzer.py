@@ -38,6 +38,7 @@ import data_generator as dg
 import rapid_tilegrid
 #from tilegrid_solver import *
 
+
 def make_folders():  
     if args.diff_folder != "NONE":
         return args.diff_folder
@@ -91,10 +92,8 @@ print("Running in directory: " + top_fuzz_path, file = sys.stderr)
 
 os.chdir(args.family + "/" + args.part + "/")
 
-##================================================================================##
-##                                  CONTROL                                       ##
-##================================================================================##
-
+# The data_generator module needs to pre-load a bunch of database files before it can do its work
+dg.data_generator_init()
 
 if is_first_run == 1:
     rapid_tilegrid.run_tilegrid_solver(args)
