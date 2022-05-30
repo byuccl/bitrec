@@ -18,6 +18,7 @@
 import random
 import re
 import json
+import sys
 import os
 import os.path
 from os import path
@@ -25,7 +26,7 @@ import datetime
 import jpype
 import jpype.imports
 from jpype.types import *
-from data_generator import *
+import data_generator as dg
 from data_analysis import parse_feature_file
 #jpype.startJVM(classpath=["rapidwright-2021.1.1-standalone-lin64.jar"])
 
@@ -667,13 +668,13 @@ def export_path(path_up, site_pin_up,path_down, site_pin_down,net_name):
 
 def generate_pip_bitstream():
     global fuzz_path, specimen_number, tile_type
-    post_placement_drc(1)
+    dg.post_placement_drc(1)
     add_nets()
-    pip_bitstream_drc()
+    dg.pip_bitstream_drc()
     print("record_device_pips data/" + fuzz_path + "/" + str(specimen_number) + "." + tile_type + ".pips.ft",file=ft)
-    write_bitstream("data/" + fuzz_path + "/" + str(specimen_number) + "." + tile_type + ".pips.bit")
+    dg.write_bitstream("data/" + fuzz_path + "/" + str(specimen_number) + "." + tile_type + ".pips.bit")
     specimen_number+=1
-    open_checkpoint("vivado_db/init")
+    dg.open_checkpoint("vivado_db/init")
     return 
 
 def add_used_site(site_pin):
@@ -1048,11 +1049,11 @@ def init_file():
     """
     global ft, fuzz_path, args
     ft = open("data/" + fuzz_path + "/fuzz_pips.tcl","w",buffering=1)
-    set_ft(ft)
+    dg.set_ft(ft)
     print("source ../../record_device.tcl",file=ft)
     print("source ../../drc.tcl",file=ft)
-    open_checkpoint("vivado_db/init")
-    disable_drc()
+    dg.open_checkpoint("vivado_db/init")
+    dg.disable_drc()
     #print("source ../../fuzz_pip.tcl",file=ft)
     print("set ::family " + args.family,file=ft)
     print("set part_name " + args.part,file=ft)
@@ -1076,7 +1077,7 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     tile_type = in_args.tile_type[0]
     fuzz_path = in_fuzz_path
     args = in_args
-    set_args(in_args)   # In data_generator.py
+    dg.set_args(in_args)   # In data_generator.py
     nets = []
     fj = open("vivado_db/primitive_dict.json")
     primitive_dict = json.load(fj) 

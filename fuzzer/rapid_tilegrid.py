@@ -23,7 +23,7 @@ import pickle
 import os
 from jpype.types import *
 
-from data_generator import *
+import data_generator as dg
 from data_analysis import parse_feature_file
 #jpype.startJVM(classpath=["rapidwright-2021.1.1-standalone-lin64.jar"])
 
@@ -38,34 +38,34 @@ from com.xilinx.rapidwright.bitstream import Frame
 def get_int_tile_dict():
     global args, int_tile_dict
     int_tile_dict = {}
-    for T in tilegrid:
-        if tilegrid[T]["TYPE"] in ["INT_L", "INT_R", "INT"]:
+    for T in dg.tilegrid:
+        if dg.tilegrid[T]["TYPE"] in ["INT_L", "INT_R", "INT"]:
             if args.family in ["artix7","spartan7","kintex7","virtex7"]:
-                int_tile_dict[tilegrid[T]["TILE_Y"]] = tilegrid[T]["Y"]%50
+                int_tile_dict[dg.tilegrid[T]["TILE_Y"]] = dg.tilegrid[T]["Y"]%50
             else:
-                int_tile_dict[tilegrid[T]["TILE_Y"]] = tilegrid[T]["Y"]%60
+                int_tile_dict[dg.tilegrid[T]["TILE_Y"]] = dg.tilegrid[T]["Y"]%60
 
 
 def get_byte_offset(RT):
     global args, int_tile_dict
     T = str(RT)
-    height = tilegrid[T]["HEIGHT"]
+    height = dg.tilegrid[T]["HEIGHT"]
     if args.family in ["artix7", "spartan7","kintex7","virtex7","zynq7"]:
         crc = [50]
         if height == 2:
-            int_y = tilegrid[T]["TILE_Y"]
+            int_y = dg.tilegrid[T]["TILE_Y"]
         elif height%2 == 0:
-            int_y = tilegrid[T]["TILE_Y"] - int(height/4*3200) + 1600
+            int_y = dg.tilegrid[T]["TILE_Y"] - int(height/4*3200) + 1600
         else:
-            int_y = tilegrid[T]["TILE_Y"] - (int(height/4))*3200
+            int_y = dg.tilegrid[T]["TILE_Y"] - (int(height/4))*3200
         words_per_int = 2
     elif args.family in ["kintexu","zynqu","virtexu"]:
         crc = [60,61,62]
-        int_y = tilegrid[T]["TILE_Y"]
+        int_y = dg.tilegrid[T]["TILE_Y"]
         words_per_int = 2
     else:
         crc = [90,91,92,93,94,95]
-        int_y = tilegrid[T]["TILE_Y"]
+        int_y = dg.tilegrid[T]["TILE_Y"]
         words_per_int = 3
     
     if int_y not in int_tile_dict:
@@ -209,7 +209,7 @@ def run_tilegrid_solver(in_args):
     global args, tile_type, tile_dict, primitive_map, nets, ft, specimen_number
     #tile_type = in_args.tile_type[0]
     args = in_args
-    set_args(in_args)
+    dg.set_args(in_args)
     init_rapidwright(args.part)
     get_int_tile_dict()
     get_blocks()

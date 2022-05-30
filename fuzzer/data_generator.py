@@ -22,22 +22,24 @@ import sys
 import random
 from multiprocessing import Pool
 
-fj = open("vivado_db/primitive_dict.json")
-primitive_dict = json.load(fj) 
-fj.close()
-fj = open("vivado_db/bel_dict.json")
-bel_dict = json.load(fj) 
-fj.close()
-fj = open("vivado_db/tile_dict.json")
-tile_dict = json.load(fj) 
-fj.close()
-fj = open("vivado_db/tilegrid.json")
-tilegrid = json.load(fj) 
-fj.close()
+def data_generator_init():
+    global primitive_dict, bel_dict, tile_dict, tilegrid, tile_type, ft, specimen_number
+    fj = open("vivado_db/primitive_dict.json")
+    primitive_dict = json.load(fj) 
+    fj.close()
+    fj = open("vivado_db/bel_dict.json")
+    bel_dict = json.load(fj) 
+    fj.close()
+    fj = open("vivado_db/tile_dict.json")
+    tile_dict = json.load(fj) 
+    fj.close()
+    fj = open("vivado_db/tilegrid.json")
+    tilegrid = json.load(fj) 
+    fj.close()
 
-tile_type = ""
-ft = ""
-specimen_number = 0
+    tile_type = ""
+    ft = ""
+    specimen_number = 0
 
 ##================================================================================##
 ##                                CREATE TCL SCRIPT                               ##

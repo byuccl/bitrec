@@ -27,7 +27,32 @@ from time import sleep
 import jpype
 import jpype.imports
 from jpype.types import *
+
+# Next line needs to be run before any com.xilinx.rapidwright.. things can be imported (like in pips_rapid.py)
 jpype.startJVM(classpath=["rapidwright-2021.2.0-standalone-lin64.jar"])
+
+import pips_rapid
+import data_analysis
+import data_generator as dg
+#from pip_generator import *
+import rapid_tilegrid
+#from tilegrid_solver import *
+
+
+def make_folders():  
+    if args.diff_folder != "NONE":
+        return args.diff_folder
+    for x in ["data","checkpoints","vivado_db","db", "fuzzer_data"]:
+        try: 
+            os.makedirs(args.family + "/" + args.part + "/" + x + "/", exist_ok=True)
+        except OSError as error: 
+            print(error)  
+    for i in range(1000):
+        if os.path.exists(args.family + "/" + args.part + "/data/" + str(i).zfill(4)) == False:
+            os.mkdir(args.family + "/" + args.part + "/data/" + str(i).zfill(4))
+            return str(i).zfill(4)
+
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('tile_type', nargs=1)                   # Selects the target tile type
@@ -62,50 +87,23 @@ if os.path.exists(args.family + "/" + args.part + "/vivado_db/init.dcp") == Fals
     is_first_run = 1
     os.system("vivado -mode batch -source get_db.tcl -tclarg " + args.family + " " + args.part)
 
-
-def make_folders():  
-    if args.diff_folder != "NONE":
-        return args.diff_folder
-    for x in ["data","checkpoints","vivado_db","db", "fuzzer_data"]:
-        try: 
-            os.makedirs(args.family + "/" + args.part + "/" + x + "/", exist_ok=True)
-        except OSError as error: 
-            print(error)  
-    for i in range(1000):
-        if os.path.exists(args.family + "/" + args.part + "/data/" + str(i).zfill(4)) == False:
-            os.mkdir(args.family + "/" + args.part + "/data/" + str(i).zfill(4))
-            return str(i).zfill(4)
-
 top_fuzz_path = make_folders()
 print("Running in directory: " + top_fuzz_path, file = sys.stderr)
 
-
 os.chdir(args.family + "/" + args.part + "/")
 
-from pips_rapid import *
-from data_analysis import *
-from data_generator import *
-#from pip_generator import *
-from rapid_tilegrid import *
-#from tilegrid_solver import *
-
-
-    
-
-##================================================================================##
-##                                  CONTROL                                       ##
-##================================================================================##
-
+# The data_generator module needs to pre-load a bunch of database files before it can do its work
+dg.data_generator_init()
 
 if is_first_run == 1:
-    run_tilegrid_solver(args)
+    rapid_tilegrid.run_tilegrid_solver(args)
 
 if int(args.pips) == 1 and int(args.fuzzer) == 1:
-    run_pip_fuzzer(top_fuzz_path,args)
+    pips_rapid.run_pip_fuzzer(top_fuzz_path,args)
 elif int(args.fuzzer) == 1:
-    run_data_generator(top_fuzz_path,args)
+    dg.run_data_generator(top_fuzz_path,args)
     
-run_data_analysis(top_fuzz_path,args)
+data_analysis.run_data_analysis(top_fuzz_path,args)
         
 os.chdir("../..")
 
