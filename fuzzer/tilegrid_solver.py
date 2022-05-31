@@ -14,6 +14,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+
+# This would seem to be the old, non-RW method for soving for the tilegrid.
+
 import json
 import os
 import argparse
