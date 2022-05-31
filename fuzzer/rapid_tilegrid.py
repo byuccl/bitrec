@@ -40,7 +40,7 @@ def get_int_tile_dict():
     Build dictionary int_tile_dict.
 
     Structure of int_tile_dict: { int: int, ... } where first int is the TILE_Y for an INT tile
-    and the second is Y coordinate of the corresponding tile in the dg.tilegrid  dictionary.
+    and the second is Y coordinate of the corresponding tile in the dg.tilegrid  dictionary % 50 or 60, depending on family.
     Curiously, most of the keys are negative numbers such as: -320696 for "INT_L_X0Y0".
     Looks to be a translation table for the row numbers of INT tiles and is based on it being 7 series vs. Ultrascale.
     By the way, these match the TILE_Y entries in the final tilgrid.json file (both computed here and in bitrec/byu_db).
@@ -60,6 +60,20 @@ def get_int_tile_dict():
 
 
 def get_byte_offset(RT):
+    """
+    Calculate the offset to the bits for a tile.
+
+    Parameters
+    ----------
+    RT : Device.Tile
+        The tile in  question.
+
+    Returns
+    -------
+    int
+        The offset to the start of the bits for this tile.  
+        This is the value that gets stored in the "offset" field of the "bits" in the tilegrid.json file.
+    """
     global args, int_tile_dict
     T = str(RT)
     height = dg.tilegrid[T]["HEIGHT"]
@@ -98,6 +112,14 @@ def get_byte_offset(RT):
 
 
 def init_rapidwright(part_name):
+    """
+    Set the device global and create a design for it.
+
+    Parameters
+    ----------
+    part_name : str
+        Name of the part to use.
+    """
     global device, design
     device = Device.getDevice(part_name)
     design = Design("temp",part_name)
@@ -235,6 +257,18 @@ def get_blocks():
 
 
 def run_tilegrid_solver(in_args):
+    """
+    Finish tilegrid.json
+
+    This follows the running of the "get_db.tcl" script infuzzer.py.  That script creates a tilegrid.json file.
+    This routine adds the "bits" part to the already-existing tilegrid.json file.
+    This uses RW to provide the info.  The old method did it all with TCL, which was much slower.
+
+    Parameters
+    ----------
+    in_args : argparser args object
+        Contains the command line args.
+    """
     global args, tile_type, tile_dict, primitive_map, nets, ft, specimen_number
     #tile_type = in_args.tile_type[0]
     args = in_args
