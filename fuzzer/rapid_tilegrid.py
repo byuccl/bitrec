@@ -282,4 +282,5 @@ def run_tilegrid_solver(in_args):
 
     get_blocks()
 
+    print("Done with run_tilegrid_solver...")
 

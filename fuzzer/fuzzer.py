@@ -107,6 +107,7 @@ os.chdir(args.family + "/" + args.part + "/")
 dg.data_generator_init()
 
 if is_first_run == 1:
+    print("Running tilegrid solver...")
     rapid_tilegrid.run_tilegrid_solver(args)
 
 if int(args.pips) == 1 and int(args.fuzzer) == 1:
