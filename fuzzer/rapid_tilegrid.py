@@ -24,7 +24,7 @@ import os
 from jpype.types import *
 
 import data_generator as dg
-from data_analysis import parse_feature_file
+#from data_analysis import parse_feature_file
 #jpype.startJVM(classpath=["rapidwright-2021.1.1-standalone-lin64.jar"])
 
 from com.xilinx.rapidwright.device import Device
