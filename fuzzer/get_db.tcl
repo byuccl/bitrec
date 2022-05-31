@@ -28,7 +28,7 @@ if {[llength $argv] == 2} {
     set part_name "xc7a25tlcsg325-2L"
 }
 
-
+# Create design, set DRC check properties, set a few other properties
 proc init {part_name} {
     puts "init"
     close_project -quiet
@@ -804,7 +804,11 @@ proc get_pip_conns {P} {
 
 
 
-
+# 1. Create init.dcp
+# 2. Create primitive_dict.json file
+# 3. Create bel_dict.json file
+# 4. Load init.dcp and using it, create_tilegrid
+# 5. Create tile_dict.json
 proc get_all_db {} {
     init $::part_name
     write_checkpoint "init.dcp" -force
@@ -824,7 +828,7 @@ proc get_all_db {} {
     close $::f
 }
 
-
+# Create directory structure Ex.: "artix7/xc7a100ticsg324-1L/vivado_db"
 file mkdir "$::family"
 file mkdir "$::family/$part_name"
 file mkdir "$::family/$part_name/vivado_db"

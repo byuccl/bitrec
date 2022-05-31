@@ -36,6 +36,19 @@ from com.xilinx.rapidwright.bitstream import BlockType
 from com.xilinx.rapidwright.bitstream import Frame
 
 def get_int_tile_dict():
+    """
+    Build dictionary int_tile_dict.
+
+    Structure of int_tile_dict: { int: int, ... } where first int is the TILE_Y for an INT tile
+    and the second is Y coordinate of the corresponding tile in the dg.tilegrid  dictionary.
+    Curiously, most of the keys are negative numbers such as: -320696 for "INT_L_X0Y0".
+    Looks to be a translation table for the row numbers of INT tiles and is based on it being 7 series vs. Ultrascale.
+    By the way, these match the TILE_Y entries in the final tilgrid.json file (both computed here and in bitrec/byu_db).
+
+    Global Effects
+    --------------
+    Creates and initializes the int_tile_dict data structure.
+    """
     global args, int_tile_dict
     int_tile_dict = {}
     for T in dg.tilegrid:
@@ -90,29 +103,45 @@ def init_rapidwright(part_name):
     design = Design("temp",part_name)
 
 def get_blocks():
-    global design, device, Bitstream, args
+    """
+    Calculate the "bits" part of the tilegrid and update that into the existing tilegrid's JSON file.
+
+    Global Effects
+    --------------
+    None.
+
+    """
+    global device, args
 
     fj = open("vivado_db/tilegrid.json")
     tilegrid = json.load(fj) 
     fj.close()
-    # Reset the tilegrid if needed
+    # Reset the tilegrid if needed (remove all the "bits" entries)
     for x in tilegrid:
         if "bits" in tilegrid[x]:
             tilegrid[x].pop("bits",None)
 
+    # Create a com.xilinx.rapidwright.bitstream.Configarray object
+    # From RW docs: "Represents the array of configuration blocks that configures the device. It is composed of an array of ConfigRows, each of which is an array of config Blocks."
     C = ConfigArray(device)
     none_tiles = set()
     tile_bit_data = {}
     row_data = {}
     col_data = {}
+    # device.getTiles(): "Gets and returns this device's 2D array of tiles that define the layout of the FPGA.": Tile[][].
     for row in device.getTiles():
         for T in row:
             try:
+                # "C.getConfigBlock(): Gets the configuration block that corresponds to the provided tile and block type.": Block
                 Block = C.getConfigBlock(T,BlockType.CLB)
+                # Ex.: "CLBLL_L_"
                 base = str(T).split("X")[0]
+                # Block.getAddress(): "Gets the configuration block address as used in the Frame Address Register (FAR)."
                 address = hex(Block.getAddress())
+                # Tile.getRow() -> int
                 tile_row = T.getRow()
                 row_data[tile_row] = hex(0xFFFFFFFF0000 & int(address,16))
+                # Tile.getColumn() -> int
                 col = T.getColumn()
                 col_data[col] = hex(0xFFFF & int(address,16))
                 x = str(T)
@@ -210,8 +239,13 @@ def run_tilegrid_solver(in_args):
     #tile_type = in_args.tile_type[0]
     args = in_args
     dg.set_args(in_args)
+
+    # Set device and create design.
     init_rapidwright(args.part)
+
+    # Build a row number lookup table for all the INT_L, INT_R, INT tiles.
     get_int_tile_dict()
+
     get_blocks()
 
 

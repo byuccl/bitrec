@@ -52,6 +52,12 @@ def make_folders():
             os.mkdir(args.family + "/" + args.part + "/data/" + str(i).zfill(4))
             return str(i).zfill(4)
 
+def prettyPrintJSON(fname):
+    with open(fname) as fj:
+        tmp = json.load(fj) 
+    with open(fname, "w") as fj:
+        json_database = json.dumps(tmp, indent=2,sort_keys=True)
+        print(json_database,file=fj)
 
 
 parser = argparse.ArgumentParser()
@@ -86,6 +92,11 @@ if os.path.exists(args.family + "/" + args.part + "/vivado_db/init.dcp") == Fals
     print("Running first time FPGA Family and Part Database generation")
     is_first_run = 1
     os.system("vivado -mode batch -source get_db.tcl -tclarg " + args.family + " " + args.part)
+    prettyPrintJSON(args.family + "/" + args.part + "/vivado_db/primitive_dict.json")
+    prettyPrintJSON(args.family + "/" + args.part + "/vivado_db/bel_dict.json")
+    prettyPrintJSON(args.family + "/" + args.part + "/vivado_db/tilegrid.json")
+    prettyPrintJSON(args.family + "/" + args.part + "/vivado_db/tile_dict.json")
+
 
 top_fuzz_path = make_folders()
 print("Running in directory: " + top_fuzz_path, file = sys.stderr)
