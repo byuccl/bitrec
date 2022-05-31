@@ -15,6 +15,17 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
+
+#########################################################################################################
+# This script creates a set of database files used by the rest of the tool chain: 
+#    primitive_dict.json
+#    bel_dict.json
+#    tilegrid.json
+#    tile_dict.json
+# It also creates an init.dcp file which is used as the starting point for every specimen created by the fuzzers.
+
+
+
 source drc.tcl
 
 set ::legacy_primitives [list "MUXCY" "XORCY" "AUTOBUF" "CFGLUT5" "BUF" "MMCME2_BASE" "PLLE2_BASE" "BUFGMUX" "INV" "BUFGCE" "LUT1" "LUT2" "LUT3" "LUT4" "LUT5" ] 
@@ -144,7 +155,7 @@ proc get_possible_properties {C f0 prop_list} {
     return $prop_list
 }
 
-
+# Create contents of primitive_dict.json file
 proc get_primitive_property_dict {} {
     set primitives [get_primitives -hierarchy -filter "PRIMITIVE_LEVEL == LEAF"]
     puts $::f "\{\"PRIMITIVE\": \{"
@@ -261,7 +272,7 @@ if { [lsearch -exact [list "kintexuplus" "zynquplus" "virtexuplus"] $::family] =
     dict set height_dict "CFG_CFG" 180
 }
 
-
+# Create contents of vivado_db/bel_dict.json file
 proc create_database {} {
     set first 0
     puts $::f "\{\"TILE_TYPE\": \{"
@@ -415,6 +426,7 @@ proc create_database {} {
     puts $::f "\}\}"
 }
 
+# Create the contents of the tilegrid.json file
 proc create_tilegrid {} {
     global height_dict
     set first 0
@@ -521,7 +533,13 @@ proc create_tilegrid {} {
 }
 
 
-
+# Create site placements map and print to the tile_dict.json file
+# For the specified site, enumerate the BELs in that site.
+#    For each BEL enumerate the primitives that can be placed on that BEL
+#       For each such placement, specify the pin mapping between the BEL pins and the primitive pins
+#          Write this to tile_dict.json
+# Then, create mapping between site pins and BEL pins and write it out.
+# Return value of this routine is ignored by caller.
 proc get_site_placements { site } {
     set primitives [get_primitives -hierarchy -filter "PRIMITIVE_LEVEL == LEAF"]
     set site_placed {} 
@@ -623,6 +641,7 @@ proc get_site_placements { site } {
     return $site_placed
 }
 
+# Build a list of all tile types
 proc get_tile_types {} {
     set tiles [get_tiles]
     set type {}
@@ -638,6 +657,7 @@ proc get_tile_types {} {
     return $type
 }
 
+# Create the contents of the tile_dict.json file
 proc get_tile_dict {} {
     set tiles [get_tiles]
     set type {}
@@ -726,7 +746,7 @@ proc get_tile_dict {} {
     puts $::f "\}\}"
     return $type
 }
-
+# Uncalled function?
 proc create_pip_dict {} {
     set first 0
     puts $::f "\{\"PIPS\": \{"
@@ -757,6 +777,7 @@ proc create_pip_dict {} {
     puts $::f "\}\}"
 }
 
+# Uncalled function (see create_pip_dict)?
 proc get_pip_conns {P} {
 #    puts $::f "\"DOWNHILL\":\["
 #    set f0 0
