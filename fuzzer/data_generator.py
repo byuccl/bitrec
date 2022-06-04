@@ -656,6 +656,8 @@ def get_next_count(cur,total,checkpoint):
     if cur == total:
         gen_bitstream(checkpoint)
         cur = 0
+        open_checkpoint("checkpoints/" + checkpoint)
+        disable_drc()
     #print("RETURNING:",cur)
     return cur
     
