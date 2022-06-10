@@ -23,6 +23,15 @@ import random
 from multiprocessing import Pool
 
 def data_generator_init():
+    """
+    Load database files needed and init needed globals.
+
+    This should be called after prior code (like fuzzer.py) has:
+    1. Generated (if needed) the directory structure and populated initial database structures using "get_db.tcl"
+    2. Done a cd to the correct directory  (<family>/<part>)
+
+    It should be called before any other routines in this module are called.
+    """
     global primitive_dict, bel_dict, tile_dict, tilegrid, tile_type, ft, specimen_number
     fj = open("vivado_db/primitive_dict.json")
     primitive_dict = json.load(fj) 
