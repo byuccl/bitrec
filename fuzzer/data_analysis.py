@@ -388,6 +388,9 @@ def sensitivity_analysis_v2(tile_data):
     That is, if feature set T1 - feature set T2 results in one additional feature, 
         that tells us what bits program the additional feature.
 
+    It would seem it should also look for T2 - T1 ?  
+    See issue #18.
+
     Parameters
     ----------
     tile_data : _type_
