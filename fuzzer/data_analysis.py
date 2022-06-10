@@ -388,7 +388,7 @@ def sensitivity_analysis_v2(tile_data):
     That is, if feature set T1 - feature set T2 results in one additional feature, 
         that tells us what bits program the additional feature.
 
-    It would seem it should also look for T2 - T1 ?  
+    TODO: It would seem it should also look for T2 - T1 ?  
     See issue #18.
 
     Parameters
@@ -446,22 +446,38 @@ def remove_lut_bits(solved_feature_dict):
     return solved_feature_dict
 
 def filter_bits(solved_feature_dict):
+    """
+    Remove PIP bits (if doing BELs) or BEL bits (if doing PIPs) and then build feature sets and possible values.
+
+    Parameters
+    ----------
+    solved_feature_dict : <<<<<<<<<<<<<<<<<<<<<<START HERE>>>>>>>>>>>>>>>>>>>>>>>>
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     global tile_type, features, bits, tile_data_rev, args
     possible_values = {}
     feature_sets = {}
     # remove the pip bits
     if int(args.pips) != 1:
         pip_bits = set()
+        # Get set of all bits involved with tile pips
         for i in range(len(features)):
             if "Tile_Pip" in features[i]:
                 pip_bits = pip_bits | solved_feature_dict[i]
+        # Remove the tile pip bits from all other features' bits (they represent bit pollution)
         for i in range(len(features)):
-            if features[i][0] != "B":
+            if features[i][0] != "B":   # Don't do BRAM bus features
                 solved_feature_dict[i] = solved_feature_dict[i] - pip_bits
         if "7" not in args.family:
             solved_feature_dict = remove_lut_bits(solved_feature_dict)
         # Create the per-feature sets of bits
         always_bits = {}
+        fff = 'C:1:DSP48E1:DSP48E1:CREG'
         for F in solved_feature_dict:
             f = features[F].rsplit(":", 1)[0]
             v = features[F].rsplit(":", 1)[1]
@@ -470,9 +486,22 @@ def filter_bits(solved_feature_dict):
                 always_bits[f] = set(solved_feature_dict[F])
                 possible_values[f] = [v]
             else:
+                # What is set of bits have you seen on for ANY values of this property?
                 feature_sets[f] |= solved_feature_dict[F]
+                # What is set of bits have you seen on for ALL values of this property?
                 always_bits[f] &= solved_feature_dict[F]
+                # Tabulate possible values for this property
                 possible_values[f] += [v]
+        print("\nFeature sets: ", feature_sets)
+        for k,v in feature_sets.items():
+            print(k, v)
+        print("\n\nAlways bits: ")
+        for k,v in always_bits.items():
+            print(k, v)
+        print("\nPossible values: ")
+        for k,v in possible_values.items():
+            print(k, v)
+        # Remove the bits that were always on for all values of property
         for f in feature_sets:
             feature_sets[f] = feature_sets[f]-always_bits[f]
         if "7" not in args.family:
@@ -739,6 +768,7 @@ def run_data_analysis(in_fuzz_path, in_args):
     else:
         # The second one is used for solving for PIPs in regular tiles
         solved_feature_dict = sensitivity_analysis_v2(tile_data)
+
     properties, values = filter_bits(solved_feature_dict)
     print(properties,values)
     db = second_analysis(tile_data, properties, values,solved_feature_dict)
