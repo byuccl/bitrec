@@ -18,6 +18,23 @@
 
 
 def print_frame (frame, addr,word_size):
+    """
+    Create list of frame bits turned on
+
+    Parameters
+    ----------
+    frame : [ int ]
+        Words of frame
+    addr : int
+        Frame number
+    word_size : int
+        Number of bytes in each word in frame
+
+    Returns
+    -------
+    [ (wordNum, bitNum), ... ]
+        List of bits that are turned on within frame, given as (wordNum, bit)
+    """
     global bitstream_addr
     frame_data = []
     #print(addr,len(frame))
