@@ -98,6 +98,38 @@ def eqn_to_init(eqn):
     return eqn_str
 
 def parse_feature_file(f, specimen, tile_type):
+    """
+    Parse feature file and build data structure tile_feature_dict.
+
+    Feature file is listing of features.  This dict simply groups all from same tile together into one dictionary entry.
+
+    Parameters
+    ----------
+    f : file
+        Opened feature file.
+    specimen : int
+        Specimen number.
+    tile_type : str
+        Ex.: "DSP_R"
+
+    Returns
+    -------
+    tile_feature_dict
+        tile_feature_dict = { 
+            'CLB.0005.0.DSP_R_X9Y195': [
+                'C:0:DSP48E1:DSP48E1:ACASCREG:1',
+                'C:0:DSP48E1:DSP48E1:ADREG:1',
+                'C:0:DSP48E1:DSP48E1:AUTORESET_PATDET:NO_RESET',
+                ...
+                ],
+            'CLB.0005.0.DSP_R_X35Y195': [
+                'C:0:DSP48E1:DSP48E1:ACASCREG:2',
+                'C:0:DSP48E1:DSP48E1:MASK:![0]',
+                ...
+                ],
+            ...
+        }
+    """
     print(f)
     tile_feature_dict = {}
     content = f.readlines()
@@ -177,29 +209,35 @@ def parse_feature_file(f, specimen, tile_type):
 
 
 def parse_files():
+    """
+    Load bitstream, feature file contents into data structures and then write .pkl file containing both.
+    """
     global fuzz_path
     file_count = 0
     fileList = os.listdir("data/" + fuzz_path + "/")
     for file in sorted(fileList):
+        # Parse just bitstream files
         if ".tile" not in file and ".bit" in file and ".dcp" not in file:
             print(file)
             file_count += 1
+
             # Parse Bitstream
             if int(args.pips) == 1:
                 specimen, tile_type, pip_ext, ext = file.split(".")
             else:
                 specimen, tile_type, site_index, site_type, bel, primitive, ext = file.split(".")
-
             f = open("data/" + fuzz_path + "/" + file, "rb")
             tile_bit_dict = parse_bitstream(f, args.family, tilegrid, tile_type, fuzz_path + "." + specimen)
             print("PARSED BIT")
             f.close()
+
             # Parse Feature file
             f = open("data/" + fuzz_path + "/" + file.replace(".bit", '.ft'))
             tile_feature_dict = parse_feature_file(f, fuzz_path + "." + specimen, tile_type)
             print("PARSED FEATURE")
             f.close()
 
+            # Write out pkl file consisting of [ parsedFeatures, bitstreamFeatures ]
             save_pkl_obj("data/" + fuzz_path + "/" + file.replace("bit","pkl"), [tile_feature_dict, tile_bit_dict])
 
 
@@ -238,8 +276,8 @@ def condense_data():
     for file in sorted(fileList):
         if ".pkl" in file:
             tile_feature_dict, tile_bit_dict = load_pkl_obj("data/" + fuzz_path + "/" + file)
-            print("OUTPUT:",tile_feature_dict)
-            print("BIT:",tile_bit_dict)
+            #print("OUTPUT:",tile_feature_dict)
+            #print("BIT:",tile_bit_dict)
             for x in tile_feature_dict:
                 features = features | set(tile_feature_dict[x])
                 bits |= set(tile_bit_dict[x])
@@ -283,10 +321,29 @@ def condense_data():
 
 
 def sensitivity_analysis(tile_data):
+    """
+    Create list of bits always on for each feature
+
+    Parameters
+    ----------
+    tile_data : dict
+        Keys are names.  Ex: CLB.0005.0.DSP_R_X9Y195"   (bus . fuzz_path . specimen . tile)
+        Values are: { 'bits': [ 116, 140, 461, ... ],
+                       'features': [ 162, 739, 642, ...]
+                    }
+    Returns
+    -------
+    solved_feature_dict = [ set(onBit, onBit, ...), 
+                            set(onBit, onBit, ...),
+                            ...
+                           ]
+        For each feature (index of list), contains set of bits always on for that feature
+    """
     global tile_type, features, bits, tile_data_rev, args
     solved_feature_dict = {}
     
     # Init masks with first present occurance of F
+    # Foreach feature, initialize solved_feature_dict with first set of bits 
     for F in tile_data_rev:
         print("INIT",F,features[F],tile_data_rev[F][0],list(bits[b] for b in tile_data[tile_data_rev[F][0]]["bits"]))
         solved_feature_dict[F] = set(tile_data[tile_data_rev[F][0]]["bits"])
@@ -301,28 +358,56 @@ def sensitivity_analysis(tile_data):
                     solved_feature_dict[F] = solved_feature_dict[F] & bit_set
     else:
         for T in tile_data:
+            # Get a set of bits turned on in a tile.  Ex.: the bits in 'CLB.0005.0.DSP_R_X9Y195'
             bit_set = set(tile_data[T]["bits"])
             for F in tile_data[T]["features"]:
                 #if "INT_L.SS6END2->>WW2BEG2" in features[F]:
                 #    print("AND",solved_feature_dict[F],bit_set)
+
+                # Foreach feature, perform AND of new bits with initialized mask from above
+                # When done, this leaves behind all the bits that are ALWAYS on when a particular feature is present
                 solved_feature_dict[F] = solved_feature_dict[F] & bit_set
     
     print("SOLVED FEATURE DICT")
     for x in solved_feature_dict:
-        print(features[x],list(bits[b] for b in solved_feature_dict[x]))
+        # x is the feature index
+        #   features[x] = 'C:0:DSP48E1:DSP48E1:AREG:0'   (name of feature)
+        #   solved_feature_dict[x] = {3, 5, 6}     (indices into bits[] of bits always on for feature)
+        #   bits[3:7] = ['26_261', '27_214', '0_227', '26_249']   (bits those map to)
+        print(x, features[x], "\n  ", solved_feature_dict[x], "\n  ", list(bits[b] for b in solved_feature_dict[x]))
 
     return solved_feature_dict
 
 
 def sensitivity_analysis_v2(tile_data):
+    """
+    Perform the alternate sensitivity analysis.
+
+    What is being done is looking for a pair of tiles, T1 and T2, 
+        whose sets of on features only differ by exactly one feature/
+    That is, if feature set T1 - feature set T2 results in one additional feature, 
+        that tells us what bits program the additional feature.
+
+    Parameters
+    ----------
+    tile_data : _type_
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     global tile_type, features, solved_feature_dict
     solved_feature_dict = {}
 
     # BEN - commented out (default not used)
     # default = list(tile_data.keys())[0]
+    # tile_data_keys = [ 'CLB.0005.0.DSP_R_X9Y195', 'CLB.0005.0.DSP_R_X35Y70', ... ]
     tile_data_keys = list(tile_data.keys())
     for i in range(len(tile_data_keys)):
         T1 = tile_data_keys[i]
+        # TODO: Where does "BLO." occur?
         if "BLO." not in T1:
             for j in range(i+1, len(tile_data_keys)):
                 T2 = tile_data_keys[j]
@@ -643,9 +728,13 @@ def run_data_analysis(in_fuzz_path, in_args):
     parse_files()
     tile_data, features, bits,feature_dict,tile_data_rev = condense_data()
 
+    # There are 2 kinds of sensitivity analyses
+    # The first one is used it NOT solving for PIPs or if it is an INT* tile
     if tile_type in ["INT_L","INT_R","INT"] or int(args.pips) != 1:
+        # Find bits always ON for each feature
         solved_feature_dict = sensitivity_analysis(tile_data)
     else:
+        # The second one is used for solving for PIPs in regular tiles
         solved_feature_dict = sensitivity_analysis_v2(tile_data)
     properties, values = filter_bits(solved_feature_dict)
     print(properties,values)
