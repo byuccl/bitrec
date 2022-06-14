@@ -539,17 +539,17 @@ def filter_bits(solved_feature_dict):
                 always_bits[f] &= solved_feature_dict[F]
                 # Tabulate possible values for this property
                 possible_values[f] += [v]
-            if f == testProp:
-                print(F, testProp, v, feature_sets[f], always_bits[f], possible_values[f])
-        print("\nFeature sets: ", feature_sets)
-        for k,v in feature_sets.items():
-            print(k, v)
-        print("\n\nAlways bits: ")
-        for k,v in always_bits.items():
-            print(k, v)
-        print("\nPossible values: ")
-        for k,v in possible_values.items():
-            print(k, v)
+#            if f == testProp:
+#                print(F, testProp, v, feature_sets[f], always_bits[f], possible_values[f])
+#        print("\nFeature sets: ", feature_sets)
+#        for k,v in feature_sets.items():
+#            print(k, v)
+#        print("\n\nAlways bits: ")
+#        for k,v in always_bits.items():
+#            print(k, v)
+#        print("\nPossible values: ")
+#        for k,v in possible_values.items():
+#            print(k, v)
         # Remove the bits that were always on for ALL values of property from a given property:value
         for f in feature_sets:
             feature_sets[f] = feature_sets[f]-always_bits[f]
@@ -699,7 +699,6 @@ def get_bits(tile_data, property_bit_set, featureIndices, propertyPossibleValues
             #   - If they are not turned on in this tile, include their negation 
             #        - They must be used to configure another value for this property
             tmp = [bits[x] if x in allTheTileBits else f"!{bits[x]}" for x in property_bit_set]
-            tmp2 = [f"{x}" if x in allTheTileBits else f"!{x}" for x in property_bit_set]
             tmp.sort()
             # Add the resulting bits.  If already exists, will not add it a second time.
             ret[propertyPossibleValues[idx]].add(tuple(tmp))
@@ -889,7 +888,7 @@ def run_data_analysis(in_fuzz_path, in_args):
     #    Make a second list of the possible values for each property
     #    See docstring in filter_bits for details on properties and values
     properties, values = filter_bits(solved_feature_dict)
-    #print(properties,values)
+    print(properties,values)
     
     db = second_analysis(tile_data, properties, values,solved_feature_dict)
 
