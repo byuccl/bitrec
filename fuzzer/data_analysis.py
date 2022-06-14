@@ -661,26 +661,39 @@ class Feature():
 
 def get_bits(tile_data, property_bit_set, featureIndices, propertyPossibleValues):
     """
-    _summary_
+    Create list of ON and OFF bits for each possible value of a given property.
 
     Parameters
     ----------
-    tile_data : _type_
-        _description_
+    tile_data : dict
+        For a given tile, lists all the bits turned on in it and the features configured in it.
+        { 'CLB.0005.0.DSP_R_X9Y95' : 
+                { 'bits': [115, 40, 460, 250],
+                  'features': [162, 739, ...]
+                }
+          'CLB.0005.0.DSP_R_X35Y40': ..
+        }
     property_bit_set : set
         All the bits on for ANY value of this property
     featureIndices : list
         List of indices of the features that pertain to this property.  
         This and the next list go together.  
         This one holds the indices of the 'n' features (property:value) for this property.
-        The next one holds the 'n' values.
+        The next one holds the 'n' possible values for the property.
     possibleValues : list
         List of possible values for this property.  
 
     Returns
     -------
-    _type_
-        _description_
+    Dictionary of values:bits associated with the given property.
+        Ex.: { "TRUE": [ 
+                            ["!27_253", "!27_255"], 
+                            [26_255, 27_253 ...]  
+                        ],
+               "FALSE": [  
+                            ["!26_255", "27_253", "27_255" ] 
+                        ]
+             }
     """
     global tile_data_rev
     ret = {}
@@ -743,7 +756,7 @@ def add_missing_features(db):
 
 def second_analysis(tile_data, properties, values, solved_feature_dict):
     """
-    _summary_
+    Build fina data structure which will get merged into the <family>/<part>/db/db.<tile_type>.json
 
     Parameters
     ----------
@@ -765,8 +778,7 @@ def second_analysis(tile_data, properties, values, solved_feature_dict):
 
     Returns
     -------
-    _type_
-        _description_
+    The JSON data structure corresponding to the db.<tile_type>.json file.
     """
     global feature_dict
     res = {"SITE_INDEX": {}, "TILE_PIP": {}}
