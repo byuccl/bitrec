@@ -210,7 +210,8 @@ def parse_feature_file(f, specimen, tile_type):
 
 def parse_files():
     """
-    Load bitstream, feature file contents into data structures and then write .pkl file containing both.
+    Load bitstreams, feature file contents into data structures and then write .pkl files containing both
+    bitstream and feature file info.
     """
     global fuzz_path
     file_count = 0
@@ -267,12 +268,45 @@ def get_solved_bel_bits(bel_dict,tile_type):
 
 
 def condense_data():
+    """
+    Process all the data in all the .pkl files into a different set of data strucutures
+
+    Returns
+    -------
+    features : list
+        A list of ALL the features turned on across ALL the tiles in ALL the specimens
+        [ 'C:1:DSP48E1:CARRYININV:CARRYIN', 'C:Tile_Pip:DSP_R.DSP_IMUX44_0->DSP_1_A22', ...]
+    bits : list
+        A list of ALL the bits turned on across ALL the tiles in ALL the specimens
+        [ '27_288', '27_19', 24_219', ...]
+    feature_dict: dict
+        Mapping from feature name to feature number where feature number corresponds to index in 'features' list.
+        { 'C:1:DSP48E1:CARRYININV:CARRYIN': 0, 'C:Tile_Pip:DSP_R.DSP_IMUX44_0->DSP_1_A22': 1, ...}
+    bit_dict: dict
+        Mapping from bit name to bit number where bit number corresdponds to index in 'bits' list.
+        { '27_288': 0, '26_43': 1, ... }
+    tile_data : dict
+        For a given tile, lists all the bits turned on in it and the features configured in it.
+        { 'CLB.0005.0.DSP_R_X9Y95' : 
+                { 'bits': [115, 40, 460, 250],
+                  'features': [162, 739, ...]
+                }
+          'CLB.0005.0.DSP_R_X35Y40': ..
+        }
+    tile_data_rec: dict
+        For a given feature number, list all the tiles it is set in
+        { 0: ['CLB.0005.0.DSP_R_X9Y195', 'CLB.0005.0.DSP_R_X35Y195', , ... ],
+          1: ['CLB.0005.14.DSP_R_X9Y195', 'CLB.0005.14.DSP_R_X35Y195', ... ]
+        }
+    """
     global feature_dict,tile_data_rev
     fileList = os.listdir("data/" + fuzz_path + "/")
     features = set()
     bits = set()
     data = {}
     tile_data = {}
+    
+    # Create the features and bits data structures (see description in docstring above)
     for file in sorted(fileList):
         if ".pkl" in file:
             tile_feature_dict, tile_bit_dict = load_pkl_obj("data/" + fuzz_path + "/" + file)
@@ -282,14 +316,22 @@ def condense_data():
                 features = features | set(tile_feature_dict[x])
                 bits |= set(tile_bit_dict[x])
 
+    # TODO The next 6 lines of code are iterating across sets (which are unordered).
+    # This assumes the enumerate ordering in the for loops will be the same order they end up in 25 lines below 
+    # when they are turned into lists.
+    # Shouldn't the conversion to lists happen before the next 6 lines of code?
     feature_dict = {}
     bit_dict = {}
+    # Make mappings from feature names to feature numbers
+    # E.g. feature_dict['C:1:DSP48E1:CARRYININV:CARRYIN'] = 0, feature_dict['C:Tile_Pip:DSP_R.DSP_IMUX44_0->DSP_1_A22'] = 1, ...
     for i,f in enumerate(features):
         feature_dict[f] = i
+    # Make mappings from bit names to bit numbers
+    # E.g. bit_dict['27_288'] = 0, bit_dict['26_43'] = 1, ...
     for i,b in enumerate(bits):
         bit_dict[b] = i
 
-
+    # Create the tile_data data structure (see description in docstring above)
     for file in sorted(fileList):
         if ".pkl" in file:
             tile_feature_dict, tile_bit_dict = load_pkl_obj("data/" + fuzz_path + "/" + file)
@@ -305,12 +347,12 @@ def condense_data():
     features = list(features)
     bits = list(bits)
 
-
+    # Create the tile_data_rev data structure (see desciption in docstring above)
     tile_data_rev = {}
     for x in range(len(features)):
         tile_data_rev[x] = []
 
-    for x in tile_data:
+    for x in tile_data:   # Ex.: 'CLB.0005.0.DSP_R_X9Y195'
         for y in tile_data[x]["features"]:
             tile_data_rev[y] += [x]    
 
@@ -322,33 +364,35 @@ def condense_data():
 
 def sensitivity_analysis(tile_data):
     """
-    Create list of bits always on for each feature
+    Create list of bits always ON for each feature.
 
     Parameters
     ----------
     tile_data : dict
+        For a given tile, lists all the features turned on in that tile and all the bits turned on in that tile.
         Keys are names.  Ex: CLB.0005.0.DSP_R_X9Y195"   (bus . fuzz_path . specimen . tile)
         Values are: { 'bits': [ 116, 140, 461, ... ],
                        'features': [ 162, 739, 642, ...]
                     }
     Returns
     -------
-    solved_feature_dict = [ set(onBit, onBit, ...), 
-                            set(onBit, onBit, ...),
+    solved_feature_dict = 
+                { 0: set(onBit, onBit, ...), 
+                  1: set(onBit, onBit, ...),
+                  2: set(onBit, onBit, ...),
                             ...
-                           ]
-        For each feature (index of list), contains set of bits always on for that feature
+                }
+        For feature[k], solved_feature_dict[k] contains set of bits always ON for feature[k]
     """
     global tile_type, features, bits, tile_data_rev, args
     solved_feature_dict = {}
     
-    # Init masks with first present occurance of F
-    # Foreach feature, initialize solved_feature_dict with first set of bits 
+    # 1. foreach feature, initialize solved_feature_dict with first tile's set of bits on for that feature
     for F in tile_data_rev:
         print("INIT",F,features[F],tile_data_rev[F][0],list(bits[b] for b in tile_data[tile_data_rev[F][0]]["bits"]))
         solved_feature_dict[F] = set(tile_data[tile_data_rev[F][0]]["bits"])
 
-    # Find always on bits for every property
+    # 2. Find 'always on' bits by AND-ing rest of bits found when that feature is on
     if tile_type in ["BRAM_L", "BRAM_R", "BRAM"]:
         # if it is a bram, the bus needs to match
         for T in tile_data:
@@ -358,7 +402,7 @@ def sensitivity_analysis(tile_data):
                     solved_feature_dict[F] = solved_feature_dict[F] & bit_set
     else:
         for T in tile_data:
-            # Get a set of bits turned on in a tile.  Ex.: the bits in 'CLB.0005.0.DSP_R_X9Y195'
+            # Get a set of all bits turned on in a tile.  Ex.: the bits in 'CLB.0005.0.DSP_R_X9Y195'
             bit_set = set(tile_data[T]["bits"])
             for F in tile_data[T]["features"]:
                 #if "INT_L.SS6END2->>WW2BEG2" in features[F]:
@@ -376,6 +420,7 @@ def sensitivity_analysis(tile_data):
         #   bits[3:7] = ['26_261', '27_214', '0_227', '26_249']   (bits those map to)
         print(x, features[x], "\n  ", solved_feature_dict[x], "\n  ", list(bits[b] for b in solved_feature_dict[x]))
 
+    # Return set of bits that are always ON for each feature
     return solved_feature_dict
 
 
@@ -387,6 +432,9 @@ def sensitivity_analysis_v2(tile_data):
         whose sets of on features only differ by exactly one feature/
     That is, if feature set T1 - feature set T2 results in one additional feature, 
         that tells us what bits program the additional feature.
+
+    TODO: It would seem it should also look for T2 - T1 ?  
+    See issue #18.
 
     Parameters
     ----------
@@ -443,21 +491,39 @@ def remove_lut_bits(solved_feature_dict):
     return solved_feature_dict
 
 def filter_bits(solved_feature_dict):
+    """
+    Remove PIP bits (if doing BELs) or BEL bits (if doing PIPs) and then build feature sets and possible values.
+
+    Parameters
+    ----------
+    solved_feature_dict : dict(featureNum: setOfBits)
+       For each featureNum specifies the bits that are always on for it
+
+    Returns
+    -------
+    feature_sets : dict(propertyName:setOfBits)
+        For each property (not property:value pair) specify all bits that were on for ANY of its values minus
+            the bits that were on for ALL of its values
+    possible_values : dict(propertyName, [ value1, value2, ...])
+        For each property specify ALL the possible values it may have
+    """
     global tile_type, features, bits, tile_data_rev, args
     possible_values = {}
     feature_sets = {}
-    # remove the pip bits
+    # Doing BEL properties, remove the PIP bits
     if int(args.pips) != 1:
         pip_bits = set()
+        # Get set of all bits involved with tile pips
         for i in range(len(features)):
             if "Tile_Pip" in features[i]:
                 pip_bits = pip_bits | solved_feature_dict[i]
+        # Remove the tile pip bits from all other features' bits (they represent bit pollution)
         for i in range(len(features)):
-            if features[i][0] != "B":
+            if features[i][0] != "B":   # Don't do BRAM bus features
                 solved_feature_dict[i] = solved_feature_dict[i] - pip_bits
         if "7" not in args.family:
             solved_feature_dict = remove_lut_bits(solved_feature_dict)
-        # Create the per-feature sets of bits
+        # Create the per-property sets of bits
         always_bits = {}
         for F in solved_feature_dict:
             f = features[F].rsplit(":", 1)[0]
@@ -467,9 +533,24 @@ def filter_bits(solved_feature_dict):
                 always_bits[f] = set(solved_feature_dict[F])
                 possible_values[f] = [v]
             else:
+                # What is set of bits have you seen on for ANY values of this property?
                 feature_sets[f] |= solved_feature_dict[F]
+                # What is set of bits have you seen on for ALL values of this property?
                 always_bits[f] &= solved_feature_dict[F]
+                # Tabulate possible values for this property
                 possible_values[f] += [v]
+#            if f == testProp:
+#                print(F, testProp, v, feature_sets[f], always_bits[f], possible_values[f])
+#        print("\nFeature sets: ", feature_sets)
+#        for k,v in feature_sets.items():
+#            print(k, v)
+#        print("\n\nAlways bits: ")
+#        for k,v in always_bits.items():
+#            print(k, v)
+#        print("\nPossible values: ")
+#        for k,v in possible_values.items():
+#            print(k, v)
+        # Remove the bits that were always on for ALL values of property from a given property:value
         for f in feature_sets:
             feature_sets[f] = feature_sets[f]-always_bits[f]
         if "7" not in args.family:
@@ -482,7 +563,7 @@ def filter_bits(solved_feature_dict):
                                 bit_set = bit_set - solved_feature_dict[features.index(f + ":" + y)]
                         solved_feature_dict[features.index(f + ":" + x)] = bit_set
 
-    else: # Remove the bel bits
+    else: # Doing PIP bits, remove the BEL bits
         
         if os.path.exists("db/db."+tile_type+".json") == 0:
             print("[YRAY ERROR]: BEL Fuzzer needs to be run before Pip Fuzzer")
@@ -578,26 +659,66 @@ class Feature():
             print(f"Error making Feature class. Bad string: {feat_str}")
 
 
-def get_bits(tile_data, bit_set, features, vals):
+def get_bits(tile_data, property_bit_set, featureIndices, propertyPossibleValues):
+    """
+    Create list of ON and OFF bits for each possible value of a given property.
+
+    Parameters
+    ----------
+    tile_data : dict
+        For a given tile, lists all the bits turned on in it and the features configured in it.
+        { 'CLB.0005.0.DSP_R_X9Y95' : 
+                { 'bits': [115, 40, 460, 250],
+                  'features': [162, 739, ...]
+                }
+          'CLB.0005.0.DSP_R_X35Y40': ..
+        }
+    property_bit_set : set
+        All the bits on for ANY value of this property
+    featureIndices : list
+        List of indices of the features that pertain to this property.  
+        This and the next list go together.  
+        This one holds the indices of the 'n' features (property:value) for this property.
+        The next one holds the 'n' possible values for the property.
+    possibleValues : list
+        List of possible values for this property.  
+
+    Returns
+    -------
+    Dictionary of values:bits associated with the given property.
+        Ex.: { "TRUE": [ 
+                            ["!27_253", "!27_255"], 
+                            [26_255, 27_253 ...]  
+                        ],
+               "FALSE": [  
+                            ["!26_255", "27_253", "27_255" ] 
+                        ]
+             }
+    """
     global tile_data_rev
     ret = {}
-    for v in vals:
+    for v in propertyPossibleValues:
         ret[v] = set()
-    #for s in srcs:
-    for idx,f in enumerate(features):
+    # Go through every feature associated with the propery of interest
+    for idx,f in enumerate(featureIndices):  
+        # Go through every tile associated with the feature 'f'
         for T in tile_data_rev[f]:
         #if f in tile_data[T]["features"]:
-            result = tile_data[T]["bits"]
-            tmp = [bits[x] if x in result else f"!{bits[x]}" for x in bit_set]
+            # Get ALL the bits turned on in this tile
+            allTheTileBits = tile_data[T]["bits"]
+            # For the bits associated with all values of this property,
+            #   - If they are turned on in this tile, include them 
+            #        - they are configuring feature 'f'
+            #   - If they are not turned on in this tile, include their negation 
+            #        - They must be used to configure another value for this property
+            tmp = [bits[x] if x in allTheTileBits else f"!{bits[x]}" for x in property_bit_set]
             tmp.sort()
-            ret[vals[idx]].add(tuple(tmp))
+            # Add the resulting bits.  If already exists, will not add it a second time.
+            ret[propertyPossibleValues[idx]].add(tuple(tmp))
     for k, v in ret.items():
         ret[k] = tuple(v)
     #print(bit_set,features,vals,ret)
     return ret
-
-
-
 
 def merge_json(db,bel_dict):
     if (type(bel_dict) is dict):
@@ -634,10 +755,37 @@ def add_missing_features(db):
 
 
 def second_analysis(tile_data, properties, values, solved_feature_dict):
+    """
+    Build fina data structure which will get merged into the <family>/<part>/db/db.<tile_type>.json
+
+    Parameters
+    ----------
+    tile_data : dict
+        For a given tile, lists all the bits turned on in it and the features configured in it.
+        { 'CLB.0005.0.DSP_R_X9Y95' : 
+                { 'bits': [115, 40, 460, 250],
+                  'features': [162, 739, ...]
+                }
+          'CLB.0005.0.DSP_R_X35Y40': ..
+        }
+    properties : dict(propertyName:setOfBits)
+        For each property (not property:value pair) specify all bits that were on for ANY of its values minus
+            the bits that were on for ALL of its values
+    values : dict(propertyName, [ value1, value2, ...])
+        For each property specify ALL the possible values it may have
+    solved_feature_dict : dict(featureNum: setOfBits)
+       For each featureNum specifies the bits that are always on for it
+
+    Returns
+    -------
+    The JSON data structure corresponding to the db.<tile_type>.json file.
+    """
     global feature_dict
     res = {"SITE_INDEX": {}, "TILE_PIP": {}}
     sites = res["SITE_INDEX"]
     for feature, bit_set in properties.items():
+        if feature == testProp:
+            print("Second analysis", feature)
         feat = Feature(feature)
         if feat.type == "TILE_PIP":
             prop_rules = {}
@@ -666,7 +814,7 @@ def second_analysis(tile_data, properties, values, solved_feature_dict):
         elif feat.type == "TILE_PIP_OF_BEL":
             # Don't solve for pips in the bel fuzzer
             continue
-        else:
+        else:    # Is of type BEL
             if feat.site_idx not in sites:
                 sites[feat.site_idx] = {"SITE_TYPE": {
                     feat.site_type: {"BEL": {}, "SITE_PIP": {}}}}
@@ -689,8 +837,10 @@ def second_analysis(tile_data, properties, values, solved_feature_dict):
                 vals = values[feature]
                 if '[' not in vals[0]:
                     feature_strs = []
+                    # Build list of indices for all features (property:value pairs) associated with this property
                     for v in vals:
                         feature_strs.append(feature_dict[f"{feature}:{v}"])
+                    # Decide which bits get included and which get inverted
                     prop_rules = get_bits(tile_data, bit_set, feature_strs, vals)
                     bel_info[feat.prop] = {"VALUE": prop_rules, "BUS": feat.bus}
                 else:
@@ -712,6 +862,7 @@ def second_analysis(tile_data, properties, values, solved_feature_dict):
 def run_data_analysis(in_fuzz_path, in_args):
     global fuzz_path, args, tile_type, tilegrid, bel_dict, feature_dict
     global bits, features
+    global testProp
     tile_type = in_args.tile_type[0]
     fuzz_path = in_fuzz_path
     args = in_args
@@ -725,20 +876,34 @@ def run_data_analysis(in_fuzz_path, in_args):
     bel_dict = json.load(fj)
     fj.close()
 
+    testProp = 'C:0:DSP48E1:DSP48E1:AUTORESET_PATDET'
+
+    # In the comments in this file:
+    #   The word 'property' refers to a BEL property as in: 'C:1:DSP48E1:DSP48E1:ADREG'
+    #   The word 'feature' refers to a property:value combo as in 'C:1:DSP48E1:DSP48E1:ADREG:0'
+
+    # 1. Load bitstreams, feature file contents into data structures and then write .pkl files containing both
+    #    bitstream and feature file info.
     parse_files()
+
+    # 2. Convert .pkl files into data structures used for data analysis.
+    #    See comments in condense_data() docstrings for details on data structures
     tile_data, features, bits,feature_dict,tile_data_rev = condense_data()
 
-    # There are 2 kinds of sensitivity analyses
-    # The first one is used it NOT solving for PIPs or if it is an INT* tile
+    # 3. Foreach feature, create list of bits ALWAYS on when that feature is on
     if tile_type in ["INT_L","INT_R","INT"] or int(args.pips) != 1:
-        # Find bits always ON for each feature
         solved_feature_dict = sensitivity_analysis(tile_data)
     else:
-        # The second one is used for solving for PIPs in regular tiles
         solved_feature_dict = sensitivity_analysis_v2(tile_data)
+
+    # 4. Make list of all the bits that affect each property
+    #    Make a second list of the possible values for each property
+    #    See docstring in filter_bits for details on properties and values
     properties, values = filter_bits(solved_feature_dict)
     print(properties,values)
+    
     db = second_analysis(tile_data, properties, values,solved_feature_dict)
+
     db = add_missing_features(db)
 
     

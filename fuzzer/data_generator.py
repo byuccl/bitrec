@@ -288,6 +288,8 @@ def pip_bitstream_drc():
     #
 
 
+
+
 ##########################################################
 ##                         FUZZER                       ##
 ##########################################################
@@ -476,8 +478,6 @@ def fuzz_tilegrid(col_tile_list,checkpoint_list):
 def fuzzer():
     """
     Fuzz the given tile type.
-
-    Inline comments below give overall flow of its operation.
 
     Returns nothing.
     """
