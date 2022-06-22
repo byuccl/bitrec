@@ -67,7 +67,7 @@ def main():
     parser.add_argument('--placelimit',default=50)
     parser.add_argument('--stdoutToFile', default=None)
     parser.add_argument('--pipsfile', default="pipresults.txt")
-    parser.add_argument('--resultsfile', default='packedResults.txt')
+    parser.add_argument('--resultsfile', default='packedResults.json')
     args = parser.parse_args()
 
     if args.stdoutToFile:
