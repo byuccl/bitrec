@@ -58,7 +58,7 @@ import random
 from functools import reduce
 import datetime
 
-jpype.startJVM(classpath=["rapidwright-2021.2.0-standalone-lin64.jar"])
+jpype.startJVM(classpath=["../fuzzer/rapidwright-2021.2.0-standalone-lin64.jar"])
 
 from com.xilinx.rapidwright.device import Device
 from com.xilinx.rapidwright.device import Series
