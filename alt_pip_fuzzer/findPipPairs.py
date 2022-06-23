@@ -286,6 +286,7 @@ def traceUpDn(pip, solutions, dir, stack, indnt, depth):
     # Add current PIP to stack
     stack.append(pip)
 
+    pipsToFollow = []
     # Build list of PIPs that branch from 'pip' that we need to search
     if dir == "UP":
         n = pip.getStartNode()     # Get uphill node
@@ -420,7 +421,7 @@ def findDisjointPairs(solution):
     # Note there are pairs of everything since we are doing dual paths.
     origPip = [None, None]
     origTile = [None, None]
-    origPathStringPIPNames = [None, None]
+    origPathStringPIPNames = [[], []]
     trimmedPaths = [None, None]
     for i in range(2):    
         assert len(sol[i])>0
@@ -838,6 +839,7 @@ def main():
     totFailures = 0
     depth = int(args.startdepth)
     maxTries = int(args.maxtries)
+    remainingPIPs = []
     while len(pips) > 0:
         msg(f"\n## Starting depth = {depth}\n", file=resultsFile)
         remainingPIPs = pips[:]
