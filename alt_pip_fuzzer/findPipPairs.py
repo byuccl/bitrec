@@ -395,13 +395,13 @@ def findDisjointPairs(solution):
 
     Parameters
     ----------
-    solution : [ [ pip1Name, pip2Name, ...], [ pip3Name, pip4Name, ...], ... ]
+    solution : [ [ com.xilinx.rapidwright.Device.PIP, ...], [ com.xilinx.rapidwright.Device.PIP, ...], ... ]
         List of paths previously found, each path being a list of PIP names 
         leading from a pin to the PIP of interest (or the other way around).
     Returns
     -------
-    [ ( [path0PIPs], [path1PIPs] ), ( [path0PIPs], [path1PIPs]), ...]
-        List of pairs of paths where each pair's two paths are disjoint.
+    [ ( [PIPName1, PIPName2], [PIPName3, PIPName4] ), ( [PIPName5], [PIPName6]), ...]
+        List of pairs of paths (strings) where each pair's two paths are disjoint.
     """
     ret = []
     sol = []
@@ -539,14 +539,27 @@ def find4Way(upairs, dpairs):
 
     Parameters
     ----------
-    upairs : [ ( path, path ), ... ] where path is a list of PIPs
-        The pairs of uphill paths to consider.
-    dpairs : [ ( path, path ), ... ] where path is a list of PIPs
-        The pairs of downhill paths to consider.
-
+    upairs : 
+    [ 
+        ( [PIPName1, PIPName2, ...], [PIPName3, PIPName4, ...] ), 
+        (...), 
+        ... 
+    ]
+        A list of the pairs of uphill paths to consider.
+    dpairs : 
+    [ 
+        ( [PIPName1, PIPName2, ...], [PIPName3, PIPName4, ...] ), 
+        (...), 
+        ... 
+    ]
+        A list of the pairs of downhill paths to consider.
+    
     Returns
     -------
-    ( uphill pair, downhill pair)
+    ( 
+        ( [PIPName1, PIPName2, ...], [PIPName3, PIPName4, ...] ), 
+        ( [PIPName1, PIPName2, ...], [PIPName3, PIPName4, ...] ) 
+    )
         The 4-way solution pieces found.
     """
     u = [set(pr[0][1:]).union(set(pr[1][1:])) for pr in upairs]
