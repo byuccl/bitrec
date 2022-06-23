@@ -14,6 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# This material is based upon work supported  by the Office of Naval Research
+# under Contract No. N68335-20-C-0569. Any opinions, findings and conclusions 
+# or recommendations expressed in this material are those of the author(s) and 
+# do not necessarily reflect the views of the Office of Naval Research.
+
+
 import jpype
 import jpype.imports
 from jpype.types import *
