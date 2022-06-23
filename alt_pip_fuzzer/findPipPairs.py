@@ -166,7 +166,7 @@ def is_valid_SP(SP,direction,N):
             were being solved for was not an interconnect tile.  
             In that case, sites from that tile type could be used.
         2.  Site pins named SR or CE could not be used.
-    The net result is this code would only solve for part of the pips ( out of ~3,730).
+    The net result is this code would only solve for part of the pips (3,626 out of ~3,730) (104 unsolved).
 
     Other variations:
         Sites allowed: add SLICEM and BUFHCE to list
@@ -233,8 +233,8 @@ def is_valid_SP(SP,direction,N):
     #elif ST == "SLICEM" and SP.getPinName() not in allowedSLICEMpins:
     #    return 0
     # But later, to get all PIPs to solve, we opened it up to the site types below
-    # elif ST not in ["SLICEL", "SLICEM", "TIEOFF", "BUFHCE"] and TT != tile_type :
-    elif ST not in ["SLICEL", "TIEOFF"] and TT != tile_type :
+    elif ST not in ["SLICEL", "SLICEM", "TIEOFF", "BUFHCE"] and TT != tile_type :
+    #elif ST not in ["SLICEL", "TIEOFF"] and TT != tile_type :
         return 0
     if str(SP).split("/")[-1] in banned_pin_list:
         return 0
@@ -776,8 +776,8 @@ def main():
 
     #The original pips_rapid.py code didn't allow SR or CE to be source or sink pins.
     # See docstring for is_valid_SP() for explanation of effects of this.
-    banned_pin_list = ["SR","CE"]
-    # banned_pin_list = []
+    # banned_pin_list = ["SR","CE"]
+    banned_pin_list = []
 
     # Build list of ppips (always-on or pullup PIPs)
     ppipNames, ppipTypes = getPPipNames(device)
@@ -866,27 +866,28 @@ def main():
 
         # Ask if user wants to continue
         resp = ""
-        while resp not in ['Y', 'y', 'N', 'n']:
-            resp = input(f"Depth was {depth}, continue the program with depth of {depth+1}? [y/n]")
-            if resp in ['N', 'n']:
-                # Exiting, but print unsolved PIPs first
-                msg("Unsolved:", file=resultsFile)
-                for p in remainingPIPs:
-                    msg(f"{getPpipName(p)}", file=resultsFile)
-                resultsFile.close()
-                return
-            elif resp in ['Y', 'y']:
-                # Go around for another try
-                pass
+        while resp not in ['c', 'r', 'q']:
+            resp = input(f"Depth was {depth}, (c)ontinue with higher depth, (r)epeat with same depth, (q)uit?  ")
+            if resp in ['q']:
+                break
+            elif resp in ['c']:
+                depth += 1
+                break
             else:
                 print("Try again....")
 
+        if resp in ['q']:
+            break
+
         pips = remainingPIPs
-        depth += 1
-    
-    # All done, got here because len(pips) == 0
-    msg("Unsolved:", file=resultsFile)
+        print("")
+
+    msg(f"Unsolved ({len(remainingPIPs)}):", file=resultsFile)
+    for p in remainingPIPs:
+        msg(f"{getPpipName(p)}", file=resultsFile)
     resultsFile.close()
+    return
+
 
 #####################################################################################################################
 
