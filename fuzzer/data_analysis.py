@@ -325,6 +325,8 @@ def condense_data():
     # This assumes the enumerate ordering in the for loops will be the same order they end up in 25 lines below 
     # when they are turned into lists.
     # Shouldn't the conversion to lists happen before the next 6 lines of code?
+    features = list(features)
+    bits = list(bits)
     feature_dict = {}
     bit_dict = {}
     # Make mappings from feature names to feature numbers
@@ -349,8 +351,8 @@ def condense_data():
                     tile_data[x]["features"].append(feature_dict[y])
                 for y in tile_bit_dict[x]:
                     tile_data[x]["bits"].append(bit_dict[y])
-    features = list(features)
-    bits = list(bits)
+    #features = list(features)
+    #bits = list(bits)
 
     # Create the tile_data_rev data structure (see desciption in docstring above)
     tile_data_rev = {}
