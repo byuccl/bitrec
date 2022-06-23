@@ -1,53 +1,18 @@
-########################################################################################
-# File: mypips.py
-# Author: Brent Nelson
-# Date: May 2022
-# Description:
-#  The routine pips_rapid.py/run_pip_generation() iterates on solving for PIPs and, 
-#    after each iteration checks to see what PIPs remain "unsolved".   A PIP remains
-#    unsolved (or ambiguated) if it doesn't appear in an .ft file or if it only
-#    appears in tiles where other things are also turned on.
-#  It became clear that no matter how many iterations you run it, some small 
-#    subset (8) of the PIPs will never be fully disambiguated according to the
-#    criteria.
-#  One of the PIPs that is never solved for is: GFAN0->>BYP_ALT1.  There will never
-#    be a case where it is the only thing in the tile.
-#  This program investigates an alternative approach.  
-#    - Given a PIP 'P', enumerate all the <=n hop ways to go upstream and get to 
-#      a site pin.  Now do the same for downstream.  
-#    - Now, find two uphill paths and two downhill paths that are all totally
-#      disjoint from each other.
-#    - The solution can then be uphill[0]/downhill[0]and uphill[1]/downhill[1], each of
-#      which pass through pip P but which are otherwise disjoint. 
-#    - Or, it could be uphill[0]/downhill[1]and uphill[1]/downhill[0], each of
-#      which pass through pip P but which are otherwise disjoint. 
-#    - Call this a 4-way solution.
-#    - Create a tile with the first solution and a different file with the second.
-#    - Since the only thing common between the two tiles is P, this should provide
-#      enough info to completely solve for P.
-#  
-#  A side discovery is that for PIP: GFAN0->>BYP_ALT, there are only two ways out 
-#     of the tile when going downhill.  And, one of those paths can only terminate 
-#     at a SLICEM's input pin.  Thus, to find two downhill paths as above will require 
-#     that SLICEM sites be allowed to be used (the code currently allows only SLICEL).
-#  If allowing SLICEM sites, restricting the pins usable on them to the same pins 
-#     usable on a SLICEL will avoid the DRC rules for LUTRAM and SRL's.  This code 
-#     does that.
+# Copyright 2020-2022 BitRec Authors
 #
-#  Another side discovery was that sometimes the original run_pip_generation() code
-#     will end up using the same PIP in both its uphill and its downhill sub-nets 
-#     (have observed it as through a bounce pip). This is unroutable and so wastes 
-#     Vivado time.  This algorithm naturally avoids that problem based on the way 
-#     it works..
-#  TODO: is the logic sound - determine that.
-#  TODO: Determine how well this works - is it able to solve for PIPs not otherwise
-#        solvable or not otherwise solvable without many specimens?
-#  TODO: Determine how many specimens (bitstreams) it requires compared to normal?
-#  TODO: Measure speed of search - is the requirement to find all paths wthin a 
-#        certain distance simply too slow?
-########################################################################################
-
-
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
 
 import jpype
 import jpype.imports
