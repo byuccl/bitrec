@@ -1094,9 +1094,9 @@ def run_pip_fuzzer(in_fuzz_path,in_args):
     
     # If the following list is empty it will do all pips.
     # Otherwise, it will do just the pips you specify.  Ex:
-    #pipsToDo = [ ]
+    pipsToDo = [ ]
     #pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
-    pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
+    #pipsToDo = ["EE2END2->>IMUX_L20", "GFAN0->>BYP_ALT1", "LV_L18<<->>LH0"]
 
     # Superfluous assignment, done for real in check_pip_files
     pip_dict = {}
