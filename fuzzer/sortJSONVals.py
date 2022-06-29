@@ -39,6 +39,8 @@
 
 import json
 import argparse
+#from types import NoneType
+
 
 def lsort(lst):
     tot = 0
@@ -51,17 +53,12 @@ def lsort(lst):
                 tot += int(e.split('_')[i])
     return tot
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('fileName')
-    args = parser.parse_args()
-
-    file = args.fileName
-
+def processFile(file, prefix):
     with open(file) as f:
         j = json.load(f)
 
-    with open(file + ".sortedVals", 'w') as fs:
+    dest = file.split("/")[-1]
+    with open(prefix + '-' + dest + ".sortedVals", 'w') as fs:
         for top in j:
             if top != "SITE_INDEX":
                 continue
@@ -74,13 +71,25 @@ def main():
                         for bel in j[top][snk]["SITE_TYPE"][st][b1]:
                             for prop in j[top][snk]["SITE_TYPE"][st][b1][bel]["CONFIG"]:
                                 for val in j[top][snk]["SITE_TYPE"][st][b1][bel]["CONFIG"][prop]["VALUE"]:
-                                    if len(j[top][snk]["SITE_TYPE"][st][b1][bel]["CONFIG"][prop]["VALUE"][val]) > 1:
-                                        print(snk, st, bel, prop, val, end='', file=fs)
-                                        vals = j[top][snk]["SITE_TYPE"][st][b1][bel]["CONFIG"][prop]["VALUE"][val]
-                                        print(" :: ", len(vals), file=fs)
+                                    print(snk, st, bel, prop, val, end='', file=fs)
+                                    vals = j[top][snk]["SITE_TYPE"][st][b1][bel]["CONFIG"][prop]["VALUE"][val]
+                                    if len(vals) > 1:
+                                        #print(" :: ", len(vals), file=fs)
                                         vals.sort(key=lsort)
-                                        print(json.dumps(vals, indent=2), file=fs)
+                                    print(json.dumps(vals, indent=2), file=fs)
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--fileNameA', default=None)
+    parser.add_argument('--fileNameB', default=None)
+    args = parser.parse_args()
+
+    if args.fileNameA:
+        processFile(args.fileNameA, "A")
+    if args.fileNameB:
+        processFile(args.fileNameB, "B")
 
 if __name__ == "__main__":
     main()
+
     

@@ -233,4 +233,5 @@ parser.add_argument('--parallel',default=8)                 # Runs tile in paral
 parser.add_argument('--pips',default=0)                     # 1: Turns on the pip_fuzzer, 0: turns it off
 </pre>
 
-
+# 5. Comparing db Files
+As changes are made to the fuzzer it is useful to be able to compare the database files that result.  The database files are JSON files and they have the characteristic that when a given feature can be turned on by more than one combination of bits, the list of those bit combinations are not sorted.  The program `sortJSONVals.py` can be used to sort those and output the bit values in that sorted order.  (Note: it does not output the entire JSON file again, just the sorted values bits).  Thus, it can be run on two `db.*.json` files and the results compared to see if any bit values changed.
